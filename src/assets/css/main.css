@@ -1,0 +1,54 @@
+/* @import './base.css'; */
+
+#app {
+  width: 100%;
+  /* margin: 0 auto; */
+  /* padding: 2rem; */
+  font-weight: normal;
+}
+
+.subHeader {
+  margin-left: 20px;
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+
+a {
+  color: #000;
+  text-decoration: none;
+  transition: 0.4s;
+  padding: 10px;
+}
+
+ul {
+  list-style-type: none;
+}
+
+.active-link {
+  color: blue;
+  font-weight: bold;
+}
+
+.userBtn {
+  background-color: #5a6aa2; /* 背景颜色 */
+  border: none; /* 去掉边框 */
+  color: white; /* 文字颜色 */
+  padding: 5px 10px; /* 内边距 */
+  text-align: center; /* 文字对齐 */
+  text-decoration: none; /* 去掉下划线 */
+  display: inline-block; /* 显示为内联块 */
+  font-size: 14px; /* 字体大小 */
+  margin: 4px 3px 0px 0px; /* 外边距 */
+  cursor: pointer; /* 鼠标悬停时显示为指针 */
+  border-radius: 8px; /* 圆角边框 */
+  transition: background-color 0.3s ease; /* 过渡效果 */
+}
+
+.userBtn:hover {
+  background-color: #04379d; /* 悬停时的背景颜色 */
+}
+
+.userBtn:active {
+  background-color: #4463d3; /* 点击时的背景颜色 */
+}
+
