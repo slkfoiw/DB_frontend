@@ -1,7 +1,12 @@
-# buaa-cafeterias
+# DB_frontend
+
+## api
 src/api里有很多地方把原本调用后端api的地方注释掉换成返回测试数据了，正式使用时记得替换掉
 
-侧边栏登录和注册按钮只在未登录时显示，"我的"按钮只在登录后显示，前端模拟登录可以调整src/store/user.js里//temp下的代码
+1. 管理员相关的api在api/admin.js
+2. 宿管相关的api在api/dormManager.js
+3. 学生相关的api在api/student.js
+4. 登录、注册的api在user.js里（这个还没开始写，用的原来的，后面再修改、补充）
 
 ### 一些额外安装的库
 ```sh

@@ -122,8 +122,6 @@
 
 <script setup>
 import {onMounted, ref} from "vue";
-import Preview from "@/components/Preview.vue";
-import {queryUserPost} from "@/api";
 import EditUserInfoModal from '@/components/EditUserInfoModal.vue';
 import ChangePasswordModal from '@/components/ChangePasswordModal.vue';
 import {useUserStore} from "@/store/user";

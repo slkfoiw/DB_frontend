@@ -1,14 +1,11 @@
 <template>
   <div class="app-container">
     <aside class = "sidebar">
-      <img alt="buaa emoji" class="logo" src="https://buaaxiaolanshu.oss-cn-beijing.aliyuncs.com/static/logo-bg-no.svg" width="80" height="80" />
+      <img alt="logo" class="logo" src="@/assets/emoji.png" width="80" height="80" />
       <ul>
-        <li><div><router-link to="/home"><i class="fas fa-home"></i><span>首页</span></router-link></div></li>
-        <li><div><router-link to="/all"><i class="fas fa-list"></i><span>所有</span></router-link></div></li>
+        <li><div><router-link to="/"><i class="fas fa-home"></i><span>首页</span></router-link></div></li>
+        <li><div><router-link to="/admin"><i class="fas fa-home"></i><span>管理员</span></router-link></div></li>
         <li class="menu-break"><hr></li>
-        <li><div><router-link to="/upload"><i class="fas fa-pencil-alt"></i><span>发布</span></router-link></div></li>
-        <li><div><router-link to="/ai"><i class="fas fa-robot"></i><span>诶哎</span></router-link></div></li>
-        <li id="user-about-us"><div><router-link :to="`/team`"><i class="fas fa-address-card"></i><span>我们</span></router-link></div></li>
         <li id="user-item" v-if="!show"><div><router-link :to="`/user/${userName}`"><i class="fas fa-user"></i><span>我的</span></router-link></div></li>
         <li id="user-item" v-if="show"><div><router-link :to="`/login`"><i class="fas fa-sign-in-alt"></i><span>登陆</span></router-link></div></li>
       </ul>

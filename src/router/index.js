@@ -1,66 +1,22 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import Home from '@/views/Home.vue';
-import All from '@/views/All.vue';
-import Cafeteria from '@/views/Cafeteria.vue';
-import Counter from '@/views/Counter.vue';
+// import Home from '@/views/Home.vue';
 import Register from '@/views/Register.vue';
 import Login from '@/views/Login.vue';
-import User from '@/views/User.vue';
-import Team from '@/views/Team.vue';
-import Detail from '@/views/Detail.vue';
-import Upload from '@/views/Upload.vue';
+// import User from '@/views/User.vue';
 import store from '@/store';
-import AI from '@/views/AI.vue';
+import Admin from '@/views/Admin.vue';
+import User from '@/views/User.vue';
 
 const routes = [
   {
     path: '/',
     name: 'ORIGIN',
-    component: Home
+    component: Admin
   },
   {
-    path: '/home',
-    name: 'Home',
-    component: Home
-  },
-  {
-    path: '/team',
-    name: 'Team',
-    component: Team
-  },
-  {
-    path: '/cafeteria',
-    name: 'AllCafeteria',
-    component: All
-  },
-  {
-    path: '/all',
-    name: 'All',
-    component: All
-  },
-  {
-    path: '/cafeteria/:cafeteriaId',
-    name: 'Cafeteria',
-    component: Cafeteria,
-    props: true
-  },
-  {
-    path: '/cafeteria/:cafeteriaId/counter/:counterId',
-    name: 'CafeteriaCounter',
-    component: Counter,
-    props: true
-  },
-  {
-    path: '/counter/:counterId',
-    name: 'Counter',
-    component: Counter,
-    props: true
-  },
-  {
-    path: '/dish/:dishId',
-    name: 'DishDetail',
-    component: Detail,
-    props: true
+    path: '/admin',
+    name: 'Admin',
+    component: Admin
   },
   {
     path: '/register',
@@ -78,16 +34,6 @@ const routes = [
     component: User,
     // meta: { requiresAuth: true }
     props: true
-  },
-  {
-    path: '/upload',
-    name: 'Upload',
-    component: Upload
-  },
-  {
-    path: '/ai',
-    name: 'AI',
-    component: AI
   }
 ];
 
@@ -100,11 +46,12 @@ router.beforeEach((to, from, next) => {
   const requiresAuth = to.matched.some(record => record.meta.requiresAuth);
   const isAuthenticated = store.state.isAuthenticated;
 
-  if (requiresAuth && !isAuthenticated) {
-    next('/login');
-  } else {
-    next();
-  }
+  // if (requiresAuth && !isAuthenticated) {
+  //   next('/login');
+  // } else {
+  //   next();
+  // }
+  next();
 });
 
 export default router;
