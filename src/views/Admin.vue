@@ -1,29 +1,46 @@
 <template>
-    <div class="stuList">
-        <StuList />
+    <div>
+        <div class="stuList">
+            <StuList />
+        </div>
+        <div class="dormManaList">
+            <DormManaList />
+        </div>
+        <div class="noticeList">
+            <NoticeList />
+        </div>
+        <div class="repairList">
+            <RepairList />
+        </div>
     </div>
 </template>
 
 <script>
-import StuList from '@/views/StuList.vue';
+import StuList from '@/components/StuList.vue';
+import DormManaList from '@/components/dormManaList.vue';
+import NoticeList from '@/components/noticeList.vue';
+import RepairList from '@/components/repairList.vue';
 
 export default {
     name: 'Admin',
     components: {
-        StuList
+        StuList,
+        DormManaList,
+        NoticeList,
+        RepairList
     }
 }
 
 </script>
 
 <style>
-.stuList {
-    margin: 10px;
-    padding: 0;
-    border: 0;
+.stuList, .dormManaList, .noticeList, .repairList {
+    margin: 20px;
+    padding: 10px;
+    border: 2px solid #abacca;
     display: block;
     /* justify-content: center;
     align-items: center; */
-    /* height: 100%; */
 }
+
 </style>

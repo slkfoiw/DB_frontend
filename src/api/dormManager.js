@@ -1,9 +1,18 @@
 import http from "@/utils/http";
 
 const mockDormManagers = [
-    { managerId: 'mgr01', managerName: '宿管A', apartmentNumber: '11' },
-    { managerId: 'mgr02', managerName: '宿管B', apartmentNumber: '12' },
-    { managerId: 'mgr03', managerName: '宿管C', apartmentNumber: '13' },
+    { managerId: '22500001', managerName: '宿管A', apartmentNumber: '11' },
+    { managerId: '22500002', managerName: '宿管B', apartmentNumber: '12' },
+    { managerId: '22500003', managerName: '宿管C', apartmentNumber: '13' },
+    { managerId: '22500004', managerName: '宿管D', apartmentNumber: '14' },
+    { managerId: '22500005', managerName: '宿管E', apartmentNumber: '15' },
+    { managerId: '22500006', managerName: '宿管F', apartmentNumber: '16' },
+    { managerId: '22500007', managerName: '宿管G', apartmentNumber: '17' },
+    { managerId: '22500008', managerName: '宿管H', apartmentNumber: '18' },
+    { managerId: '22500009', managerName: '宿管I', apartmentNumber: '19' },
+    { managerId: '22500010', managerName: '宿管J', apartmentNumber: '20' },
+    { managerId: '22500011', managerName: '宿管K', apartmentNumber: '21' },
+    { managerId: '22500012', managerName: '宿管L', apartmentNumber: '22' },
 ];
 
 export const getDormManagers = () => {
@@ -29,6 +38,7 @@ export const addDormManager = (manager) => {
     //     data: manager
     // })
     mockDormManagers.push(manager); // 模拟添加
+    console.log(mockDormManagers);
     return { success: true };
 };
 
@@ -45,6 +55,7 @@ export const updateDormManager = (manager) => {
     if (index !== -1) {
         mockDormManagers[index] = manager; // 模拟更新
     }
+    console.log(mockDormManagers);
     return { success: true };
 };
 

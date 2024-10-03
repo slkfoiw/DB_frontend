@@ -1,5 +1,9 @@
 import http from "@/utils/http";
 
+const userInfo = {
+    name: '张三'
+}
+
 // 登录
 export const login = ({email, password}) => {
     return http({
@@ -16,13 +20,16 @@ export const login = ({email, password}) => {
 }
 
 export const getUserInfo = () => {
-    return http({
-        url: 'user/get-info',
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-    })
+    // return http({
+    //     url: 'user/get-info',
+    //     method: 'GET',
+    //     headers: {
+    //         'Content-Type': 'application/json'
+    //     },
+    // })
+    return {
+        data: userInfo
+    }
 }
 
 export const getUserActionInfo = () => {

@@ -1,10 +1,19 @@
 <template>
-    <div>
+    <div class="stu-list">
         <h2>学生信息列表</h2>
-        <input v-model="searchQuery" placeholder="搜索学生" />
-        <button @click="sortByStudentId">按学号排序</button>
-        <button @click="sortByNamePinyin">按姓名拼音排序</button>
-        <button @click="openAddModal">添加学生</button>
+        <div>
+            <h4>导入学生信息</h4>
+            <input type="file" @change="handleFileUpload" accept=".xlsx, .xls" />
+            <h4>导出学生信息</h4>
+            <button @click="exportStudents">导出学生信息</button>
+        </div>
+
+        <input v-model="searchQuery" placeholder="搜索学生学号、姓名" />
+        <div class="sort-buttons">
+            <button @click="sortByStudentId">按学号排序</button>
+            <button @click="sortByNamePinyin">按姓名拼音排序</button>
+            <button @click="openAddModal">添加学生</button>
+        </div>
 
         <table>
             <thead>
@@ -25,8 +34,10 @@
                     <td>{{ student.dormitoryNumber }}</td>
                     <td>{{ student.major }}</td>
                     <td>
-                        <button @click="openEditModal(student)">编辑</button>
-                        <button @click="deleteStudent(student.studentId)">删除</button>
+                        <template v-if="student.studentId"> <!-- 只在有有效的宿管ID时显示按钮 -->
+                            <button @click="openEditModal(student)">编辑</button>
+                            <button @click="deleteDormMana(student.studentId)">删除</button>
+                        </template>
                     </td>
                 </tr>
             </tbody>
@@ -61,7 +72,8 @@
 
 <script>
 import { ref, computed, onMounted } from 'vue';
-import { getStudents } from '@/api/student.js'; // 假设你有一个 api.js 文件用于处理 API 调用
+import { getStudents, addStudent, updateStudent, deleteStudent } from '@/api/student';
+import * as XLSX from 'xlsx';
 
 export default {
     setup() {
@@ -88,7 +100,16 @@ export default {
 
         const paginatedStudents = computed(() => {
             const start = (currentPage.value - 1) * pageSize;
-            return filteredStudents.value.slice(start, start + pageSize);
+            const currentData = filteredStudents.value.slice(start, start + pageSize);
+             // 计算缺少的行数
+            const missingRows = pageSize - currentData.length;
+
+            // 填补空行
+            for (let i = 0; i < missingRows; i++) {
+                currentData.push({ managerId: '', managerName: '', apartmentNumber: '' });
+            }
+
+            return currentData;
         });
 
         const totalPages = computed(() => {
@@ -136,13 +157,28 @@ export default {
             showModal.value = true;
         };
 
-        const saveStudent = () => {
+        const saveStudent = async() => {
+            // 验证学号是否满足8位数字的条件
+            const studentId = currentStudent.value.studentId;
+            const isValidStudentId = /^\d{8}$/.test(studentId); 
+            if (!isValidStudentId) {
+                alert('学号必须是8位数字！'); 
+                return; 
+            }
+            // 验证信息是否为空
+            if (currentStudent.value.stuName === '' || currentStudent.value.apartmentNumber === '' || currentStudent.value.dormitoryNumber === '' || currentStudent.value.major === '') {
+                alert('请填写完整信息！');
+                return;
+            }
+
             if (isEditing.value) {
+                await updateStudent(currentStudent.value)
                 const index = students.value.findIndex(s => s.studentId === currentStudent.value.studentId);
                 if (index !== -1) {
                     students.value[index] = { ...currentStudent.value };
                 }
             } else {
+                awaitaddStudent(currentStudent.value);
                 students.value.push({ ...currentStudent.value });
             }
             closeModal();
@@ -154,6 +190,39 @@ export default {
 
         const closeModal = () => {
             showModal.value = false;
+        };
+
+        const exportStudents = () => {
+            const wb = XLSX.utils.book_new(); // 创建新的工作簿
+            console.log("1");
+            const ws = XLSX.utils.json_to_sheet(filteredStudents.value); // 将学生信息转为工作表
+            console.log("1");
+            XLSX.utils.book_append_sheet(wb, ws, '学生信息'); // 将工作表加入工作簿
+            XLSX.writeFile(wb, '学生信息.xlsx'); // 导出为 Excel 文件
+        };
+
+        const handleFileUpload = (event) => {
+            const file = event.target.files[0];
+            const reader = new FileReader();
+            
+            reader.onload = (e) => {
+                const data = new Uint8Array(e.target.result);
+                const workbook = XLSX.read(data, { type: 'array' });
+                const firstSheetName = workbook.SheetNames[0];
+                const worksheet = workbook.Sheets[firstSheetName];
+                const jsonData = XLSX.utils.sheet_to_json(worksheet);
+                
+                // 清空现有学生数据并填充导入的数据
+                students.value = jsonData.map(student => ({
+                    studentId: student['学号'],
+                    stuName: student['姓名'],
+                    apartmentNumber: student['公寓号'],
+                    dormitoryNumber: student['宿舍号'],
+                    major: student['专业']
+                }));
+            };
+
+            reader.readAsArrayBuffer(file);
         };
 
         onMounted(fetchStudents);
@@ -179,53 +248,19 @@ export default {
             saveStudent,
             deleteStudent,
             closeModal,
+            exportStudents,
+            handleFileUpload
         };
     },
 };
 </script>
 
 <style scoped>
-table {
+@import '@/assets/css/table.css';
+
+.stu-list {
     width: 100%;
-    border-collapse: collapse;
-}
-
-th,
-td {
-    border: 1px solid #ddd;
-    padding: 10px;
-    text-align: left;
-}
-
-th {
-    background-color: #f2f2f2;
-}
-
-.pagination {
-    margin-top: 10px;
-}
-
-.modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.modal-content {
-    background: white;
-    padding: 20px;
-    border-radius: 5px;
-    width: 300px;
-}
-
-.modal-content label {
-    display: block;
-    margin: 10px 0 5px;
+    max-width: 800px;
+    margin: 0 auto;
 }
 </style>

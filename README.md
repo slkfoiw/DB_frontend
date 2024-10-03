@@ -14,6 +14,8 @@ npm install unplugin-auto-import
 npm install unplugin-vue-components
 npm install -D sass
 npm install vue-infinite-scroll
+npm install xlsx
+
 ```
 不全，可以根据控制台运行的报错提示安装相应的库
 
