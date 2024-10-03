@@ -17,9 +17,9 @@
 
 <script>
 import StuList from '@/components/StuList.vue';
-import DormManaList from '@/components/dormManaList.vue';
-import NoticeList from '@/components/noticeList.vue';
-import RepairList from '@/components/repairList.vue';
+import DormManaList from '@/components/DormManaList.vue';
+import NoticeList from '@/components/NoticeList.vue';
+import RepairList from '@/components/RepairList.vue';
 
 export default {
     name: 'Admin',
