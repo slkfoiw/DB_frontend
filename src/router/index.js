@@ -6,6 +6,7 @@ import Login from '@/views/Login.vue';
 import store from '@/store';
 import Admin from '@/views/Admin.vue';
 import User from '@/views/User.vue';
+import SendNotice from '@/views/SendNotice.vue';
 
 const routes = [
   {
@@ -17,6 +18,11 @@ const routes = [
     path: '/admin',
     name: 'Admin',
     component: Admin
+  },
+  {
+    path: '/sendnotice',
+    name: 'SendNotice',
+    component: SendNotice
   },
   {
     path: '/register',

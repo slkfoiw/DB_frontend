@@ -4,7 +4,8 @@
       <img alt="logo" class="logo" src="@/assets/emoji.png" width="80" height="80" />
       <ul>
         <li><div><router-link to="/"><i class="fas fa-home"></i><span>首页</span></router-link></div></li>
-        <li><div><router-link to="/admin"><i class="fas fa-home"></i><span>管理员</span></router-link></div></li>
+        <li><div><router-link to="/admin"><span>管理员</span></router-link></div></li>
+        <li><div><router-link to="/sendnotice"><span>发布公告</span></router-link></div></li>
         <li class="menu-break"><hr></li>
         <li id="user-item" v-if="!show"><div><router-link :to="`/user/${userName}`"><i class="fas fa-user"></i><span>我的</span></router-link></div></li>
         <li id="user-item" v-if="show"><div><router-link :to="`/login`"><i class="fas fa-sign-in-alt"></i><span>登陆</span></router-link></div></li>

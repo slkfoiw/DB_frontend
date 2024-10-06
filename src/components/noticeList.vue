@@ -21,7 +21,8 @@
             <th>公告ID</th>
             <th>发布时间</th>
             <th>发布人</th>
-            <th>公告主题</th>
+            <th>接收对象</th>
+            <th>公告标题</th>
             <th>公告内容</th>
             <th>操作</th>
           </tr>
@@ -31,6 +32,7 @@
             <td>{{ notice.id }}</td>
             <td>{{ new Date(notice.date).toLocaleString() }}</td>
             <td>{{ notice.publisher }}</td>
+            <td>{{ notice.recipient }}</td>
             <td>{{ notice.title }}</td>
             <td>{{ notice.content }}</td>
             <td>
@@ -62,7 +64,11 @@
               <input v-model="form.publisher" type="text" id="publisher" required :readonly="isEdit" />
             </div>
             <div>
-              <label for="title">公告主题:</label>
+              <label for="recipient">接收对象:</label>
+              <input v-model="form.recipient" type="text" id="recipient" required :readonly="isEdit" />
+            </div>
+            <div>
+              <label for="title">公告标题:</label>
               <input v-model="form.title" type="text" id="title" required />
             </div>
             <div>
@@ -86,7 +92,7 @@ import { getUserInfo } from '@/api/user';
     name: 'NoticeList',
     setup() {
       const notices = ref([]);
-      const form = ref({ id: null, publisher: '', title: '', content: '', date: '' });
+      const form = ref({ id: null, publisher: '', recipient: '', title: '', content: '', date: '' });
       const isEdit = ref(false);
       const isModalVisible = ref(false);
       const searchQuery = ref('');
