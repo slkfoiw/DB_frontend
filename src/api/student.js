@@ -24,7 +24,7 @@ export const getStudents = () => {
     //     }
     // })
     return {
-        data: mockStudents
+        data: [...mockStudents]
     };
 };
 

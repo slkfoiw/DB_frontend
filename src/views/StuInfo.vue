@@ -24,9 +24,6 @@
                 <el-button icon="Search" style="margin-left: 5px" type="primary" @click="load"></el-button>
                 <!-- <el-button icon="refresh-left" style="margin-left: 10px" type="default" @click="reset"></el-button> -->
                 <div style="float: right">
-                    <el-button @click="sortBy('studentId')">按学号排序</el-button>
-                    <el-button @click="sortBy('stuName')">按姓名拼音排序</el-button>
-                    <!-- 添加按钮，打开弹窗 -->
                     <el-tooltip content="添加学生" placement="top">
                         <el-button icon="plus" style="width: 50px" type="primary" @click="openModal()"></el-button>
                     </el-tooltip>
@@ -36,15 +33,19 @@
             <!-- 表格显示宿管信息 -->
             <el-table :data="paginatedStudents" style="width: 100%">
                 <el-table-column label="序号" type="index" />
-                <el-table-column prop="studentId" label="学号" />
-                <el-table-column prop="stuName" label="姓名" />
-                <el-table-column prop="dormitoryNumber" label="公寓号" />
-                <el-table-column prop="roomNumber" label="宿舍号" />
+                <el-table-column prop="studentId" label="学号" sortable />
+                <el-table-column prop="stuName" label="姓名" sortable />
+                <el-table-column prop="dormitoryNumber" label="公寓号" sortable />
+                <el-table-column prop="roomNumber" label="宿舍号" sortable />
                 <el-table-column prop="major" label="专业" />
                 <el-table-column label="操作">
                     <template v-slot="scope">
-                        <el-button v-if="scope.row.studentId" @click="openModal(scope.row)">编辑</el-button>
-                        <el-button v-if="scope.row.studentId" @click="deleteStu(scope.row.studentId)">删除</el-button>
+                        <el-button icon="Edit" @click="openModal(scope.row)">编辑</el-button>
+                        <el-popconfirm title="确认删除？" @confirm="handleDelete(scope.row.studentId)">
+                            <template #reference>
+                                <el-button icon="Delete" type="danger">删除</el-button>
+                            </template>
+                        </el-popconfirm>
                     </template>
                 </el-table-column>
             </el-table>
@@ -104,27 +105,18 @@ const form = ref({
 const oldStudentId = ref('');
 const isEdit = ref(false);
 const showModal = ref(false);
-const sortKey = ref('studentId');
-const isAscending = ref(true);
 const currentPage = ref(1);
 const pageSize = ref(10); // 每页显示10条数据
 const paginatedStudents = ref([]);
-// 根据选择的字段排序后的全部学生列表
-const sortedStudents = computed(() => {
-    return [...students.value].sort((a, b) => {
-        let result;
-        if (sortKey.value === 'stuName') {
-            // 按拼音排序
-            result = a.stuName.localeCompare(b.stuName, 'zh');
-        } else {
-            // 按ID排序
-            result = a[sortKey.value] > b[sortKey.value] ? 1 : -1;
-        }
-        return isAscending.value ? result : -result;
+const filteredStudents = computed(() => {
+    return students.value.filter(student => {
+        return (
+            student.studentId.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
+            student.stuName.toLowerCase().includes(searchQuery.value.toLowerCase())
+        );
     });
 });
-
-const totalitems = computed(() => sortedStudents.value.length);
+const totalitems = computed(() => filteredStudents.value.length);
 
 const fetchStudents = async () => {
     try {
@@ -138,26 +130,8 @@ const fetchStudents = async () => {
 
 // 搜索功能
 const load = () => {
-    const filteredStudents = sortedStudents.value.filter(student => {
-        return (
-            student.studentId.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-            student.stuName.toLowerCase().includes(searchQuery.value.toLowerCase())
-        );
-    });
-    paginatedStudents.value = filteredStudents.slice((currentPage.value - 1) * pageSize.value, currentPage.value * pageSize.value);
+    paginatedStudents.value = filteredStudents.value.slice((currentPage.value - 1) * pageSize.value, currentPage.value * pageSize.value);
 }
-
-// 排序逻辑
-const sortBy = (key) => {
-    if (sortKey.value === key) {
-        isAscending.value = !isAscending.value; // 如果再次点击同一个字段，则切换升降序
-    } else {
-        sortKey.value = key;
-        isAscending.value = true; // 默认升序
-    }
-    // console.log('按', key, '排序');
-    load();
-};
 
 // 翻页功能
 const handleCurrentChange = (pageNum) => {
@@ -209,7 +183,7 @@ const saveStudent = async () => {
         }
     }
 
-    const res = isEdit.value? await updateStudent(form.value) : await addStudent(form.value);
+    const res = isEdit.value ? await updateStudent(form.value) : await addStudent(form.value);
     if (res.success) {
         ElMessage.success(res.message);
     } else {
@@ -219,7 +193,7 @@ const saveStudent = async () => {
     closeModal();
 };
 
-const deleteStu = async (studentId) => {
+const handleDelete = async (studentId) => {
     const res = await deleteStudent(studentId);
     if (res.success) {
         ElMessage.success(res.message);
@@ -261,7 +235,7 @@ const handleFileUpload = (file) => {
 };
 
 
-const parseExcel = async(data) => {
+const parseExcel = async (data) => {
     const workbook = XLSX.read(data, { type: 'array' });
     const firstSheetName = workbook.SheetNames[0];
     const worksheet = workbook.Sheets[firstSheetName];
@@ -275,8 +249,8 @@ const parseExcel = async(data) => {
     }
 };
 
-const parseXML = async(data) => {
-    parseString(data, async(err, result) => {
+const parseXML = async (data) => {
+    parseString(data, async (err, result) => {
         if (err) {
             ElMessage.error('XML解析失败!');
         } else {
@@ -293,7 +267,7 @@ const parseXML = async(data) => {
 
 const exportStudents = () => {
     const wb = XLSX.utils.book_new(); // 创建新的工作簿
-    const ws = XLSX.utils.json_to_sheet(sortedStudents.value); // 将学生信息转为工作表
+    const ws = XLSX.utils.json_to_sheet(students.value); // 将学生信息转为工作表
     XLSX.utils.book_append_sheet(wb, ws, '学生信息'); // 将工作表加入工作簿
     XLSX.writeFile(wb, '学生信息.xlsx'); // 导出为 Excel 文件
 };

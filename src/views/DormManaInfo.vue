@@ -17,14 +17,12 @@
                 <el-button @click="exportDormManagers">导出宿管信息</el-button>
             </div>
 
-            <!-- 搜索宿管、排序、添加宿管 -->
+            <!-- 搜索宿管、添加宿管 -->
             <div style="margin: 10px 0">
                 <el-input v-model="searchQuery" clearable placeholder="请输入宿管工号或姓名" prefix-icon="Search"
                     style="width: 20%" />
                 <el-button icon="Search" style="margin-left: 5px" type="primary" @click="load"></el-button>
                 <div style="float: right">
-                    <el-button @click="sortBy('managerId')">按宿管ID排序</el-button>
-                    <el-button @click="sortBy('managerName')">按姓名拼音排序</el-button>
                     <el-tooltip content="添加宿管" placement="top">
                         <el-button icon="plus" style="width: 50px" type="primary" @click="openModal()"></el-button>
                     </el-tooltip>
@@ -34,13 +32,17 @@
             <!-- 表格显示宿管信息 -->
             <el-table :data="paginatedDormManagers" style="width: 100%">
                 <el-table-column label="序号" type="index" />
-                <el-table-column prop="managerId" label="宿管ID" />
-                <el-table-column prop="managerName" label="姓名" />
-                <el-table-column prop="dormitoryNumber" label="公寓号" />
+                <el-table-column prop="managerId" label="宿管ID" sortable />
+                <el-table-column prop="managerName" label="姓名" sortable />
+                <el-table-column prop="dormitoryNumber" label="公寓号" sortable />
                 <el-table-column label="操作">
                     <template v-slot="scope">
-                        <el-button v-if="scope.row.managerId" @click="openModal(scope.row)">编辑</el-button>
-                        <el-button v-if="scope.row.managerId" @click="deleteDormMana(scope.row.managerId)">删除</el-button>
+                        <el-button icon="Edit" @click="openModal(scope.row)">编辑</el-button>
+                        <el-popconfirm title="确认删除？" @confirm="handleDelete(scope.row.managerId)">
+                            <template #reference>
+                                <el-button icon="Delete" type="danger">删除</el-button>
+                            </template>
+                        </el-popconfirm>
                     </template>
                 </el-table-column>
             </el-table>
@@ -94,17 +96,12 @@ const isAscending = ref(true);
 const currentPage = ref(1);
 const pageSize = ref(10);
 const paginatedDormManagers = ref([]);
+const filteredManagers = computed(() => dormManagers.value.filter(manager =>
+    manager.managerId.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
+    manager.managerName.toLowerCase().includes(searchQuery.value.toLowerCase())
+));
 
-const sortedDormManagers = computed(() => {
-    return [...dormManagers.value].sort((a, b) => {
-        const compareResult = sortKey.value === 'managerName' ?
-            a.managerName.localeCompare(b.managerName, 'zh') :
-            a[sortKey.value] - b[sortKey.value];
-        return isAscending.value ? compareResult : -compareResult;
-    });
-});
-
-const totalitems = computed(() => sortedDormManagers.value.length);
+const totalitems = computed(() => filteredManagers.value.length);
 
 const fetchDormManagers = async () => {
     try {
@@ -117,17 +114,7 @@ const fetchDormManagers = async () => {
 };
 
 const load = () => {
-    const filteredManagers = sortedDormManagers.value.filter(manager =>
-        manager.managerId.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-        manager.managerName.toLowerCase().includes(searchQuery.value.toLowerCase())
-    );
-    paginatedDormManagers.value = filteredManagers.slice((currentPage.value - 1) * pageSize.value, currentPage.value * pageSize.value);
-};
-
-const sortBy = (key) => {
-    isAscending.value = (sortKey.value === key) ? !isAscending.value : true;
-    sortKey.value = key;
-    load();
+    paginatedDormManagers.value = filteredManagers.value.slice((currentPage.value - 1) * pageSize.value, currentPage.value * pageSize.value);
 };
 
 const handleCurrentChange = (pageNum) => {
@@ -188,7 +175,7 @@ const saveDormMana = async () => {
     closeModal();
 };
 
-const deleteDormMana = async (managerId) => {
+const handleDelete = async (managerId) => {
     try {
         const res = await deleteDormManager(managerId);
         if (!res.success) throw new Error(res.message);

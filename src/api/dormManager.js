@@ -24,7 +24,7 @@ export const getDormManagers = () => {
     //     }
     // })
     return {
-        data: mockDormManagers
+        data: [...mockDormManagers]
     };
 };
 
@@ -90,6 +90,7 @@ export const deleteDormManager = (managerId) => {
     if (index !== -1) {
         mockDormManagers.splice(index, 1); // 模拟删除
     }
+    console.log(mockDormManagers);
     return { 
         success: true,
         message: '删除成功'

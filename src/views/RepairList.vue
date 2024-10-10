@@ -1,176 +1,186 @@
 <template>
     <div class="repair-list-container">
-        <h2>报修列表</h2>
+        <el-breadcrumb separator-icon="ArrowRight">
+            <el-breadcrumb-item :to="{ path: '/home' }">首页</el-breadcrumb-item>
+            <el-breadcrumb-item>信息管理</el-breadcrumb-item>
+            <el-breadcrumb-item>报修记录</el-breadcrumb-item>
+        </el-breadcrumb>
 
-        <!-- 搜索框 -->
-        <div class="search">
-            <input v-model="searchQuery" placeholder="搜索报修类型" />
-        </div>
+        <el-card>
+            <!-- 搜索框 -->
+            <div style="margin: 10px 0">
+                <el-input v-model="searchQuery" clearable placeholder="请输入报修类型" prefix-icon="Search"
+                    style="width: 20%" />
+                <el-button icon="Search" style="margin-left: 5px" type="primary" @click="load"></el-button>
+                <div style="float: right">
+                    <el-tooltip content="添加报修记录" placement="top">
+                        <el-button icon="plus" style="width: 50px" type="primary" @click="openModal()"></el-button>
+                    </el-tooltip>
+                </div>
+            </div>
 
-        <!-- 排序按钮 -->
-        <div class="sort-buttons">
-            <button @click="sortByDate('asc')">按时间升序</button>
-            <button @click="sortByDate('desc')">按时间降序</button>
-        </div>
+            <!-- 表格显示报修信息 -->
+            <el-table :data="paginatedRepairs" style="width: 100%">
+                <el-table-column label="序号" type="index" />
+                <el-table-column prop="date" label="报修时间" sortable />
+                <el-table-column prop="type" label="报修类型" />
+                <el-table-column prop="dormitoryNumber" label="公寓号" />
+                <el-table-column prop="roomNumber" label="宿舍号" />
+                <el-table-column :filter-method="filterTag" :filters="[
+                    { text: '已完成', value: '已完成' },
+                    { text: '未完成', value: '未完成' },
+                ]" filter-placement="bottom-end" label="报修状态" prop="status" sortable>
+                    <template #default="scope">
+                        <el-tag :type="scope.row.status === '已完成' ? 'success' : 'info'" disable-transitions>{{
+                            scope.row.status }}
+                        </el-tag>
+                    </template>
+                </el-table-column>
+                <el-table-column label="操作">
+                    <template #default="scope">
+                        <el-button icon="Edit" type="primary" @click="openModal(scope.row)">编辑</el-button>
+                        <el-popconfirm title="确认删除？" @confirm="handleDelete(scope.row.id)">
+                            <template #reference>
+                                <el-button icon="Delete" type="danger">删除</el-button>
+                            </template>
+                        </el-popconfirm>
+                    </template>
+                </el-table-column>
+            </el-table>
 
-        <!-- 表格显示报修信息 -->
-        <table>
-            <thead>
-                <tr>
-                    <th>报修ID</th>
-                    <th>报修时间</th>
-                    <th>报修类型</th>
-                    <th>公寓号</th>
-                    <th>宿舍号</th>
-                    <th>报修状态</th>
-                    <th>操作</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr v-for="(repair, index) in currentRepairs" :key="repair.id">
-                    <td>{{ repair.id }}</td>
-                    <td>{{ new Date(repair.date).toLocaleString() }}</td>
-                    <td>{{ repair.type }}</td>
-                    <td>{{ repair.apartmentNumber }}</td>
-                    <td>{{ repair.dormitoryNumber }}</td>
-                    <td>
-                        <select v-model="repair.status">
-                            <option value="未完成">未完成</option>
-                            <option value="已完成">已完成</option>
-                        </select>
-                    </td>
-                    <td>
-                        <button @click="updateRepair(repair)">更新状态</button>
-                    </td>
-                </tr>
-                <!-- 添加空行补足不足的行数 -->
-                <tr v-for="n in emptyRows" :key="n">
-                    <td colspan="7" style="height: 40px;"></td>
-                </tr>
-            </tbody>
-        </table>
+            <!-- 翻页控件 -->
+            <el-pagination @current-change="handleCurrentChange" @size-change="handleSizeChange"
+                :current-page="currentPage" :page-size="pageSize" :page-sizes="[10, 20]" :total="totalitems"
+                layout="total, sizes, prev, pager, next, jumper" :disabled="totalitems === 0">
+            </el-pagination>
 
-        <!-- 翻页控件 -->
-        <div class="pagination">
-            <button @click="prevPage" :disabled="currentPage === 1">上一页</button>
-            <span>第 {{ currentPage }} 页</span>
-            <button @click="nextPage" :disabled="currentPage === totalPages">下一页</button>
-        </div>
+            <!-- 弹窗 -->
+            <el-dialog v-model="showModal" title="报修信息" @close="closeModal">
+                <div class="modal-content">
+                    <h3>{{ isEdit ? '编辑报修' : '添加报修' }}</h3>
+                    <el-form :model="form" ref="formRef">
+                        <el-form-item label="报修时间" prop="date" style="margin-top: 27px">
+                            <el-date-picker v-model="form.date" :disabled="isEdit" clearable
+                                placeholder="选择时间" style="width: 48%" type="datetime"
+                                value-format="YYYY-MM-DD HH:mm:ss"></el-date-picker>
+                        </el-form-item>
+                        <el-form-item label="报修类型" prop="type" required>
+                            <el-input v-model="form.type" placeholder="请输入报修类型"></el-input>
+                        </el-form-item>
+                        <el-form-item label="公寓号" prop="dormitoryNumber" required>
+                            <el-input v-model="form.dormitoryNumber" placeholder="请输入公寓号"></el-input>
+                        </el-form-item>
+                        <el-form-item label="宿舍号" prop="roomNumber" required>
+                            <el-input v-model="form.roomNumber" placeholder="请输入公寓号"></el-input>
+                        </el-form-item>
+                        <el-form-item label="报修状态" prop="status" required>
+                            <el-radio-group v-model="form.status">
+                                <el-radio label="已完成">已完成</el-radio>
+                                <el-radio label="未完成">未完成</el-radio>
+                            </el-radio-group>
+                        </el-form-item>
+                        <el-form-item>
+                            <el-button type="primary" @click="handleChange">{{ isEdit ? '更新' : '添加' }}</el-button>
+                            <el-button type="default" @click="closeModal">取消</el-button>
+                        </el-form-item>
+                    </el-form>
+                </div>
+            </el-dialog>
+        </el-card>
     </div>
 </template>
 
-<script>
+<script setup>
 import { ref, computed, onMounted } from 'vue';
-import { getRepairs, updateRepairStatus } from '@/api/admin'; // 替换为实际 API
+import { getRepairs, updateRepair, addRepair, deleteRepair } from '@/api/admin'; // 替换为实际 API
 
-export default {
-    name: 'RepairList',
-    setup() {
-        const repairs = ref([]);
-        const searchQuery = ref('');
-        const currentPage = ref(1);
-        const itemsPerPage = ref(5);
 
-        const totalPages = computed(() => Math.ceil(filteredRepairs.value.length / itemsPerPage.value));
+const repairs = ref([]);
+const searchQuery = ref('');
+const currentPage = ref(1);
+const pageSize = ref(10);
+const paginatedRepairs = ref([]);
+const totalitems = computed(() => filteredRepairs.value.length);
+const showModal = ref(false);
+const form = ref({ id: null, date: '', type: '', dormitoryNumber: '', roomNumber: '', status: '' });
+const isEdit = ref(false);
 
-        // 获取报修列表
-        const fetchRepairs = async () => {
-            const response = await getRepairs();
-            repairs.value = response.data; // 假设 API 返回的数据
-        };
-
-        const filteredRepairs = computed(() => {
-            return repairs.value.filter(repair => {
-                return repair.type.toLowerCase().includes(searchQuery.value.toLowerCase());
-            });
-        });
-
-        const currentRepairs = computed(() => {
-            const start = (currentPage.value - 1) * itemsPerPage.value;
-            return filteredRepairs.value.slice(start, start + itemsPerPage.value);
-        });
-
-        const emptyRows = computed(() => {
-            return itemsPerPage.value - currentRepairs.value.length;
-        });
-
-        const sortByDate = (order) => {
-            if (order === 'asc') {
-                repairs.value.sort((a, b) => new Date(a.date) - new Date(b.date));
-            } else {
-                repairs.value.sort((a, b) => new Date(b.date) - new Date(a.date));
-            }
-        };
-
-        const nextPage = () => {
-            if (currentPage.value < totalPages.value) {
-                currentPage.value++;
-            }
-        };
-
-        const prevPage = () => {
-            if (currentPage.value > 1) {
-                currentPage.value--;
-            }
-        };
-
-        const updateRepair = async (repair) => {
-            await updateRepairStatus(repair.id, { status: repair.status });
-            await fetchRepairs(); // 刷新报修列表
-        };
-
-        onMounted(fetchRepairs); // 获取报修列表
-
-        return {
-            repairs,
-            searchQuery,
-            currentPage,
-            itemsPerPage,
-            totalPages,
-            filteredRepairs,
-            currentRepairs,
-            emptyRows,
-            sortByDate,
-            nextPage,
-            prevPage,
-            updateRepair,
-        };
-    }
+// 获取报修列表
+const fetchRepairs = async () => {
+    const response = await getRepairs();
+    repairs.value = response.data; // 假设 API 返回的数据
+    load();
 };
+
+const filterTag = (value, row) => {
+    return row.status === value;
+};
+
+const filteredRepairs = computed(() => repairs.value.filter(
+    repair => {
+        return repair.type.toLowerCase().includes(searchQuery.value.toLowerCase());
+    })
+);
+
+const load = () => {
+    const start = (currentPage.value - 1) * pageSize.value;
+    paginatedRepairs.value = filteredRepairs.slice(start, start + pageSize.value);
+}
+
+const handleCurrentChange = (pageNum) => {
+    currentPage.value = pageNum;
+    load();
+}
+
+const handleSizeChange = (newPageSize) => {
+    pageSize.value = newPageSize;
+    load();
+}
+
+const openModal = (repair = null) => {
+    if (repair) {
+        form.value = { ...repair };
+        isEdit.value = true;
+    } else {
+        resetForm();
+        isEdit.value = false;
+    }
+    showModal.value = true;
+};
+
+const resetForm = () => {
+    form.value = { id: null, date: '', type: '', dormitoryNumber: '', roomNumber: '', status: '' };
+};
+
+const closeModal = () => {
+    showModal.value = false;
+};
+
+const handleChange = async () => {
+    const res = isEdit.value ? await updateRepair(form.value) : await addRepair(form.value);
+    if (res.success) {
+        ElMessage.success(res.message);
+    } else {
+        ElMessage.error(res.message);
+    }
+    fetchRepairs();
+    closeModal();
+};
+
+const handleDelete = async (id) => {
+    const res = await deleteRepair(id);
+    if (res.success) {
+        ElMessage.success(res.message);
+    } else {
+        ElMessage.error(res.message);
+    }
+    fetchRepairs();
+}
+
+onMounted(fetchRepairs); // 获取报修列表
+
 </script>
 
 <style scoped>
 @import '@/assets/css/table.css';
-
-.repair-list-container {
-    width: 100%;
-    max-width: 800px;
-    margin: 0 auto;
-}
-
-.table {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-th,
-td {
-    padding: 8px;
-    border: 1px solid #ddd;
-}
-
-h2 {
-    text-align: center;
-    margin-bottom: 20px;
-}
-
-.pagination {
-    margin-top: 20px;
-    display: flex;
-    justify-content: center;
-}
-
-.pagination button {
-    margin: 0 5px;
-}
 </style>
