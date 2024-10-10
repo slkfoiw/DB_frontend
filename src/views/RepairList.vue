@@ -96,11 +96,12 @@ import { getRepairs, updateRepair, addRepair, deleteRepair } from '@/api/admin';
 
 
 const repairs = ref([]);
+const filteredRepairs = ref([]);
 const searchQuery = ref('');
 const currentPage = ref(1);
 const pageSize = ref(10);
 const paginatedRepairs = ref([]);
-const totalitems = computed(() => filteredRepairs.value.length);
+const totalitems = ref(0);
 const showModal = ref(false);
 const form = ref({ id: null, date: '', type: '', dormitoryNumber: '', roomNumber: '', status: '' });
 const isEdit = ref(false);
@@ -116,15 +117,14 @@ const filterTag = (value, row) => {
     return row.status === value;
 };
 
-const filteredRepairs = computed(() => repairs.value.filter(
+const load = () => {
+    filteredRepairs.value = repairs.value.filter(
     repair => {
         return repair.type.toLowerCase().includes(searchQuery.value.toLowerCase());
-    })
-);
-
-const load = () => {
+    });
+    totalitems.value = filteredRepairs.value.length;
     const start = (currentPage.value - 1) * pageSize.value;
-    paginatedRepairs.value = filteredRepairs.slice(start, start + pageSize.value);
+    paginatedRepairs.value = filteredRepairs.value.slice(start, start + pageSize.value);
 }
 
 const handleCurrentChange = (pageNum) => {

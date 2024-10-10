@@ -94,6 +94,7 @@ import * as XLSX from 'xlsx';
 import { ElMessage } from 'element-plus';
 
 const students = ref([]);
+const filteredStudents = ref([]);
 const searchQuery = ref('');
 const form = ref({
     studentId: '',
@@ -102,21 +103,13 @@ const form = ref({
     roomNumber: '',
     major: ''
 });
+const totalitems = ref(0);
 const oldStudentId = ref('');
 const isEdit = ref(false);
 const showModal = ref(false);
 const currentPage = ref(1);
 const pageSize = ref(10); // 每页显示10条数据
 const paginatedStudents = ref([]);
-const filteredStudents = computed(() => {
-    return students.value.filter(student => {
-        return (
-            student.studentId.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-            student.stuName.toLowerCase().includes(searchQuery.value.toLowerCase())
-        );
-    });
-});
-const totalitems = computed(() => filteredStudents.value.length);
 
 const fetchStudents = async () => {
     try {
@@ -130,6 +123,13 @@ const fetchStudents = async () => {
 
 // 搜索功能
 const load = () => {
+    filteredStudents.value = students.value.filter(student => {
+            return (
+                student.studentId.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
+                student.stuName.toLowerCase().includes(searchQuery.value.toLowerCase())
+            );
+        });
+    totalitems.value = filteredStudents.value.length;
     paginatedStudents.value = filteredStudents.value.slice((currentPage.value - 1) * pageSize.value, currentPage.value * pageSize.value);
 }
 

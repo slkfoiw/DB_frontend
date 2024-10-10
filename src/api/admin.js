@@ -8,19 +8,19 @@ const mockAdmins = [
 ];
 
 const mockNotices = [
-    { id: 1, date: new Date().toLocaleString(), title: '第一条公告', publisher: '张三', content: '这是第一条公告', recipient: '全体' },
-    { id: 2, date: new Date(Date.now() - 86400000).toLocaleString(), title: '第二条公告', publisher: '李四', content: '这是第二条公告', recipient: '所有宿管' },
-    { id: 3, date: new Date(Date.now() - 172800000).toLocaleString(), title: '第二条公告', publisher: '王五', content: '这是第三条公告', recipient: '所有学生' },
-    { id: 4, date: new Date(Date.now() - 259200000).toLocaleString(), title: '第四条公告', publisher: '赵六', content: '这是第四条公告', recipient: '全体' },
-    { id: 5, date: new Date(Date.now() - 345600000).toLocaleString(), title: '第五条公告', publisher: '张三', content: '这是第五条公告', recipient: '全体' },
-    { id: 6, date: new Date(Date.now() - 432000000).toLocaleString(), title: '第六条公告', publisher: '李四', content: '这是第六条公告', recipient: '全体' },
-    { id: 7, date: new Date(Date.now() - 518400000).toLocaleString(), title: '第七条公告', publisher: '王五', content: '这是第七条公告', recipient: '全体' },
-    { id: 8, date: new Date(Date.now() - 604800000).toLocaleString(), title: '第八条公告', publisher: '赵六', content: '这是第八条公告', recipient: '全体' },
-    { id: 9, date: new Date(Date.now() - 691200000).toLocaleString(), title: '第九条公告', publisher: '张三', content: '这是第九条公告', recipient: '全体' },
-    { id: 10, date: new Date(Date.now() - 777600000).toLocaleString(), title: '第十条公告', publisher: '李四', content: '这是第十条公告', recipient: '全体' },
-    { id: 11, date: new Date(Date.now() - 864000000).toLocaleString(), title: '第十一条公告', publisher: '王五', content: '这是第十一条公告', recipient: '全体' },
-    { id: 12, date: new Date(Date.now() - 950400000).toLocaleString(), title: '第十二条公告', publisher: '赵六', content: '这是第十二条公告', recipient: '全体' },
-    { id: 13, date: new Date(Date.now() - 1036800000).toLocaleString(), title: '第十三条公告', publisher: '张三', content: '这是第十三条公告', recipient: '全体' }
+    { id: 1, releaseTime: new Date().toLocaleString(), title: '第一条公告', publisher: '张三', content: '这是第一条公告', recipient: '全体' },
+    { id: 2, releaseTime: new Date(Date.now() - 86400000).toLocaleString(), title: '第二条公告', publisher: '李四', content: '这是第二条公告', recipient: '所有宿管' },
+    { id: 3, releaseTime: new Date(Date.now() - 172800000).toLocaleString(), title: '第二条公告', publisher: '王五', content: '这是第三条公告', recipient: '所有学生' },
+    { id: 4, releaseTime: new Date(Date.now() - 259200000).toLocaleString(), title: '第四条公告', publisher: '赵六', content: '这是第四条公告', recipient: '全体' },
+    { id: 5, releaseTime: new Date(Date.now() - 345600000).toLocaleString(), title: '第五条公告', publisher: '张三', content: '这是第五条公告', recipient: '全体' },
+    { id: 6, releaseTime: new Date(Date.now() - 432000000).toLocaleString(), title: '第六条公告', publisher: '李四', content: '这是第六条公告', recipient: '全体' },
+    { id: 7, releaseTime: new Date(Date.now() - 518400000).toLocaleString(), title: '第七条公告', publisher: '王五', content: '这是第七条公告', recipient: '全体' },
+    { id: 8, releaseTime: new Date(Date.now() - 604800000).toLocaleString(), title: '第八条公告', publisher: '赵六', content: '这是第八条公告', recipient: '全体' },
+    { id: 9, releaseTime: new Date(Date.now() - 691200000).toLocaleString(), title: '第九条公告', publisher: '张三', content: '这是第九条公告', recipient: '全体' },
+    { id: 10, releaseTime: new Date(Date.now() - 777600000).toLocaleString(), title: '第十条公告', publisher: '李四', content: '这是第十条公告', recipient: '全体' },
+    { id: 11, releaseTime: new Date(Date.now() - 864000000).toLocaleString(), title: '第十一条公告', publisher: '王五', content: '这是第十一条公告', recipient: '全体' },
+    { id: 12, releaseTime: new Date(Date.now() - 950400000).toLocaleString(), title: '第十二条公告', publisher: '赵六', content: '这是第十二条公告', recipient: '全体' },
+    { id: 13, releaseTime: new Date(Date.now() - 1036800000).toLocaleString(), title: '第十三条公告', publisher: '张三', content: '这是第十三条公告', recipient: '全体' }
 ];
 
 const mockRepairs = [

@@ -86,22 +86,16 @@ import { ElMessage } from 'element-plus';
 import { parseString } from 'xml2js';
 
 const dormManagers = ref([]);
+const filteredManagers = ref([]);
 const searchQuery = ref('');
+const totalitems = ref(0);
 const form = ref({ managerId: '', managerName: '', dormitoryNumber: '' });
 const oldManagerId = ref('');
 const isEdit = ref(false);
 const showModal = ref(false);
-const sortKey = ref('managerId');
-const isAscending = ref(true);
 const currentPage = ref(1);
 const pageSize = ref(10);
 const paginatedDormManagers = ref([]);
-const filteredManagers = computed(() => dormManagers.value.filter(manager =>
-    manager.managerId.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-    manager.managerName.toLowerCase().includes(searchQuery.value.toLowerCase())
-));
-
-const totalitems = computed(() => filteredManagers.value.length);
 
 const fetchDormManagers = async () => {
     try {
@@ -114,6 +108,11 @@ const fetchDormManagers = async () => {
 };
 
 const load = () => {
+    filteredManagers.value = dormManagers.value.filter(manager =>
+        manager.managerId.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
+        manager.managerName.toLowerCase().includes(searchQuery.value.toLowerCase())
+    );
+    totalitems.value = filteredManagers.value.length;
     paginatedDormManagers.value = filteredManagers.value.slice((currentPage.value - 1) * pageSize.value, currentPage.value * pageSize.value);
 };
 
