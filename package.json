@@ -14,7 +14,7 @@
     "@fortawesome/free-solid-svg-icons": "^6.6.0",
     "@fortawesome/vue-fontawesome": "^3.0.8",
     "axios": "^1.7.2",
-    "element-plus": "^2.7.7",
+    "element-plus": "^2.8.4",
     "js-cookie": "^3.0.5",
     "particles": "^0.3.1",
     "particles.js": "^2.0.0",
@@ -26,7 +26,8 @@
     "vue-infinite-scroll": "^2.0.2",
     "vue-router": "^4.4.0",
     "vuex": "^4.1.0",
-    "xlsx": "^0.18.5"
+    "xlsx": "^0.18.5",
+    "xml2js": "^0.6.2"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^5.0.5",

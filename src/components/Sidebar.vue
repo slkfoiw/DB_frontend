@@ -1,16 +1,47 @@
 <template>
   <div class="app-container">
-    <aside class = "sidebar">
+    <el-menu :default-active="this.$route.path" router
+      unique-opened class="sidebar">
+      <!-- logo -->
       <img alt="logo" class="logo" src="@/assets/emoji.png" width="80" height="80" />
-      <ul>
-        <li><div><router-link to="/"><i class="fas fa-home"></i><span>首页</span></router-link></div></li>
-        <li><div><router-link to="/admin"><span>管理员</span></router-link></div></li>
-        <li><div><router-link to="/sendnotice"><span>发布公告</span></router-link></div></li>
-        <li class="menu-break"><hr></li>
-        <li id="user-item" v-if="!show"><div><router-link :to="`/user/${userName}`"><i class="fas fa-user"></i><span>我的</span></router-link></div></li>
-        <li id="user-item" v-if="show"><div><router-link :to="`/login`"><i class="fas fa-sign-in-alt"></i><span>登陆</span></router-link></div></li>
-      </ul>
-    </aside>
+      
+      <!-- 侧边菜单列表 -->
+      <el-menu-item index="/home">
+        <el-icon><house/></el-icon>
+        <span>首页</span>
+      </el-menu-item>
+      <!-- identityLevel 学校管理员：0 宿管：1 学生：2 -->
+      <el-sub-menu v-if="identityLevel !== 2" index="2">
+        <template #title>
+          <el-icon><user/></el-icon>
+          <span>用户管理</span>
+        </template>
+        <el-menu-item v-if="identityLevel === 0" index="/dormManagerInfo">宿管信息</el-menu-item>
+        <el-menu-item index="/stuInfo">学生信息</el-menu-item>
+      </el-sub-menu>
+      <el-sub-menu v-if="identityLevel !== 2" index="3">
+        <template #title>
+          <el-icon><coin/></el-icon>
+          <span>宿舍管理</span>
+        </template>
+        <el-menu-item index="/dormitoryInfo">公寓信息</el-menu-item>
+        <el-menu-item index="/roomInfo">房间信息</el-menu-item>
+      </el-sub-menu>
+      <el-sub-menu v-if="identityLevel !== 2" index="4">
+        <template #title>
+          <el-icon><message/></el-icon>
+          <span>信息管理</span>
+        </template>
+        <el-menu-item index="/noticeList">公告列表</el-menu-item>
+        <el-menu-item index="/repairList">报修记录</el-menu-item>
+      </el-sub-menu>
+      <el-menu-item :index="`/user/${userName}`">
+        <template #title>
+          <el-icon><setting/></el-icon>
+          <span>个人信息</span>
+        </template>
+      </el-menu-item>
+    </el-menu>
   </div>
 </template>
 
@@ -38,10 +69,13 @@ export default {
     setup() {
         const userStore = useUserStore();
         const userName = computed(() => userStore.userInfo.username);
+        // const identityLevel = computed(() => userStore.userInfo.identityLevel);
+        const identityLevel = 0;
         // console.log('userInfo:', userStore.userInfo);
         // console.log('userId:', userId.value);
         return {
-            userName
+            userName,
+            identityLevel
         }
     }
 }
@@ -53,77 +87,37 @@ header {
 	border:0
 }
 
-.app-container {
-  position: relative;
-}
-
 .sidebar {
-    position: fixed;
-    left: 0;
-    width: 175px;
-    min-height: 100vh;
-    /* overflow: auto; */
-    background-color: #125188;
-    /* padding-left: 2px; */
-    z-index: 1;
+  width: 200px; 
+  height: 100%; 
+  min-height: calc(100vh - 40px);
+  position: fixed;
+  left: 0;
+  /* overflow: auto; */
+  /* background-color: #82a6c5; */
+  /* padding-left: 2px; */
+  z-index: 1;
 }
 
-ul {
-  margin: 0;
-  padding: 0;
+.icon {
+  margin-right: 6px;
 }
 
-li>div {
-  padding-left:1rem;
-}
-
-.menu-break {
-  padding: 0 3rem 0 1.5rem;
-}
-
-main {
-  margin-left: 200px;
-  /* 设置左边距，使其不被侧边栏遮挡 */
-  flex-grow: 1;
-  /* 使主内容区域占据剩余空间 */
-  /* padding: 20px; */
-  /* 添加内边距，使内容不紧贴边缘 */
-}
-
-a {
-  display: block;
-  /* width: 100%; */
-  color: white;
-  font-size: 18px;
-}
-
-.fas {
-  margin-left: 20px;
-  margin-right: 10px;
-  font-size: 20px;
-  width: 24px; /* 固定图标宽度 */
-}
-
-span {
-  margin-left: 5px;
+.el-sub-menu .el-menu-item {
+  height: 50px;
+  line-height: 50px;
+  padding: 0 45px;
+  min-width: 199px;
 }
 
 .logo {
   display: block;
   margin: 20px auto;
-
 }
 
 #user-item {
   position: absolute;
   bottom: 30px;
-  left: 0;
-  width: 100%;
-}
-
-#user-about-us {
-  position: absolute;
-  bottom: 80px;
   left: 0;
   width: 100%;
 }

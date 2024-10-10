@@ -16,10 +16,10 @@
 </template>
 
 <script>
-import StuList from '@/components/StuList.vue';
-import DormManaList from '@/components/DormManaList.vue';
-import NoticeList from '@/components/NoticeList.vue';
-import RepairList from '@/components/RepairList.vue';
+import StuList from '@/views/StuInfo.vue';
+import DormManaList from '@/views/DormManaInfo.vue';
+import NoticeList from '@/views/NoticeList.vue';
+import RepairList from '@/views/RepairList.vue';
 
 export default {
     name: 'Admin',

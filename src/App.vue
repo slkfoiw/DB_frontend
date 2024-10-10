@@ -19,7 +19,7 @@ import Sidebar from '@/components/Sidebar.vue'
 
 main {
   flex-grow: 1;
-  margin-left: 175px;
+  margin-left: 200px;
   background-color: #f1f1f1;
   flex-direction: column;
   justify-content: center; /* 垂直居中对齐 */

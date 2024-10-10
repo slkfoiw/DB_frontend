@@ -6,6 +6,7 @@ import router from './router'
 import store from './store'
 import axios from 'axios'
 import ElementPlus from 'element-plus'
+import zhCn from 'element-plus/es/locale/lang/zh-cn'
 import 'element-plus/dist/index.css'
 import { createPinia } from 'pinia';
 import piniaPersist from 'pinia-plugin-persistedstate';
@@ -25,7 +26,7 @@ app.component('font-awesome-icon', FontAwesomeIcon);
 
 app.use(router)
 app.use(store)
-app.use(ElementPlus)
+app.use(ElementPlus, { locale: zhCn })
 const pinia = createPinia()
 pinia.use(piniaPersist)
 

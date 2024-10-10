@@ -10,14 +10,39 @@ import SendNotice from '@/views/SendNotice.vue';
 
 const routes = [
   {
-    path: '/',
+    path: '/home',
     name: 'ORIGIN',
     component: Admin
   },
   {
-    path: '/admin',
-    name: 'Admin',
-    component: Admin
+    path: '/dormManagerInfo',
+    name: 'DormManagerInfo',
+    component: () => import('@/views/DormManaInfo.vue')
+  },
+  {
+    path: '/stuInfo',
+    name: 'StuInfo',
+    component: () => import('@/views/StuInfo.vue')
+  },
+  {
+    path: '/dormitoryInfo',
+    name: 'DormitoryInfo',
+    component: () => import('@/views/DormitoryInfo.vue')
+  },
+  {
+    path: '/roomInfo',
+    name: 'RoomInfo',
+    component: () => import('@/views/RoomInfo.vue')
+  },
+  {
+    path: '/noticeList',
+    name: 'NoticeList',
+    component: () => import('@/views/NoticeList.vue')
+  },
+  {
+    path: '/repairList',
+    name: 'RepairList',
+    component: () => import('@/views/RepairList.vue')
   },
   {
     path: '/sendnotice',

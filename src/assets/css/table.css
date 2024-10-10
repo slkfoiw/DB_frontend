@@ -1,62 +1,8 @@
-table {
-    width: 100%;
-    border-collapse: collapse;
+.el-breadcrumb {
+    margin: 16px;
 }
 
-table,
-th,
-td {
-    border: 1px solid #ddd;
-}
-
-th,
-td {
-    padding: 8px;
-    text-align: left; /* 可以根据需求设置为 right 或 center */
-    height: 20px;
-}
-
-th {
-    background-color: #f2f2f2;
-}
-
-button {
-    margin-right: 10px;
-}
-
-.sort-buttons {
-    margin-bottom: 10px;
-    display: flex;
-    justify-content: flex-end; /* 设置为两端对齐 */
-}
-
-.pagination {
-    margin-top: 20px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.modal-content label {
-    display: block;
-    margin: 10px 0 5px;
-}
-
-.modal-content {
-    background-color: white;
-    padding: 20px;
-    border-radius: 5px;
-    width: 400px;
+.el-card {
+    margin: 15px;
+    min-height: calc(100vh - 111px);
 }
