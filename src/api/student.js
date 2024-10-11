@@ -1,6 +1,6 @@
 import http from "@/utils/http";
 
-const mockStudents = [
+let mockStudents = [
     { studentId: '22371001', stuName: '张三', dormitoryNumber: '11', roomNumber: '101', major: '计算机科学' },
     { studentId: '22371002', stuName: '李四', dormitoryNumber: '11', roomNumber: '102', major: '软件工程' },
     { studentId: '22371003', stuName: '王五', dormitoryNumber: '11', roomNumber: '201', major: '信息管理' },

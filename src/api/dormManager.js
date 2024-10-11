@@ -1,6 +1,6 @@
 import http from "@/utils/http";
 
-const mockDormManagers = [
+let mockDormManagers = [
     { managerId: '22500002', managerName: '宿管C', dormitoryNumber: '12' },
     { managerId: '22500003', managerName: '宿管B', dormitoryNumber: '13' },
     { managerId: '22500001', managerName: '宿管A', dormitoryNumber: '11' },

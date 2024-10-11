@@ -25,7 +25,6 @@
         <el-table-column prop="title" label="主题" />
         <el-table-column prop="publisher" label="发布人" />
         <el-table-column prop="recipient" label="通知对象" />
-        <el-table-column prop="content" label="内容" />
         <el-table-column label="操作">
           <template v-slot="scope">
             <el-button icon="more-filled" type="default" @click="openDetail(scope.row)"></el-button>
