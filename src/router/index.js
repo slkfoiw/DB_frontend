@@ -7,6 +7,11 @@ import store from '@/store';
 import Admin from '@/views/Admin.vue';
 import User from '@/views/User.vue';
 import SendNotice from '@/views/SendNotice.vue';
+// STUDENT
+import ApplyChangeRoom from '@/views/STUDENT/ApplyChangeRoom.vue';
+import ApplyRepairInfo from '@/views/STUDENT/ApplyRepairInfo.vue';
+import MyRoomInfo from '@/views/STUDENT/MyRoomInfo.vue';
+import AnnouncementBoard from '@/views/AnnouncementBoard.vue';
 
 const routes = [
   {
@@ -65,7 +70,30 @@ const routes = [
     component: User,
     // meta: { requiresAuth: true }
     props: true
-  }
+  },
+
+    // STUDENT
+    {
+      path: '/myRoomInfo',
+      name: 'MyRoomInfo',
+      component: MyRoomInfo
+    },
+    {
+      path: '/applyChangeRoom',
+      name: 'ApplyChangeRoom',
+      component: ApplyChangeRoom
+    },
+    {
+      path: '/applyRepairInfo',
+      name: 'ApplyRepairInfo',
+      component: ApplyRepairInfo
+    },
+
+    {
+      path: '/announcementBoard',
+      name: 'AnnouncementBoard',
+      component: AnnouncementBoard
+    }
 ];
 
 const router = createRouter({

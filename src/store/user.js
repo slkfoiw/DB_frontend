@@ -1,3 +1,4 @@
+// 需要 勿删
 import { defineStore } from "pinia";
 import { ref, computed } from "vue";
 import {login, register, refreshAccessToken, logout, getUserInfo, getUserActionInfo} from "@/api/user.js";
@@ -43,8 +44,8 @@ export const useUserStore = defineStore('user', () => {
             return null;
         }
     }
-    userInfo.value.userId = 123;
-    userInfo.value.username = 123;
+    userInfo.value.userId = 22373474;
+    userInfo.value.username = "樊孜昱";
     userInfo.value.email = '123@qq.com';
     const updateUserBaseInfo = async () => {
         const res = await getUserInfo();

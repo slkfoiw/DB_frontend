@@ -35,6 +35,25 @@
         <el-menu-item index="/noticeList">公告列表</el-menu-item>
         <el-menu-item index="/repairList">报修记录</el-menu-item>
       </el-sub-menu>
+      
+      <el-menu-item index="/announcementBoard">
+      <el-icon><DataLine /></el-icon>
+      <span>公告栏</span>
+      </el-menu-item>
+      <!-- 判断STUDENT身份 -->
+      <el-menu-item index="/myRoomInfo">
+      <el-icon><school /></el-icon>
+      <span>我的宿舍</span>
+      </el-menu-item>
+      <el-menu-item index="/applyChangeRoom">
+      <el-icon><takeaway-box /></el-icon>
+      <span>申请调宿</span>
+      </el-menu-item>
+      <el-menu-item index="/applyRepairInfo">
+      <el-icon><set-up /></el-icon>
+      <span>报修申请</span>
+      </el-menu-item>
+      
       <el-menu-item :index="`/user/${userName}`">
         <template #title>
           <el-icon><setting/></el-icon>
