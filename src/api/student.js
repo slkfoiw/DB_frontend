@@ -94,10 +94,25 @@ export const deleteStudent = (studentId) => {
     };
 };
 
-export const checkIfIdExists = (stuentId) => {
+export const checkIfIdExists = (studentId) => {
     // return http({
     //     url: `dormManager/check-if-id-exits/${managerId}`,
     //     method: 'GET'
     // })
-    return mockStudents.some(m => m.studentId === stuentId);
+    return mockStudents.some(m => m.studentId === String(studentId));
+}
+
+export const getStudentById = (studentId) => {
+    // return http({
+    //     url: `student/get-student-by-id/${studentId}`,
+    //     method: 'GET'
+    // })
+    return new Promise((resolve, reject) => {
+        const student = mockStudents.find(s => s.studentId === String(studentId));
+        if (student) {
+            resolve({ code: "0", data: student });
+        } else {
+            reject({ code: "1", message: "学生信息不存在" });
+        }
+    });
 }
