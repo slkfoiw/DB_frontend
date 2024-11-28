@@ -153,7 +153,8 @@
 
 import { ref, reactive, onMounted, nextTick } from 'vue';
 import { ElMessage } from 'element-plus';
-import { checkRoomState, checkRoomExist, checkBedState, fetchAdjustRoomData, getMyRoom, updateAdjustRoom, addAdjustRoom } from '@/api/applyChangeRoom'; // 导入API
+import { checkRoomState, checkRoomExist, checkBedState, fetchAdjustRoomData, updateAdjustRoom, addAdjustRoom } from '@/api/applyChangeRoom'; // 导入API
+import { getRoomBedUserId } from '@/api/myRoomInfo';
 import { useUserStore } from '@/store/user';
 
 const loading = ref(true);
@@ -264,9 +265,9 @@ const add = () => {
     form.userId = user.userId;
     form.name = user.username;
     try {
-      const res = await getMyRoom(form.userId);
-      form.currentRoomId = res.data.dormRoomId;
-      form.currentBedId = calBedNum(form.userId, res.data);
+      const res = await getRoomBedUserId(form.userId);
+      form.currentRoomId = res.data.info.dormRoomId;
+      form.currentBedId = calBedNum(form.userId, res.data.info);
     } catch (error) {
       console.error('获取房间信息失败', error);
     }
@@ -282,10 +283,10 @@ const save = () => {
         if (!judgeOption.value) {
           judgeOrderState(form.state);
           const res = await updateAdjustRoom(orderState.value, form);
-          handleResponse(res, "修改成功");
+          handleResponse(res.data, "修改成功");
         } else {
           const res = await addAdjustRoom(form);
-          handleResponse(res, "添加成功");
+          handleResponse(res.data, "添加成功");
         }
       } catch (error) {
         ElMessage({ message: "请求失败", type: "error" });

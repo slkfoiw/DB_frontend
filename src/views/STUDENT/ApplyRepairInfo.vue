@@ -129,7 +129,8 @@
 <script setup>
 import { reactive, ref, onMounted, nextTick } from 'vue';
 import { ElMessage } from 'element-plus';
-import { getRepairRecords, getMyRoom, addRepair } from '@/api/applyRepairInfo';  // 引入你的api文件
+import { getRepairRecords, addRepair } from '@/api/applyRepairInfo';  // 引入你的api文件
+import { getRoomInfo } from '@/api/myRoomInfo';
 import { useUserStore } from '@/store/user';
 
 // 响应式变量
@@ -166,12 +167,12 @@ const init = () => {
 
 // 获取房间信息
 const getInfo = async () => {
-  const res = await getMyRoom(userId.value);
-  if (res.code === '0') {
-    Object.assign(room, res.data);
+  const res = await getRoomInfo(userId.value);
+  if (res.data.code === '0') {
+    Object.assign(room, res.data.info);
   } else {
     ElMessage({
-      message: res.msg,
+      message: res.data.msg,
       type: 'error',
     });
   }

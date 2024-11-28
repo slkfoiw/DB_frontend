@@ -181,7 +181,7 @@ const init = () => {
 const getInfo = async () => {
     try {
         const roomData = await getRoomInfo(form.userId);
-        room.value = roomData.data;
+        room.value = roomData.data.info;
     } catch (error) {
         console.error(error);
     }

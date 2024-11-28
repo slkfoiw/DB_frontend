@@ -1,14 +1,17 @@
 import http from "@/utils/http";
 
+// 获取当前用户房间信息
 export const getRoomInfo = (userId) => {
-    // return http({
-    //   url: `/room/getMyRoom/${userId}`,
-    //   method: 'GET'
-    // });
-  
-    return {
+  // return http({
+  //   url: `/room/getMyRoom/${userId}`,
+  //   method: 'GET'
+  // });
+
+  return {
+    data: {
       code: "0",
-      data: {
+      msg: "sucess",
+      info: {
         dormRoomId: 257,
         dormBuildId: 13,
         floorNum: 2,
@@ -19,7 +22,30 @@ export const getRoomInfo = (userId) => {
         thirdBed: "name3",
         fourthBed: "樊孜昱",
       },
-      msg: "Successfully fetched room info",
-    };
+    }
   };
-  
+};
+
+// 获取当前用户房间人员学号
+export const getRoomBedUserId = (userId) => {
+  // return http({
+  //     url: `room/getRoomBedUserId/${userId}`,
+  //     method: 'GET',
+  //     headers: {
+  //         'Content-Type': 'application/json'
+  //     }
+  // });
+  return {
+    data: {
+      code: "0",
+      mes: 'success',
+      info: {
+        dormRoomId: 257,
+        firstBed: 4,
+        secondBed: 3,
+        thirdBed: 2,
+        fourthBed: 22373474
+      }
+    }
+  }
+};

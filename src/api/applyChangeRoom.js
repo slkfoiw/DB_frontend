@@ -1,4 +1,5 @@
 import http from '@/utils/http';
+import { info } from 'sass';
 
 // 检查房间状态
 export const checkRoomState = (roomId) => {
@@ -73,32 +74,10 @@ export const fetchAdjustRoomData = (params) => {
                     {index: 2, userId: 22373473, name: "辛卓妍", currentRoomId: 256, currentBedId: 2, towardsRoomId: 257, towardsBedId: 4, applyTime: "2021-07-01 12:00:00", state: "驳回", finishTime: "2021-07-02 12:00:00"},
                     {index: 3, userId: 22373472, name: "李梦婷", currentRoomId: 256, currentBedId: 3, towardsRoomId: 257, towardsBedId: 4, applyTime: "2021-07-01 12:00:00", state: "通过", finishTime: "2021-07-02 12:00:00"},           
                 ],
-                total: 2,
+                total: 3,
                 }
     }
     // records包括index userId name currentRoomId currentBedId targetRoomId towardsBedId applyTime state finishTime
-};
-
-// 获取当前用户的房间信息
-export const getMyRoom = (username) => {
-    // return http({
-    //     url: `room/getMyRoom/${username}`,
-    //     method: 'GET',
-    //     headers: {
-    //         'Content-Type': 'application/json'
-    //     }
-    // });
-    return {
-            code: "0",
-            mes: 'success',
-            data: {
-                dormRoomId: 257,
-                firstBed: 4,
-                secondBed: 3,
-                thirdBed: 2,
-                fourthBed: 22373474
-            }
-    }
 };
 
 // 更新调整房间信息
@@ -112,8 +91,10 @@ export const updateAdjustRoom = (orderState, data) => {
     //     data: data
     // });
     return {
+        data: {
             code: "0",
             mes: 'success'
+        }
     }
 };
 
@@ -128,8 +109,10 @@ export const addAdjustRoom = (data) => {
     //     data: data
     // });
     return {
+        data: {
             code: "0",
             mes: 'success'
+        }
     }
 };
 

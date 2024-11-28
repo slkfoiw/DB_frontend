@@ -25,26 +25,6 @@ export const getRepairRecords = (params) => {
     };
   };
   
-  // 获取房间信息
-  export const getMyRoom = (userId) => {
-    // return request({
-    //   url: `/room/getMyRoom/${userId}`,
-    //   method: 'GET',
-    //   headers: {
-    //     'Content-Type': 'application/json'
-    //   }
-    // });
-  
-    // 模拟数据
-    return {
-      code: "0",
-      data: {
-        dormRoomId: 257,
-        dormBuildId: 13,
-      }
-    };
-  };
-  
   // 新增维修记录
   export const addRepair = (form) => {
     // return request({
