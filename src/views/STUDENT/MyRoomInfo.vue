@@ -16,7 +16,7 @@
                     <el-icon>
                       <office-building/>
                     </el-icon>
-                    楼宇号
+                    公寓号
                   </div>
                 </template>
                 <span class="rightSpan">{{ room.dormBuildId }}</span>
@@ -27,7 +27,7 @@
                     <el-icon>
                       <Key />
                     </el-icon>
-                    房间号
+                    宿舍号
                   </div>
                 </template>
                 <span class="rightSpan">{{ room.dormRoomId }}</span>

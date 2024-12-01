@@ -23,8 +23,8 @@
         <el-table v-loading="loading" :data="tableData" border max-height="705" style="width: 100%">
           <el-table-column label="#" type="index"/>
           <el-table-column :show-overflow-tooltip="true" label="标题" prop="title"/>
-          <el-table-column label="宿舍号" prop="dormBuildId" sortable width="150px"/>
-          <el-table-column label="房间号" prop="dormRoomId" sortable width="150px"/>
+          <el-table-column label="公寓号" prop="dormBuildId" sortable width="150px"/>
+          <el-table-column label="宿舍号" prop="dormRoomId" sortable width="150px"/>
           <el-table-column label="申请人" prop="repairer" width="150px"/>
           <el-table-column
               :filter-method="filterTag"
@@ -69,10 +69,10 @@
         <div>
           <el-dialog v-model="dialogVisible" title="添加" width="30%" @close="cancel">
             <el-form ref="formRef" :model="form" :rules="rules" label-width="120px">
-              <el-form-item label="楼宇号" prop="dormBuildId" style="margin-bottom: 27px">
+              <el-form-item label="公寓号" prop="dormBuildId" style="margin-bottom: 27px">
                 <el-input v-model="form.dormBuildId" disabled style="width: 80%">{{ this.room.dormBuildId }}</el-input>
               </el-form-item>
-              <el-form-item label="房间号" prop="dormRoomId" style="margin-bottom: 27px">
+              <el-form-item label="宿舍号" prop="dormRoomId" style="margin-bottom: 27px">
                 <el-input v-model="form.dormRoomId" disabled style="width: 80%">{{ this.room.dormRoomId }}</el-input>
               </el-form-item>
               <el-form-item label="申请人" prop="repairer">
@@ -184,13 +184,16 @@ const load = async () => {
     pageNum: currentPage.value,
     pageSize: pageSize.value,
     search: search.value,
-    name: name.value,
+    userId: userId.value,
   };
   const res = await getRepairRecords(params);
   tableData.value = res.data.records;
   total.value = res.data.total;
   loading.value = false;
 };
+
+// 过滤标签
+const filterTag = (value, row) => row.state === value;
 
 // 展示详情
 const showDetail = (row) => {
@@ -225,7 +228,7 @@ const save = async () => {
   formRef.value.validate(async (valid) => {
     if (valid) {
       const res = await addRepair(form);
-      if (res.code === '0') {
+      if (res.data.code === '0') {
         ElMessage({
           message: '新增成功',
           type: 'success',

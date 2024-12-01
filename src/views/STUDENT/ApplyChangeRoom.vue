@@ -8,9 +8,9 @@
     <el-card style="margin: 15px; min-height: calc(100vh - 111px)">
       <div>
         <!-- 功能区 -->
-        <div class="function-area">
+        <div style="margin: 10px 0">
           <!-- 搜索区 -->
-          <div class="search-bar">
+          <div style="margin: 10px 0">
             <el-input v-model="search" clearable placeholder="请输入学号" prefix-icon="Search" style="width: 20%" />
             <el-button icon="Search" style="margin-left: 5px" type="primary" @click="load"></el-button>
             <div style="float: right">
@@ -25,9 +25,11 @@
           <el-table-column label="#" type="index" />
           <el-table-column label="学号" prop="userId" sortable width="100px" />
           <el-table-column label="姓名" prop="name" width="100px" />
-          <el-table-column label="当前房间号" prop="currentRoomId" sortable />
+          <el-table-column label="当前公寓号" prop="currentDormId" sortable />
+          <el-table-column label="当前宿舍号" prop="currentRoomId" sortable />
           <el-table-column label="当前床位号" prop="currentBedId" sortable />
-          <el-table-column label="目标房间号" prop="towardsRoomId" sortable />
+          <el-table-column label="目标公寓号" prop="towardsDormId" sortable/>
+          <el-table-column label="目标宿舍号" prop="towardsRoomId" sortable />
           <el-table-column label="目标床位号" prop="towardsBedId" sortable />
           <el-table-column
             :filter-method="filterTag"
@@ -62,7 +64,7 @@
           </el-table-column>
         </el-table>
         <!-- 分页 -->
-        <div class="pagination-area">
+        <div style="margin: 10px 0">
           <el-pagination
             v-model:currentPage="currentPage"
             :page-size="pageSize"
@@ -82,13 +84,21 @@
             <el-form-item label="姓名" prop="name">
               <el-input v-model="form.name" disabled style="width: 80%" />
             </el-form-item>
-            <el-form-item label="当前房间号" prop="currentRoomId">
+            <el-form-item label="当前公寓号" prop="currentDormId">
+              <el-input v-model="form.currentDormId" disabled style="width: 80%" />
+            </el-form-item>
+            <el-form-item label="当前宿舍号" prop="currentRoomId">
               <el-input v-model="form.currentRoomId" disabled style="width: 80%" />
             </el-form-item>
             <el-form-item label="当前床位号" prop="currentBedId">
               <el-input v-model="form.currentBedId" disabled style="width: 80%" />
             </el-form-item>
-            <el-form-item label="目标房间号" prop="towardsRoomId">
+            <el-form-item label="目标公寓号" prop="towardsDormId">
+              <el-select v-model="form.towardsDormId" placeholder="选择公寓号" style="width: 80%">
+                <el-option v-for="build in dormBuildings" :key="build.id" :label="build.name" :value="build.id" />
+              </el-select>
+            </el-form-item>
+            <el-form-item label="目标宿舍号" prop="towardsRoomId">
               <el-input v-model.number="form.towardsRoomId" style="width: 80%" />
             </el-form-item>
             <el-form-item label="目标床位号" prop="towardsBedId">
@@ -122,13 +132,19 @@
             <el-form-item label="姓名：" prop="name">
               <span>{{ form.name }}</span>
             </el-form-item>
-            <el-form-item label="当前房间号：" prop="currentRoomId">
+            <el-form-item label="当前公寓号：" prop="currentDormId">
+              <span>{{ form.currentDormId }}</span>
+            </el-form-item>
+            <el-form-item label="当前宿舍号：" prop="currentRoomId">
               <span>{{ form.currentRoomId }}</span>
             </el-form-item>
             <el-form-item label="当前床位号：" prop="currentBedId">
               <span>{{ form.currentBedId }}</span>
             </el-form-item>
-            <el-form-item label="目标房间号：" prop="towardsRoomId">
+            <el-form-item label="目标公寓号：" prop="towardsDormId">
+              <span>{{ form.towardsDormId }}</span>
+            </el-form-item>
+            <el-form-item label="目标宿舍号：" prop="towardsRoomId">
               <span>{{ form.towardsRoomId }}</span>
             </el-form-item>
             <el-form-item label="目标床位号：" prop="towardsBedId">
@@ -172,8 +188,10 @@ const formRef = ref(null);
 const form = reactive({
       userId: '',
       name: '',
+      currentDormId: '',
       currentRoomId: '',
       currentBedId: '',
+      towardsDormId: '',
       towardsRoomId: '',
       towardsBedId: '',
       applyTime: '',
@@ -186,8 +204,8 @@ const checkRoomStateHandler = async (rule, value, callback) => {
   dormRoomId.value = value;
   if (typeof value === "number") {
     try {
-      const res = await checkRoomState(value);
-      const result = await checkRoomExist(value);
+      const res = await checkRoomState(form.towardsDormId, value);
+      const result = await checkRoomExist(form.towardsDormId, value);
       if (result.data.code === "-1") {
         callback(new Error(result.data.msg));
       } else if (res.data.code === "-1") {
@@ -206,7 +224,7 @@ const checkRoomStateHandler = async (rule, value, callback) => {
 // 检查床位状态
 const checkBedStateHandler = async (rule, value, callback) => {
   try {
-    const res = await checkBedState(dormRoomId.value, value);
+    const res = await checkBedState(form.towardsDormId, dormRoomId.value, value);
     if (res.data.code === "0") {
       callback();
     } else {
@@ -227,7 +245,7 @@ const rules = reactive({
     { pattern: /^(?:[\u4E00-\u9FA5·]{2,10})$/, message: "必须由 2 到 10 个汉字组成", trigger: "blur" },
   ],
   currentRoomId: [
-    { required: true, message: "请输入当前房间号", trigger: "blur" },
+    { required: true, message: "请输入当前宿舍号", trigger: "blur" },
   ],
   currentBedId: [
     { required: true, message: "请输入当前床位号", trigger: "blur" },
@@ -266,6 +284,7 @@ const add = () => {
     form.name = user.username;
     try {
       const res = await getRoomBedUserId(form.userId);
+      form.currentDormId = res.data.info.dormBuildId;
       form.currentRoomId = res.data.info.dormRoomId;
       form.currentBedId = calBedNum(form.userId, res.data.info);
     } catch (error) {
@@ -363,6 +382,13 @@ const handleCurrentChange = (pageNum) => {
   currentPage.value = pageNum;
   load();
 };
+
+const dormBuildings = ref([
+  { id: '1', name: '13' },
+  { id: '2', name: '14' },
+  { id: '3', name: '15' },
+  // 其他楼宇数据...
+]);
 
 onMounted(() => {
   load();

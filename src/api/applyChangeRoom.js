@@ -2,9 +2,9 @@ import http from '@/utils/http';
 import { info } from 'sass';
 
 // 检查房间状态
-export const checkRoomState = (roomId) => {
+export const checkRoomState = (dormId, roomId) => {
     // return http({
-    //     url: `room/checkRoomState/${roomId}`,
+    //     url: `room/checkRoomState/${dormId}/${roomId}`,
     //     method: 'GET',
     //     headers: {
     //         'Content-Type': 'application/json'
@@ -13,15 +13,15 @@ export const checkRoomState = (roomId) => {
     return {
             data: {
                 code: "0",
-                mes: 'success',
+                msg: 'success',
             }
     }
 };
 
 // 检查房间是否存在
-export const checkRoomExist = (roomId) => {
+export const checkRoomExist = (dormId, roomId) => {
     // return http({
-    //     url: `room/checkRoomExist/${roomId}`,
+    //     url: `room/checkRoomExist/${dormId}/${roomId}`,
     //     method: 'GET',
     //     headers: {
     //         'Content-Type': 'application/json'
@@ -30,15 +30,15 @@ export const checkRoomExist = (roomId) => {
     return {
             data: {
                 code: "0",
-                mes: 'success',
+                msg: 'success',
             }
     }
 };
 
 // 检查床位状态
-export const checkBedState = (roomId, bedId) => {
+export const checkBedState = (dormId, roomId, bedId) => {
     // return http({
-    //     url: `room/checkBedState/${roomId}/${bedId}`,
+    //     url: `room/checkBedState/${dormId}/${roomId}/${bedId}`,
     //     method: 'GET',
     //     headers: {
     //         'Content-Type': 'application/json'
@@ -47,7 +47,7 @@ export const checkBedState = (roomId, bedId) => {
     return {
             data: {
                 code: "0",
-                mes: 'success',
+                msg: 'success',
             }
     }
 };
@@ -70,9 +70,9 @@ export const fetchAdjustRoomData = (params) => {
     return {
             data:{
                 records: [
-                    {index: 1, userId: 22373474, name: "樊孜昱", currentRoomId: 257, currentBedId: 4, towardsRoomId: 256, towardsBedId: 3, applyTime: "2021-07-01 12:00:00", state: "未处理", finishTime: "2021-07-02 12:00:00"},
-                    {index: 2, userId: 22373473, name: "辛卓妍", currentRoomId: 256, currentBedId: 2, towardsRoomId: 257, towardsBedId: 4, applyTime: "2021-07-01 12:00:00", state: "驳回", finishTime: "2021-07-02 12:00:00"},
-                    {index: 3, userId: 22373472, name: "李梦婷", currentRoomId: 256, currentBedId: 3, towardsRoomId: 257, towardsBedId: 4, applyTime: "2021-07-01 12:00:00", state: "通过", finishTime: "2021-07-02 12:00:00"},           
+                    {index: 1, userId: 22373474, name: "樊孜昱", currentDormId: 13, currentRoomId: 257, currentBedId: 4, towardsDormId: 13, towardsRoomId: 256, towardsBedId: 3, applyTime: "2021-07-01 12:00:00", state: "未处理", finishTime: "2021-07-02 12:00:00"},
+                    {index: 2, userId: 22373473, name: "辛卓妍", currentDormId: 13, currentRoomId: 256, currentBedId: 2, towardsDormId: 13, towardsRoomId: 257, towardsBedId: 4, applyTime: "2021-07-01 12:00:00", state: "驳回", finishTime: "2021-07-02 12:00:00"},
+                    {index: 3, userId: 22373472, name: "李梦婷", currentDormId: 13, currentRoomId: 256, currentBedId: 3, towardsDormId: 13, towardsRoomId: 257, towardsBedId: 4, applyTime: "2021-07-01 12:00:00", state: "通过", finishTime: "2021-07-02 12:00:00"},           
                 ],
                 total: 3,
                 }
@@ -93,7 +93,7 @@ export const updateAdjustRoom = (orderState, data) => {
     return {
         data: {
             code: "0",
-            mes: 'success'
+            msg: 'success'
         }
     }
 };
@@ -111,7 +111,7 @@ export const addAdjustRoom = (data) => {
     return {
         data: {
             code: "0",
-            mes: 'success'
+            msg: 'success'
         }
     }
 };

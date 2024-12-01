@@ -1,12 +1,12 @@
 // 获取维修记录
 export const getRepairRecords = (params) => {
     // return request({
-    //   url: `/repair/find/${params.name}`,
+    //   url: `/repair/find/${params.userId}`,
     //   method: 'GET',
     //   headers: {
     //     'Content-Type': 'application/json'
     //   },
-    //   params: {
+    //   data: {
     //     pageNum: params.pageNum,
     //     pageSize: params.pageSize,
     //     search: params.search,
@@ -38,8 +38,10 @@ export const getRepairRecords = (params) => {
   
     // 模拟数据
     return {
-      code: "0",
-      msg: "新增成功"
+      data: {
+        code: "0",
+        msg: "新增成功"
+      }
     };
   };
   

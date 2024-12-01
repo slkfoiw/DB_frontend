@@ -40,6 +40,7 @@ export const getRoomBedUserId = (userId) => {
       code: "0",
       mes: 'success',
       info: {
+        dormBuildId: 13,
         dormRoomId: 257,
         firstBed: 4,
         secondBed: 3,
