@@ -1,9 +1,9 @@
 import http from "@/utils/http";
 
 // 获取当前用户房间信息
-export const getRoomInfo = (userId) => {
+export const getRoomInfo = (userid) => {
   // return http({
-  //   url: `/room/getMyRoom/${userId}`,
+  //   url: `/room/getMyRoom/${userid}`,
   //   method: 'GET'
   // });
 
@@ -27,9 +27,9 @@ export const getRoomInfo = (userId) => {
 };
 
 // 获取当前用户房间人员学号
-export const getRoomBedUserId = (userId) => {
+export const getRoomBedUserId = (userid) => {
   // return http({
-  //     url: `room/getRoomBedUserId/${userId}`,
+  //     url: `room/getRoomBeduserId/${userid}`,
   //     method: 'GET',
   //     headers: {
   //         'Content-Type': 'application/json'
