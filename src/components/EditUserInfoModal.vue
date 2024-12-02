@@ -5,13 +5,12 @@
       <h3 class="modal-title">编辑用户信息</h3>
       <form @submit.prevent="submitForm">
         <div class="edit-item">
-          <label for="avatar" class="form-label">头像:</label>
-          <img :src="formData.avatarPreview || userInfo.avatar" alt="avatar" class="avatar" @click="changeAvatar" />
-          <input type="file" id="avatar" @change="handleAvatarChange" class="form-input" ref="avatarInput" style="display: none;" />
+          <label for="username" class="form-label">姓名:</label>
+          <input type="text" id="username" v-model="formData.username" class="form-input" disabled/>
         </div>
         <div class="edit-item">
-          <label for="username" class="form-label">用户名:</label>
-          <input type="text" id="username" v-model="formData.username" class="form-input"/>
+          <label for="userid" class="form-label">学工号:</label>
+          <input type="text" id="userid" v-model="formData.userid" class="form-input" disabled/>
         </div>
         <div class="edit-item">
           <label for="email" class="form-label">邮箱:</label>
@@ -40,7 +39,7 @@
 
 <script setup>
 import { ref, watch } from 'vue'
-import { updateUserInfo, updateUserAvatar } from '@/api/user.js'
+import { updateUserInfo } from '@/api/user.js'
 import { ElMessage } from "element-plus";
 
 const props = defineProps({
@@ -57,9 +56,8 @@ const props = defineProps({
 const emit = defineEmits(['update:showModal', 'doUpdate'])
 
 const formData = ref({
-    avatar: null,
-    avatarPreview: null,
     username: props.userInfo.username,
+    userid: props.userInfo.userid,
     email: props.userInfo.email,
     gender: props.userInfo.gender,
     introduction: props.userInfo.introduction
@@ -69,9 +67,8 @@ watch(() => props.showModal, (newVal) => {
     if (newVal) {
         // 填充用户信息
         formData.value = {
-            avatar: null,
-            avatarPreview: null,
             username: props.userInfo.username,
+            userid: props.userInfo.userid,
             email: props.userInfo.email,
             gender: props.userInfo.gender,
             introduction: props.userInfo.introduction
@@ -79,22 +76,11 @@ watch(() => props.showModal, (newVal) => {
     }
 })
 
-const handleAvatarChange = (event) => {
-    const file = event.target.files[0]
-    formData.value.avatar = file
-    formData.value.avatarPreview = URL.createObjectURL(file)
-}
-
-const changeAvatar = () => {
-    const avatarInput = document.getElementById('avatar')
-    avatarInput.click()
-}
 
 const submitForm = async () => {
   try {
         // 更新用户信息（文本）
         const userInfoResponse = await updateUserInfo({
-            username: formData.value.username,
             email: formData.value.email,
             gender: formData.value.gender,
             introduction: formData.value.introduction
@@ -107,47 +93,6 @@ const submitForm = async () => {
                 duration: 2000
             });
             return;
-        }
-
-
-        // 更新用户头像（如果用户上传了新头像）
-        if (formData.value.avatar) {
-          const allowedTypes = ['image/jpeg', 'image/png']; // 可接受的图片类型
-          const maxSize = 2; // 最大文件大小，单位：MB
-          const file = formData.value.avatar;
-
-          if (!allowedTypes.includes(file.type)) {
-            ElMessage(
-              {
-                message: '请上传正确的图片文件!',
-                type: 'warning',
-                duration: 2000
-              }
-            );
-            return;
-          }
-
-          if (file.size / 1024 / 1024 > maxSize) {
-            ElMessage(
-              {
-                message: `文件大小最多${maxSize}MB!`,
-                type: 'warning',
-                duration: 2000
-              }
-            );
-            return;
-          }
-
-          const avatarResponse = await updateUserAvatar(formData.value.avatar);
-
-          if (!avatarResponse.success) {
-            ElMessage({
-              message: '更新头像失败，请稍后重试。',
-                type: 'error',
-                duration: 2000
-            });
-            return;
-          }
         }
 
         ElMessage({
@@ -239,15 +184,6 @@ const closeModal = () => {
 .form-buttons {
   display: flex;
   justify-content: space-between;
-}
-
-.avatar {
-  width: 100px;
-  height: 100px;
-  border-radius: 50%;
-  cursor: pointer;
-  object-fit: cover;
-  margin-bottom: 15px;
 }
 
 .btn {

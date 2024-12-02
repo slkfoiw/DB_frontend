@@ -40,21 +40,23 @@
       <el-icon><DataLine /></el-icon>
       <span>公告栏</span>
       </el-menu-item>
-      <!-- 判断STUDENT身份 -->
-      <el-menu-item index="/myRoomInfo">
+      
+      <!-- 判断STUDENT身份 -- begin-->
+      <el-menu-item v-if="identityLevel === 2" index="/myRoomInfo">
       <el-icon><school /></el-icon>
       <span>我的宿舍</span>
       </el-menu-item>
-      <el-menu-item index="/applyChangeRoom">
+      <el-menu-item v-if="identityLevel === 2" index="/applyChangeRoom">
       <el-icon><takeaway-box /></el-icon>
       <span>申请调宿</span>
       </el-menu-item>
-      <el-menu-item index="/applyRepairInfo">
+      <el-menu-item v-if="identityLevel === 2" index="/applyRepairInfo">
       <el-icon><set-up /></el-icon>
       <span>报修申请</span>
       </el-menu-item>
-      
-      <el-menu-item :index="`/user/${userName}`">
+      <!-- 判断STUDENT身份 -- end-->
+
+      <el-menu-item :index="`/user/${userId}`">
         <template #title>
           <el-icon><setting/></el-icon>
           <span>个人信息</span>
@@ -88,11 +90,12 @@ export default {
     setup() {
         const userStore = useUserStore();
         const userName = computed(() => userStore.userInfo.username);
-        // const identityLevel = computed(() => userStore.userInfo.identityLevel);
-        const identityLevel = 0;
+        const userId = computed(() => userStore.userInfo.userid);
+        const identityLevel = computed(() => userStore.userInfo.identityLevel);
         // console.log('userInfo:', userStore.userInfo);
         // console.log('userId:', userId.value);
         return {
+            userId,
             userName,
             identityLevel
         }
