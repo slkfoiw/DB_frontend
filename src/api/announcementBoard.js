@@ -2,9 +2,9 @@
 import http from "@/utils/http";
 
 // 获取公告列表
-export const fetchAnnouncements = (userId) => {
+export const fetchAnnouncements = (userid) => {
     // return http({
-    //   url: '/announcement/list/${userId}',
+    //   url: '/announcement/list/${userid}',
     //   method: 'GET'
     // });
     
@@ -23,9 +23,9 @@ export const fetchAnnouncements = (userId) => {
 };
 
 // 标记公告为已读
-export const markRead = (announcementId, userId) => {
+export const markRead = (announcementId, userid) => {
     // return http({
-    //   url: `/announcement/markRead/${announcementId}/${userId}`,
+    //   url: `/announcement/markRead/${announcementId}/${userid}`,
     //   method: 'POST'
     // });
 
