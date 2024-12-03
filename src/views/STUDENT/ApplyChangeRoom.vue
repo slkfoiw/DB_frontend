@@ -59,7 +59,7 @@
           <el-table-column label="操作" width="130px">
             <template #default="scope">
               <el-button icon="MoreFilled" type="default" @click="showDetail(scope.row)"></el-button>
-              <el-button v-if="scope.row.state === '未处理' && scope.row.studentId === user.userid" icon="Edit" type="primary" @click="handleEdit(scope.row)"></el-button>
+              <el-button v-if="scope.row.state === '未处理' && scope.row.studentId === user.userId" icon="Edit" type="primary" @click="handleEdit(scope.row)"></el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -285,7 +285,7 @@ const add = () => {
   nextTick(async () => {
     formRef.value.resetFields();
     const user = useUserStore().userInfo;
-    form.studentId = user.userid;
+    form.studentId = user.userId;
     form.name = user.username;
     try {
       const res = await getRoomBedUserId(form.studentId);

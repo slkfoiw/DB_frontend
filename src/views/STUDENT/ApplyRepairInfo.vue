@@ -150,7 +150,7 @@ const room = reactive({
   dormBuildId: '',
 });
 const name = ref('');
-const userid = ref('');
+const userId = ref('');
 const rules = reactive({
   title: [{ required: true, message: '请输入标题', trigger: 'blur' }],
   content: [{ required: true, message: '请输入内容', trigger: 'blur' }],
@@ -161,13 +161,13 @@ const rules = reactive({
 const init = () => {
   const user = useUserStore().userInfo;
   name.value = user.username;
-  userid.value = user.userid;
+  userId.value = user.userId;
   console.log(user);
 };
 
 // 获取房间信息
 const getInfo = async () => {
-  const res = await getRoomInfo(userid.value);
+  const res = await getRoomInfo(userId.value);
   if (res.data.code === '0') {
     Object.assign(room, res.data.info);
   } else {
@@ -184,7 +184,7 @@ const load = async () => {
     pageNum: currentPage.value,
     pageSize: pageSize.value,
     search: search.value,
-    userid: userid.value,
+    userId: userId.value,
   };
   const res = await getRepairRecords(params);
   tableData.value = res.data.records;

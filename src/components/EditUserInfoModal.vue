@@ -9,8 +9,8 @@
           <input type="text" id="username" v-model="formData.username" class="form-input" disabled/>
         </div>
         <div class="edit-item">
-          <label for="userid" class="form-label">学工号:</label>
-          <input type="text" id="userid" v-model="formData.userid" class="form-input" disabled/>
+          <label for="userId" class="form-label">学工号:</label>
+          <input type="text" id="userId" v-model="formData.userId" class="form-input" disabled/>
         </div>
         <div class="edit-item">
           <label for="email" class="form-label">邮箱:</label>
@@ -57,7 +57,7 @@ const emit = defineEmits(['update:showModal', 'doUpdate'])
 
 const formData = ref({
     username: props.userInfo.username,
-    userid: props.userInfo.userid,
+    userId: props.userInfo.userId,
     email: props.userInfo.email,
     gender: props.userInfo.gender,
     introduction: props.userInfo.introduction
@@ -68,7 +68,7 @@ watch(() => props.showModal, (newVal) => {
         // 填充用户信息
         formData.value = {
             username: props.userInfo.username,
-            userid: props.userInfo.userid,
+            userId: props.userInfo.userId,
             email: props.userInfo.email,
             gender: props.userInfo.gender,
             introduction: props.userInfo.introduction

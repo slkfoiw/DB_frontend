@@ -10,12 +10,12 @@ export const useUserStore = defineStore('user', () => {
     // 下面的个人信息之后应该在 userLogin 里面获取 对接完成之后可以删除
     userInfo.value = {
         nickname: 'Fanziyu',
-        userid: 22373474,
+        userId: 22373474,
         gender: 'female',
         introduction: '这个人很懒，什么都没留下',
         username: '樊孜昱',
         email: '123@qq.com',
-        identityLevel: 2,
+        identityLevel: 0,
     }
     // 
 
@@ -46,7 +46,7 @@ export const useUserStore = defineStore('user', () => {
     const updateUserBaseInfo = async () => {
         const res = await getUserInfo();
         userInfo.value.nickname = res.data.nickname;
-        userInfo.value.userid = res.data.id;
+        userInfo.value.userId = res.data.id;
         userInfo.value.gender = res.data.gender;
         userInfo.value.introduction = res.data.introduction;
         userInfo.value.username = res.data.username;

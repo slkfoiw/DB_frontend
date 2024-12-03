@@ -90,7 +90,7 @@ export default {
     setup() {
         const userStore = useUserStore();
         const userName = computed(() => userStore.userInfo.username);
-        const userId = computed(() => userStore.userInfo.userid);
+        const userId = computed(() => userStore.userInfo.userId);
         const identityLevel = computed(() => userStore.userInfo.identityLevel);
         // console.log('userInfo:', userStore.userInfo);
         // console.log('userId:', userId.value);

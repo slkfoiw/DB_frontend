@@ -39,7 +39,7 @@ export const refreshAccessToken = (refreshToken) => {
 
 
 // 注册
-export const register = ({nickname, userid, username, password, email}) => {
+export const register = ({nickname, userId, username, password, email}) => {
     return http({
         url: 'user/register/',
         method: 'POST',
@@ -48,7 +48,7 @@ export const register = ({nickname, userid, username, password, email}) => {
         },
         data: {
             nickname,
-            userid,
+            userId,
             username,
             password,
             email
@@ -57,7 +57,7 @@ export const register = ({nickname, userid, username, password, email}) => {
 }
 
 // 检测学工号是否已经被注册 或 学工号与姓名是否匹配
-export const checkuserIdandName = ({userid, username}) => {
+export const checkuserIdandName = ({userId, username}) => {
     return http({
         url: 'user/register/checkIdIsOnly/',
         method: 'POST',
@@ -65,7 +65,7 @@ export const checkuserIdandName = ({userid, username}) => {
             'Content-Type': 'application/json'
         },
         data: {
-            id: userid,
+            id: userId,
             name: username
         }
     })

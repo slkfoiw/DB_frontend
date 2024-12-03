@@ -1,7 +1,7 @@
 // 获取维修记录
 export const getRepairRecords = (params) => {
     // return request({
-    //   url: `/repair/find/${params.userid}`,
+    //   url: `/repair/find/${params.userId}`,
     //   method: 'GET',
     //   headers: {
     //     'Content-Type': 'application/json'

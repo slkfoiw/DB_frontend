@@ -8,7 +8,7 @@
         <div class="header">{{ siteHeader }}</div>
         <form @submit.prevent="register">
           <div class="simpleui-input-inline">
-            <el-input v-model="userid" name="userid" placeholder="学工号" autofocus :prefix-icon="User"></el-input>
+            <el-input v-model="userId" name="userId" placeholder="学工号" autofocus :prefix-icon="User"></el-input>
           </div>
           <div class="simpleui-input-inline">
             <el-input v-model="username" name="username" placeholder="姓名" :prefix-icon="User"></el-input>
@@ -51,7 +51,7 @@ export default {
   setup() {
     const router = useRouter();
     const nickname = ref('');
-    const userid = ref('');
+    const userId = ref('');
     const username = ref('');
     const password = ref('');
     const confirmPassword = ref('');
@@ -72,7 +72,7 @@ export default {
 
     const handleRegister = async () => {
 
-      if (!nickname.value || !userid.value || !username.value || !password.value || !confirmPassword.value || !email.value) {
+      if (!nickname.value || !userId.value || !username.value || !password.value || !confirmPassword.value || !email.value) {
         ElMessage({
           message: '请填写所有字段。',
           type: 'error',
@@ -120,7 +120,7 @@ export default {
       }
       try {
         // 检查学工号是否已经被注册
-        const checkRes = await checkuserIdandName(userid.value, username.value, password.value, email.value);
+        const checkRes = await checkuserIdandName(userId.value, username.value, password.value, email.value);
         if (!checkRes.success) {
           ElMessage.error("该学工号已被注册或姓名不匹配");
           return;
@@ -128,7 +128,7 @@ export default {
 
         const res = await register({
           nickname: nickname.value,
-          userid: userid.value,
+          userId: userId.value,
           username: username.value,
           password: password.value,
           email: email.value
@@ -169,7 +169,7 @@ export default {
 
     return {
       nickname,
-      userid,
+      userId,
       username,
       password,
       confirmPassword,
