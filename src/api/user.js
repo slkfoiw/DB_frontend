@@ -1,7 +1,7 @@
 import http from "@/utils/http";
 
 // 登录
-export const login = ({email, password}) => {
+export const login = ({nickname, password}) => {
     return http({
         url: 'user/login/',
         method: 'POST',
@@ -9,7 +9,7 @@ export const login = ({email, password}) => {
             'Content-Type': 'application/json'
         },
         data: {
-            email,
+            nickname,
             password
         }
     })
@@ -39,7 +39,7 @@ export const refreshAccessToken = (refreshToken) => {
 
 
 // 注册
-export const register = ({userid, username, password, email}) => {
+export const register = ({nickname, userid, username, password, email}) => {
     return http({
         url: 'user/register/',
         method: 'POST',
@@ -47,6 +47,7 @@ export const register = ({userid, username, password, email}) => {
             'Content-Type': 'application/json'
         },
         data: {
+            nickname,
             userid,
             username,
             password,
@@ -58,7 +59,7 @@ export const register = ({userid, username, password, email}) => {
 // 检测学工号是否已经被注册 或 学工号与姓名是否匹配
 export const checkuserIdandName = ({userid, username}) => {
     return http({
-        url: 'user/register/check-student-id/',
+        url: 'user/register/checkIdIsOnly/',
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'

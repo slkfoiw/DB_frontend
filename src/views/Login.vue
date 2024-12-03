@@ -8,34 +8,19 @@
         <div class="header">{{ siteHeader }}</div>
         <form @submit.prevent="login">
           <div class="simpleui-input-inline">
-            <el-input
-              v-model="email"
-              name="email"
-              placeholder="邮箱"
-              autofocus
-              :prefix-icon="Message"
-            ></el-input>
+            <el-input v-model="nickname" name="nickname" placeholder="昵称" autofocus :prefix-icon="User"></el-input>
           </div>
           <div class="simpleui-input-inline">
-            <el-input
-              type="password"
-              v-model="password"
-              name="password"
-              @focus="changeLogoToClosedEyes"
-              @blur="changeLogoToOpenEyes"
-              @keyup.enter="login"
-              placeholder="密码"
-              show-password
-              :prefix-icon="Lock"
-            ></el-input>
+            <el-input v-model="email" name="email" placeholder="邮箱" autofocus :prefix-icon="Message"></el-input>
+          </div>
+          <div class="simpleui-input-inline">
+            <el-input type="password" v-model="password" name="password" @focus="changeLogoToClosedEyes"
+              @blur="changeLogoToOpenEyes" @keyup.enter="login" placeholder="密码" show-password
+              :prefix-icon="Lock"></el-input>
           </div>
           <div class="simpleui-input-inline button-container">
-            <el-button
-              @click="login"
-              type="primary"
-            >登录</el-button>
-            <el-button @click="goToRegister" type="secondary">注册</el-button>
-            <el-button @click="goToAdminLogin" type="warning">管理员登录</el-button>
+            <el-button @click="login" type="primary">登录</el-button>
+            <el-button @click="goToRegister" >注册</el-button>
           </div>
           <input type="hidden" name="next" :value="next">
         </form>
@@ -56,7 +41,7 @@
 import {useUserStore} from '@/store/user';
 import {ref, onMounted} from 'vue';
 import {useRouter} from 'vue-router';
-import {Message, Lock} from '@element-plus/icons-vue';
+import {User, Message, Lock} from '@element-plus/icons-vue';
 import 'particles.js';
 import { ElMessage } from 'element-plus';
 
@@ -64,12 +49,13 @@ export default {
   name: 'Login',
   setup() {
     const router = useRouter();
+    const nickname = ref('');
     const email = ref('');
     const password = ref('');
     const logoOpenEyes = 'https://buaaxiaolanshu.oss-cn-beijing.aliyuncs.com/static/logo-bg-no.svg';
     const logoClosedEyes = 'https://buaaxiaolanshu.oss-cn-beijing.aliyuncs.com/static/logo-close-eyes.jpg';
     const logo = ref(logoOpenEyes);
-    const siteHeader = '小蓝书登陆界面';
+    const siteHeader = 'BUAA宿舍管理系统登陆界面';
     const next = ref('');
     const isRedirecting = ref(false);
     const isRegistering = ref(false);
@@ -85,9 +71,9 @@ export default {
     };
 
     const login = async () => {
-      if (!email.value || !password.value) {
+      if (!nickname.value || !email.value || !password.value) {
         ElMessage({
-          message: '邮箱和密码不能为空',
+          message: '昵称、邮箱、密码均不能为空',
           type: 'error',
           duration: 1000,
         });
@@ -95,8 +81,8 @@ export default {
       }
 
       try {
-        const user = await store.userLogin(email.value, password.value);
-        if (!user) {
+        const response = await store.userLogin(nickname.value, password.value);
+        if (!response) {
           ElMessage({
             message: '登录失败，请检查邮箱和密码',
             type: 'error',
@@ -105,6 +91,8 @@ export default {
           return;
         }
 
+        // 解析token获取用户角色
+        const user = response.username;
         // 显示登录成功消息
         ElMessage({
           message: `欢迎 ${user} 登录成功`,
@@ -126,13 +114,6 @@ export default {
       }
     };
 
-    const goToAdminLogin = () => {
-      isRedirecting.value = true;
-      setTimeout(() => {
-        window.location.href = 'http://localhost:8000/admin/';
-      }, 1000); // 1秒钟的过渡动画
-    };
-
     const goToRegister = () => {
       isRegistering.value = true;
       setTimeout(() => {
@@ -152,6 +133,7 @@ export default {
     });
 
     return {
+      nickname,
       email,
       password,
       login,
@@ -159,9 +141,9 @@ export default {
       siteHeader,
       next,
       store,
+      User,
       Message,
       Lock,
-      goToAdminLogin,
       goToRegister,
       isRedirecting,
       isRegistering,
