@@ -20,6 +20,11 @@ const routes = [
     component: Admin
   },
   {
+    path: "/notifications",
+    name: "Notifications",
+    component: () => import("@/components/Notifications.vue"),
+  },
+  {
     path: '/dormManagerInfo',
     name: 'DormManagerInfo',
     component: () => import('@/views/DormManaInfo.vue')
@@ -48,6 +53,11 @@ const routes = [
     path: '/repairList',
     name: 'RepairList',
     component: () => import('@/views/RepairList.vue')
+  },
+  {
+    path: '/changeRoomList',
+    name: 'ChangeRoomList',
+    component: () => import('@/views/ChangeRoomList.vue')
   },
   {
     path: '/sendnotice',
