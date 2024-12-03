@@ -1,6 +1,6 @@
 <template>
   <div class="bg">
-    <div class="login-decorator" :class="{ 'slide-up': isLogin}">
+    <div class="login-decorator" :class="{ 'slide-up': isLogin }">
       <div class="login-main">
         <div class="logo">
           <img :src="logo" alt="Logo">
@@ -8,52 +8,25 @@
         <div class="header">{{ siteHeader }}</div>
         <form @submit.prevent="register">
           <div class="simpleui-input-inline">
-            <el-input
-              v-model="username"
-              name="username"
-              placeholder="用户名"
-              autofocus
-              :prefix-icon="User"
-            ></el-input>
+            <el-input v-model="userid" name="userid" placeholder="学工号" autofocus :prefix-icon="User"></el-input>
           </div>
           <div class="simpleui-input-inline">
-            <el-input
-              type="password"
-              v-model="password"
-              name="password"
-              @focus="changeLogoToClosedEyes"
-              @blur="changeLogoToOpenEyes"
-              placeholder="密码"
-              show-password
-              :prefix-icon="Lock"
-            ></el-input>
+            <el-input v-model="username" name="username" placeholder="姓名" :prefix-icon="User"></el-input>
           </div>
           <div class="simpleui-input-inline">
-            <el-input
-              type="password"
-              v-model="confirmPassword"
-              name="confirmPassword"
-              @focus="changeLogoToClosedEyes"
-              @blur="changeLogoToOpenEyes"
-              placeholder="再次输入密码"
-              show-password
-              :prefix-icon="Lock"
-            ></el-input>
+            <el-input type="password" v-model="password" name="password" @focus="changeLogoToClosedEyes"
+              @blur="changeLogoToOpenEyes" placeholder="密码" show-password :prefix-icon="Lock"></el-input>
           </div>
           <div class="simpleui-input-inline">
-            <el-input
-              v-model="email"
-              name="email"
-              placeholder="邮箱"
-              :prefix-icon="Message"
-            ></el-input>
+            <el-input type="password" v-model="confirmPassword" name="confirmPassword" @focus="changeLogoToClosedEyes"
+              @blur="changeLogoToOpenEyes" placeholder="再次输入密码" show-password :prefix-icon="Lock"></el-input>
+          </div>
+          <div class="simpleui-input-inline">
+            <el-input v-model="email" name="email" placeholder="邮箱" :prefix-icon="Message"></el-input>
           </div>
           <div class="simpleui-input-inline button-container">
-            <el-button
-              @click="handleRegister"
-              type="primary"
-            >注册</el-button>
-            <el-button @click="goToLogin" type="secondary">返回登录</el-button>
+            <el-button @click="handleRegister" type="primary">注册</el-button>
+            <el-button @click="goToLogin">返回登录</el-button>
           </div>
         </form>
       </div>
@@ -67,7 +40,7 @@
 
 import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
-import { register } from '@/api';
+import { register, checkuserIdandName } from '@/api/user';
 import { User, Lock, Message } from '@element-plus/icons-vue';
 import 'particles.js';
 import { ElMessage } from 'element-plus';
@@ -77,6 +50,8 @@ export default {
   name: 'Register',
   setup() {
     const router = useRouter();
+    const nickname = ref('');
+    const userid = ref('');
     const username = ref('');
     const password = ref('');
     const confirmPassword = ref('');
@@ -84,7 +59,7 @@ export default {
     const logoOpenEyes = 'https://buaaxiaolanshu.oss-cn-beijing.aliyuncs.com/static/logo-bg-no.svg';
     const logoClosedEyes = 'https://buaaxiaolanshu.oss-cn-beijing.aliyuncs.com/static/logo-close-eyes.jpg';
     const logo = ref(logoOpenEyes);
-    const siteHeader = '小蓝书注册界面';
+    const siteHeader = 'BUAA宿舍管理系统注册界面';
     const isLogin = ref(false);
 
     const changeLogoToClosedEyes = () => {
@@ -97,7 +72,7 @@ export default {
 
     const handleRegister = async () => {
 
-      if (!username.value || !password.value || !confirmPassword.value || !email.value) {
+      if (!nickname.value || !userid.value || !username.value || !password.value || !confirmPassword.value || !email.value) {
         ElMessage({
           message: '请填写所有字段。',
           type: 'error',
@@ -106,21 +81,20 @@ export default {
         return;
       }
 
-      const usernameRegex = /^[a-zA-Z0-9_]{5,15}$/;
       const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-
-      if (!usernameRegex.test(username.value)) {
+      if (!emailRegex.test(email.value)) {
         ElMessage({
-          message: '用户名必须是5-15个字符，只能包含字母、数字和下划线。',
+          message: '请输入有效的邮箱地址。',
           type: 'error',
           duration: 1000,
         });
         return;
       }
 
-      if (!emailRegex.test(email.value)) {
+      const nicknameRegex = /^[a-zA-Z0-9]+$/; // 正则表达式：仅允许英文字母和数字
+      if (!nicknameRegex.test(nickname.value)) {
         ElMessage({
-          message: '请输入有效的邮箱地址。',
+          message: '昵称只能包含英文字母和数字。',
           type: 'error',
           duration: 1000,
         });
@@ -144,9 +118,21 @@ export default {
         });
         return;
       }
-
       try {
-        const res = await register({username: username.value, password: password.value, email: email.value});
+        // 检查学工号是否已经被注册
+        const checkRes = await checkuserIdandName(userid.value, username.value, password.value, email.value);
+        if (!checkRes.success) {
+          ElMessage.error("该学工号已被注册或姓名不匹配");
+          return;
+        }
+
+        const res = await register({
+          nickname: nickname.value,
+          userid: userid.value,
+          username: username.value,
+          password: password.value,
+          email: email.value
+        });
 
         if (res.success) {
           ElMessage({
@@ -182,6 +168,8 @@ export default {
     });
 
     return {
+      nickname,
+      userid,
       username,
       password,
       confirmPassword,
@@ -203,7 +191,7 @@ export default {
 
 <style scoped>
 .bg {
-  background: #f0f2f5;
+  /* background: #f0f2f5; */
   background-image: url('https://buaaxiaolanshu.oss-cn-beijing.aliyuncs.com/static/bg-login.svg');
   min-height: 100%;
   background-repeat: no-repeat;
@@ -267,10 +255,4 @@ export default {
   justify-content: space-between;
   margin-top: 15px;
 }
-
 </style>
-
-
-
-
-
