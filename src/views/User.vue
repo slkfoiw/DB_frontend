@@ -7,7 +7,7 @@
     <div class="userInfo" v-if="userInfo">
       <el-row :gutter="10">
         <el-col :span="12" style="width: 200px;">
-          <el-avatar :size="200" :src="userInfo.avatar"></el-avatar>
+          <img src="@/assets/avatar.png" width="200" height="200"></img>
         </el-col>
         <el-col :span="12" style="width: 250px!important;">
           <h2>
@@ -16,6 +16,13 @@
             <span v-if="userInfo.gender === 'male'" class="gender-icon"><i class="fas fa-male"></i></span>
             <span v-if="userInfo.gender === 'null'" class="gender-icon"><i class="fas fa-genderless"></i></span>
           </h2>
+          <!-- 用户身份 -->
+          <p class="identity">
+            <el-tag :type="getIdentityTagType(userInfo.identityLevel)">
+              {{ getIdentityName(userInfo.identityLevel) }}
+            </el-tag>
+          </p>
+          <p class="in-one"><strong>昵称：</strong>{{ userInfo.nickname }}</p>
           <p class="in-one"><strong>邮箱：</strong>{{ userInfo.email }}</p>
           <p class="in-one"><strong>个性签名：</strong>{{ userInfo.introduction }}</p>
         </el-col>
@@ -35,87 +42,6 @@
           @update:showModal="showChangePasswordModal = $event"
       />
     </div>
-    <div class="checkBox" @change="Toggle">
-      <el-radio-group v-model="radio" size="large" class="radio-group">
-        <el-radio-button class="radio" label="吃过" :value="'吃过'" name="ate"/>
-        <el-radio-button class="radio" label="收藏的菜肴" :value="'收藏的菜肴'" name="collectDishs"/>
-        <el-radio-button class="radio" label="收藏的食堂" :value="'收藏的食堂'" name="collectCafeterias"/>
-        <el-radio-button class="radio" label="收藏的柜台" :value="'收藏的柜台'" name="collectCounters"/>
-        <el-radio-button class="radio" label="我的帖子" :value="'我的帖子'" name="post"/>
-      </el-radio-group>
-    </div>
-    <div style="margin-top: 30px;" v-if="userInfo">
-      <div v-if="radio === '收藏的菜肴'">
-        <div v-if="userCollectDishes?.length === 0">
-          <el-empty description="现在还没有收藏菜肴..."/>
-        </div>
-        <div v-infinite-scroll="load" :infinite-scroll-disabled="disabled" :infinite-scroll-delay="200"
-             :infinite-scroll-distance="100"
-             v-else>
-          <div class="dishes-preview">
-            <div v-for="collect in userCollectDishes" :key="collect.id">
-              <Preview :name="'dish'" :preview="collect"/>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div v-else-if="radio === '收藏的柜台'">
-        <div v-if="userCollectCounters?.length === 0">
-          <el-empty description="现在还没有收藏柜台..."/>
-        </div>
-        <div v-infinite-scroll="load" :infinite-scroll-disabled="disabled" :infinite-scroll-delay="200"
-             :infinite-scroll-distance="100"
-             v-else>
-          <div class="counters-preview">
-            <div v-for="collect in userCollectCounters" :key="collect.id">
-              <Preview :name="'counter'" :preview="collect"/>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div v-else-if="radio === '收藏的食堂'">
-        <div v-if="userCollectCafeterias?.length === 0">
-          <el-empty description="现在还没有收藏食堂..."/>
-        </div>
-        <div v-infinite-scroll="load" :infinite-scroll-disabled="disabled" :infinite-scroll-delay="200"
-             :infinite-scroll-distance="100"
-             v-else>
-          <div class="cafeterias-preview">
-            <div v-for="collect in userCollectCafeterias" :key="collect.id">
-              <Preview :name="'cafeteria'" :preview="collect"/>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div v-else-if="radio === '吃过'">
-        <div v-if="userAte?.length === 0">
-          <el-empty description="现在还没有吃过..."/>
-        </div>
-        <div v-infinite-scroll="load" :infinite-scroll-disabled="disabled" :infinite-scroll-delay="200"
-             :infinite-scroll-distance="100"
-             v-else>
-          <div class="dishes-preview">
-            <div v-for="dish in userAte" :key="dish.id">
-              <Preview :name="'dish'" :preview="dish"/>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div v-else-if="radio === '我的帖子'">
-        <div v-if="userPost?.length === 0">
-          <el-empty description="现在还没有我的帖子..."/>
-        </div>
-        <div v-infinite-scroll="load" :infinite-scroll-disabled="disabled" :infinite-scroll-delay="200"
-             :infinite-scroll-distance="100"
-             v-else>
-          <div class="dishes-preview">
-            <div v-for="post in userPost" :key="post.id">
-              <Preview :name="'dish'" :preview="post"/>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
     <div id="particles-js"></div>
   </div>
 </template>
@@ -130,19 +56,11 @@ import 'particles.js';
 // 加载用户信息
 const userStore = useUserStore();
 const userInfo = ref(userStore.userInfo);
-const userAte = ref([]);
-const userCollectDishes = ref([]);
-const userCollectCounters = ref([]);
-const userCollectCafeterias = ref([]);
-const userPost = ref([]);
 
 const getUserInfo = async () => {
-  document.title = userInfo.value.username + '的小蓝书';
+  document.title = userInfo.value.username + '的主页';
 };
 
-// 主页切换标签
-const radio = ref('吃过');
-const disabled = ref(true); // 初始禁用滚动加载
 const showEditModal = ref(false);
 const showChangePasswordModal = ref(false);
 
@@ -150,87 +68,29 @@ const doUpdate = async () => {
   await useUserStore().updateUserBaseInfo()
 };
 
-const Toggle = async () => {
-  const user_id = userInfo.value.userId;
-  const offset = 0;
-  const types = radio.value;
-
-  if (types === '收藏的菜肴' && userCollectDishes.value.length === 0) {
-    const post = await queryUserPost({user_id, types, offset});
-    userCollectDishes.value = post.data.info;
-  } else if (types === '收藏的柜台' && userCollectCounters.value.length === 0) {
-    const post = await queryUserPost({user_id, types, offset});
-    userCollectCounters.value = post.data.info;
-  } else if (types === '收藏的食堂' && userCollectCafeterias.value.length === 0) {
-    const post = await queryUserPost({user_id, types, offset});
-    userCollectCafeterias.value = post.data.info;
-  } else if (types === '吃过' && userAte.value.length === 0) {
-    const post = await queryUserPost({user_id, types, offset});
-    userAte.value = post.data.info;
-  } else if (types === '我的帖子' && userPost.value.length === 0) {
-    const post = await queryUserPost({user_id, types, offset});
-    userPost.value = post.data.info;
+// 获取身份名称
+const getIdentityName = (identityLevel) => {
+  switch (identityLevel) {
+    case 0: return '学校管理员';
+    case 1: return '宿管';
+    case 2: return '学生';
+    default: return '未知身份';
   }
-  disabled.value = false;
 };
 
-const load = async () => {
-  disabled.value = true;
-  const user_id = userInfo.value.id;
-  const types = radio.value;
-
-  if (types === '我的帖子') {
-    const offset = userPost.value.length;
-    const post = await queryUserPost({user_id, types, offset});
-    if (post.data.info.length === 0) {
-      disabled.value = true;
-    } else {
-      userPost.value = [...userPost.value, ...post.data.info];
-      disabled.value = false;
-    }
-  } else if (types === '吃过') {
-    const offset = userAte.value.length;
-    const ate = await queryUserPost({user_id, types, offset});
-    if (ate.data.info.length === 0) {
-      disabled.value = true;
-    } else {
-      userAte.value = [...userAte.value, ...ate.data.info];
-      disabled.value = false;
-    }
-  } else if (types === '收藏的菜肴') {
-    const offset = userCollectDishes.value.length;
-    const collect = await queryUserPost({user_id, types, offset});
-    if (collect.data.info.length === 0) {
-      disabled.value = true;
-    } else {
-      userCollectDishes.value = [...userCollectDishes.value, ...collect.data.info];
-      disabled.value = false;
-    }
-  } else if (types === '收藏的柜台') {
-    const offset = userCollectCounters.value.length;
-    const collect = await queryUserPost({user_id, types, offset});
-    if (collect.data.info.length === 0) {
-      disabled.value = true;
-    } else {
-      userCollectCounters.value = [...userCollectCounters.value, ...collect.data.info];
-      disabled.value = false;
-    }
-  } else if (types === '收藏的食堂') {
-    const offset = userCollectCafeterias.value.length;
-    const collect = await queryUserPost({user_id, types, offset});
-    if (collect.data.info.length === 0) {
-      disabled.value = true;
-    } else {
-      userCollectCafeterias.value = [...userCollectCafeterias.value, ...collect.data.info];
-      disabled.value = false;
-    }
+// 获取标签样式类型
+const getIdentityTagType = (identityLevel) => {
+  switch (identityLevel) {
+    case 0: return 'danger'; // 红色标签
+    case 1: return 'warning'; // 黄色标签
+    case 2: return 'success'; // 绿色标签
+    default: return 'info'; // 默认蓝色标签
   }
 };
 
 // onMounted 生命周期钩子
 onMounted(async () => {
   await getUserInfo();
-  await Toggle();
 });
 
     onMounted(() => {
@@ -299,6 +159,12 @@ h3 {
 .radio-group {
   display: flex;
   justify-content: center;
+}
+
+/* 用户身份部分 */
+.identity {
+  margin: 8px 0; /* 添加间距 */
+  font-size: 1em;
 }
 
 .gender-icon {
