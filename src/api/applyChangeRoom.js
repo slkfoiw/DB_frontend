@@ -70,9 +70,9 @@ export const fetchAdjustRoomData = (params) => {
     return {
             data:{
                 records: [
-                    {index: 1, studentId: 22373474, name: "樊孜昱", currentDormId: 13, currentRoomId: 257, currentBedId: 4, towardsDormId: 13, towardsRoomId: 256, towardsBedId: 3, applyTime: "2021-07-01 12:00:00", state: "未处理", finishTime: "2021-07-02 12:00:00"},
-                    {index: 2, studentId: 22373473, name: "辛卓妍", currentDormId: 13, currentRoomId: 256, currentBedId: 2, towardsDormId: 13, towardsRoomId: 257, towardsBedId: 4, applyTime: "2021-07-01 12:00:00", state: "驳回", finishTime: "2021-07-02 12:00:00"},
-                    {index: 3, studentId: 22373472, name: "李梦婷", currentDormId: 13, currentRoomId: 256, currentBedId: 3, towardsDormId: 13, towardsRoomId: 257, towardsBedId: 4, applyTime: "2021-07-01 12:00:00", state: "通过", finishTime: "2021-07-02 12:00:00"},           
+                    {changeRoomApplyId: 1, studentId: 22373474, name: "樊孜昱", currentDormId: 13, currentRoomId: 257, currentBedId: 4, towardsDormId: 13, towardsRoomId: 256, towardsBedId: 3, applyTime: "2021-07-01 12:00:00", state: "未处理", finishTime: "2021-07-02 12:00:00"},
+                    {changeRoomApplyId: 2, studentId: 22373473, name: "辛卓妍", currentDormId: 13, currentRoomId: 256, currentBedId: 2, towardsDormId: 13, towardsRoomId: 257, towardsBedId: 4, applyTime: "2021-07-01 12:00:00", state: "驳回", finishTime: "2021-07-02 12:00:00"},
+                    {changeRoomApplyId: 3, studentId: 22373472, name: "李梦婷", currentDormId: 13, currentRoomId: 256, currentBedId: 3, towardsDormId: 13, towardsRoomId: 257, towardsBedId: 4, applyTime: "2021-07-01 12:00:00", state: "通过", finishTime: "2021-07-02 12:00:00"},           
                 ],
                 total: 3,
                 }
