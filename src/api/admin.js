@@ -29,6 +29,12 @@ const mockRepairs = [
     { id: 3, date: new Date(Date.now() - 172800000).toLocaleString(), type: '门锁问题', dormitoryNumber: '13', roomNumber: '103', status: '未完成' },
 ];
 
+const mockChangeRoom = [
+    { id: 1, studentId: '1234567', curDormId: '12', curRoomId: '101', curBedId: '1', toDormId: '13', toRoomId: '102', toBedId: '2', status: '通过', createDate: new Date().toLocaleString(), finishDate: new Date().toLocaleString() },
+    { id: 2, studentId: '1234568', curDormId: '12', curRoomId: '102', curBedId: '2', toDormId: '13', toRoomId: '103', toBedId: '3', status: '驳回', createDate: new Date().toLocaleString(), finishDate: new Date().toLocaleString() },
+    { id: 3, studentId: '1234569', curDormId: '12', curRoomId: '103', curBedId: '3', toDormId: '13', toRoomId: '104', toBedId: '4', status: '未处理', createDate: new Date().toLocaleString(), finishDate: null },
+];
+
 export const getAdmins = () => {
     // return http({
     //     url: 'admin/get-admins',
@@ -155,6 +161,53 @@ export const deleteNotice = (noticeId) => {
         message: '删除成功'
     };
 };
+
+export const getChangeRoom = () => {
+    // return http({
+    //     url: 'admin/get-change-room',
+    //     method: 'GET',
+    //     headers: {
+    //         'Content-Type': 'application/json'
+    //     }
+    // })
+    return {
+        data: [...mockChangeRoom]
+    };
+};
+
+export const updateChangeRoom = (changeRoom) => {
+    // return http({
+    //     url: `admin/update-change-room/${changeRoom.id}`,
+    //     method: 'PUT',
+    //     headers: {
+    //         'Content-Type': 'application/json'
+    //     },
+    //     data: changeRoom
+    // })
+    const index = mockChangeRoom.findIndex(c => c.id === changeRoom.id);
+    if (index !== -1) {
+        mockChangeRoom[index] = changeRoom; // 模拟更新
+    }
+    return { 
+        success: true,
+        message: '更新成功'
+    };
+};
+
+export const deleteChangeRoom = (changeRoomId) => {
+    // return http({
+    //     url: `admin/delete-change-room/${changeRoomId}`,
+    //     method: 'DELETE'
+    // })
+    const index = mockChangeRoom.findIndex(c => c.id === changeRoomId);
+    if (index !== -1) {
+        mockChangeRoom.splice(index, 1); // 模拟删除
+    }
+    return { 
+        success: true,
+        message: '删除成功'
+    };
+}
 
 export const getRepairs = () => {
     // return http({
