@@ -14,7 +14,7 @@
                 <template #label>
                   <div>
                     <el-icon>
-                      <office-building/>
+                      <office-building />
                     </el-icon>
                     公寓号
                   </div>
@@ -47,7 +47,7 @@
                 <template #label>
                   <div>
                     <el-icon>
-                      <chatRound/>
+                      <chatRound />
                     </el-icon>
                     可住人数
                   </div>
@@ -58,7 +58,7 @@
                 <template #label>
                   <div>
                     <el-icon>
-                      <chatLineRound/>
+                      <chatLineRound />
                     </el-icon>
                     已住人数
                   </div>
@@ -74,64 +74,56 @@
                 <template #label>
                   <div>
                     <el-icon>
-                      <user/>
+                      <user />
                     </el-icon>
                     一号床位
                   </div>
                 </template>
-                <el-tag
-                    v-if="room.firstBed != null"
-                    :type="name === room.firstBed ? 'primary':'info'"
-                    disable-transitions
-                >{{ room.firstBed }}
+                <el-tag v-if="room.firstBed != null" :type="name === room.firstBed ? 'primary' : 'info'"
+                  disable-transitions>{{
+                    room.firstBed }}
                 </el-tag>
               </el-descriptions-item>
               <el-descriptions-item>
                 <template #label>
                   <div>
                     <el-icon>
-                      <user/>
+                      <user />
                     </el-icon>
                     二号床位
                   </div>
                 </template>
-                <el-tag
-                    v-if="room.secondBed != null"
-                    :type="name === room.secondBed ? 'primary':'info'"
-                    disable-transitions
-                >{{ room.secondBed }}
+                <el-tag v-if="room.secondBed != null" :type="name === room.secondBed ? 'primary' : 'info'"
+                  disable-transitions>{{
+                    room.secondBed }}
                 </el-tag>
               </el-descriptions-item>
               <el-descriptions-item>
                 <template #label>
                   <div>
                     <el-icon>
-                      <user/>
+                      <user />
                     </el-icon>
                     三号床位
                   </div>
                 </template>
-                <el-tag
-                    v-if="room.thirdBed != null"
-                    :type="name === room.thirdBed ? 'primary':'info'"
-                    disable-transitions
-                >{{ room.thirdBed }}
+                <el-tag v-if="room.thirdBed != null" :type="name === room.thirdBed ? 'primary' : 'info'"
+                  disable-transitions>{{
+                  room.thirdBed }}
                 </el-tag>
               </el-descriptions-item>
               <el-descriptions-item>
                 <template #label>
                   <div>
                     <el-icon>
-                      <user/>
+                      <user />
                     </el-icon>
                     四号床位
                   </div>
                 </template>
-                <el-tag
-                    v-if="room.fourthBed != null"
-                    :type="name === room.fourthBed ? 'primary':'info'"
-                    disable-transitions
-                >{{ room.fourthBed }}
+                <el-tag v-if="room.fourthBed != null" :type="name === room.fourthBed ? 'primary' : 'info'"
+                  disable-transitions>{{
+                  room.fourthBed }}
                 </el-tag>
               </el-descriptions-item>
             </el-descriptions>
@@ -149,21 +141,21 @@ import { useUserStore } from '@/store/user';
 
 // 存储用户信息
 const form = ref({
-    userId: "",
-    name: "",
+  userId: "",
+  name: "",
 });
 
 // 存储房间信息
 const room = ref({
-    dormRoomId: "",
-    dormBuildId: "",
-    floorNum: "",
-    maxCapacity: "",
-    currentCapacity: "",
-    firstBed: "",
-    secondBed: "",
-    thirdBed: "",
-    fourthBed: "",
+  dormRoomId: "",
+  dormBuildId: "",
+  floorNum: "",
+  maxCapacity: "",
+  currentCapacity: "",
+  firstBed: "",
+  secondBed: "",
+  thirdBed: "",
+  fourthBed: "",
 });
 
 // 存储用户名
@@ -172,31 +164,30 @@ const name = ref("");
 // 初始化用户信息
 const init = () => {
   const user = useUserStore().userInfo;
-    form.userId = user.userId;
-    form.name = user.username;
-    name.value = user.username;
+  form.userId = user.userId;
+  form.name = user.username;
+  name.value = user.username;
 };
 
 // 获取房间信息
 const getInfo = async () => {
-    try {
-        const roomData = await getRoomInfo(form.userId);
-        room.value = roomData.data.info;
-    } catch (error) {
-        console.error(error);
-    }
+  try {
+    const roomData = await getRoomInfo(form.userId);
+    room.value = roomData.data.info;
+  } catch (error) {
+    console.error(error);
+  }
 };
 
-// 页面加载时调用
 onMounted(() => {
-    init();
-    getInfo();
+  init();
+  getInfo();
 });
 </script>
 
 <style scoped>
 .rightSpan {
-    display: inline-block;
-    width: 80px;
+  display: inline-block;
+  width: 80px;
 }
 </style>
