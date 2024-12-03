@@ -23,7 +23,7 @@
         <!-- 表格 -->
         <el-table v-loading="loading" :data="tableData" border max-height="705" style="width: 100%">
           <el-table-column label="#" type="index" />
-          <el-table-column label="学号" prop="userId" sortable width="100px" />
+          <el-table-column label="学号" prop="studentId" sortable width="100px" />
           <el-table-column label="姓名" prop="name" width="100px" />
           <el-table-column label="当前公寓号" prop="currentDormId" sortable />
           <el-table-column label="当前宿舍号" prop="currentRoomId" sortable />
@@ -59,7 +59,7 @@
           <el-table-column label="操作" width="130px">
             <template #default="scope">
               <el-button icon="MoreFilled" type="default" @click="showDetail(scope.row)"></el-button>
-              <el-button v-if="scope.row.state !== '通过'" icon="Edit" type="primary" @click="handleEdit(scope.row)"></el-button>
+              <el-button v-if="scope.row.state === '未处理' && scope.row.studentId === user.userid" icon="Edit" type="primary" @click="handleEdit(scope.row)"></el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -78,8 +78,8 @@
         <!-- 弹窗 -->
         <el-dialog v-model="dialogVisible" title="修改" width="30%" @close="cancel">
           <el-form ref="formRef" :model="form" :rules="rules" label-width="120px">
-            <el-form-item label="学号" prop="userId">
-              <el-input v-model="form.userId" disabled style="width: 80%" />
+            <el-form-item label="学号" prop="studentId">
+              <el-input v-model="form.studentId" disabled style="width: 80%" />
             </el-form-item>
             <el-form-item label="姓名" prop="name">
               <el-input v-model="form.name" disabled style="width: 80%" />
@@ -107,7 +107,7 @@
             <el-form-item label="申请时间" prop="applyTime" style="margin-top: 27px">
               <el-date-picker
                 v-model="form.applyTime"
-                :disabled="!judgeOption"
+                :disabled="judgeOption"
                 clearable
                 placeholder="选择时间"
                 style="width: 50%"
@@ -126,8 +126,8 @@
         <!-- 详情信息弹窗 -->
         <el-dialog v-model="detailDialog" title="学生信息" width="30%" @close="cancel">
           <el-form ref="formRef" :model="form" label-width="220px">
-            <el-form-item label="学号：" prop="userId">
-              <span>{{ form.userId }}</span>
+            <el-form-item label="学号：" prop="studentId">
+              <span>{{ form.studentId }}</span>
             </el-form-item>
             <el-form-item label="姓名：" prop="name">
               <span>{{ form.name }}</span>
@@ -173,6 +173,10 @@ import { checkRoomState, checkRoomExist, checkBedState, fetchAdjustRoomData, upd
 import { getRoomBedUserId } from '@/api/myRoomInfo';
 import { useUserStore } from '@/store/user';
 
+const filterTag = (value, row) => {
+  return row.state === value;
+};
+const user = useUserStore().userInfo;
 const loading = ref(true);
 const dialogVisible = ref(false);
 const detailDialog = ref(false);
@@ -186,7 +190,8 @@ const orderState = ref(false);
 const judgeOption = ref(false);
 const formRef = ref(null);
 const form = reactive({
-      userId: '',
+  changeRoomApplyId:'',
+      studentId: '',
       name: '',
       currentDormId: '',
       currentRoomId: '',
@@ -236,7 +241,7 @@ const checkBedStateHandler = async (rule, value, callback) => {
 };
 
 const rules = reactive({
-  userId: [
+  studentId: [
     { required: true, message: "请输入学号", trigger: "blur" },
     { pattern: /^[a-zA-Z0-9]{4,9}$/, message: "必须由 4 到 9 个字母或数字组成", trigger: "blur" },
   ],
@@ -280,13 +285,13 @@ const add = () => {
   nextTick(async () => {
     formRef.value.resetFields();
     const user = useUserStore().userInfo;
-    form.userId = user.userId;
+    form.studentId = user.userid;
     form.name = user.username;
     try {
-      const res = await getRoomBedUserId(form.userId);
+      const res = await getRoomBedUserId(form.studentId);
       form.currentDormId = res.data.info.dormBuildId;
       form.currentRoomId = res.data.info.dormRoomId;
-      form.currentBedId = calBedNum(form.userId, res.data.info);
+      form.currentBedId = calBedNum(form.studentId, res.data.info);
     } catch (error) {
       console.error('获取房间信息失败', error);
     }
@@ -315,11 +320,11 @@ const save = () => {
 };
 
 // 计算床位号
-const calBedNum = (userId, data) => {
-  if (data.firstBed === userId) return 1;
-  if (data.secondBed === userId) return 2;
-  if (data.thirdBed === userId) return 3;
-  if (data.fourthBed === userId) return 4;
+const calBedNum = (studentId, data) => {
+  if (data.firstBed === studentId) return 1;
+  if (data.secondBed === studentId) return 2;
+  if (data.thirdBed === studentId) return 3;
+  if (data.fourthBed === studentId) return 4;
 };
 
 // 判断订单状态
