@@ -163,7 +163,7 @@ export default {
   background-size: 100%;
   padding: 20px 0;
   position: relative;
-  z-id: 0;
+  z-index: 0;
   transition: transform 1s ease-in-out;
 }
 
@@ -181,7 +181,7 @@ export default {
   left: 0;
   right: 0;
   bottom: 0;
-  z-id: -1;
+  z-index: -1;
 }
 
 .login-decorator {
@@ -189,7 +189,7 @@ export default {
   justify-content: center;
   align-items: center;
   height: 94vh;
-  z-id: 1;
+  z-index: 1;
   transition: transform 1s ease-in-out;
 }
 
@@ -235,7 +235,7 @@ export default {
   justify-content: center;
   align-items: center;
   background: rgba(255, 255, 255, 0.9);
-  z-id: 1000;
+  z-index: 1000;
   animation: fadeIn 1s forwards;
 }
 

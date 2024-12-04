@@ -130,7 +130,7 @@ const closeModal = () => {
   display: flex;
   justify-content: center;
   align-items: center;
-  z-id: 1000;
+  z-index: 1000;
 }
 
 .modal-content {
