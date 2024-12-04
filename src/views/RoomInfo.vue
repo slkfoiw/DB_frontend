@@ -31,7 +31,7 @@
             </div>
             <!--    表格-->
             <el-table :data="paginatedDormRooms" style="width: 100%">
-            <el-table-column label="#" type="id"/>
+            <el-table-column label="#" type="index"/>
             <!-- 床位展开-->
             <el-table-column type="expand">
                 <template #default="props">
