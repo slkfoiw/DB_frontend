@@ -100,8 +100,8 @@ const paginatedNotices = ref([]);
 // 假设获取当前登录用户的名字的函数
 const getCurrentUserName = async () => {
   const userInfo = await getUserInfo();
-  const userName = userInfo.data.name;
-  return userName; // 这里应该替换为实际获取用户名的逻辑
+  const name = userInfo.data.name;
+  return name; // 这里应该替换为实际获取用户名的逻辑
 };
 
 // 获取公告列表

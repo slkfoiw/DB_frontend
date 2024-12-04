@@ -19,7 +19,7 @@
                     公寓号
                   </div>
                 </template>
-                <span class="rightSpan">{{ room.dormBuildId }}</span>
+                <span class="rightSpan">{{ room.dormId }}</span>
               </el-descriptions-item>
               <el-descriptions-item>
                 <template #label>
@@ -30,7 +30,7 @@
                     宿舍号
                   </div>
                 </template>
-                <span class="rightSpan">{{ room.dormRoomId }}</span>
+                <span class="rightSpan">{{ room.roomId }}</span>
               </el-descriptions-item>
               <el-descriptions-item>
                 <template #label>
@@ -41,7 +41,7 @@
                     楼层
                   </div>
                 </template>
-                <span class="rightSpan">{{ room.floorNum }}</span>
+                <span class="rightSpan">{{ room.floor }}</span>
               </el-descriptions-item>
               <el-descriptions-item>
                 <template #label>
@@ -52,7 +52,7 @@
                     可住人数
                   </div>
                 </template>
-                <span class="rightSpan">{{ room.maxCapacity }}</span>
+                <span class="rightSpan">{{ room.capacity }}</span>
               </el-descriptions-item>
               <el-descriptions-item>
                 <template #label>
@@ -63,7 +63,7 @@
                     已住人数
                   </div>
                 </template>
-                <span class="rightSpan">{{ room.currentCapacity }}</span>
+                <span class="rightSpan">{{ room.peopleNum }}</span>
               </el-descriptions-item>
             </el-descriptions>
           </div>
@@ -147,11 +147,11 @@ const form = ref({
 
 // 存储房间信息
 const room = ref({
-  dormRoomId: "",
-  dormBuildId: "",
-  floorNum: "",
-  maxCapacity: "",
-  currentCapacity: "",
+  roomId: "",
+  dormId: "",
+  floor: "",
+  capacity: "",
+  peopleNum: "",
   firstBed: "",
   secondBed: "",
   thirdBed: "",
@@ -165,8 +165,8 @@ const name = ref("");
 const init = () => {
   const user = useUserStore().userInfo;
   form.userId = user.userId;
-  form.name = user.username;
-  name.value = user.username;
+  form.name = user.name;
+  name.value = user.name;
 };
 
 // 获取房间信息

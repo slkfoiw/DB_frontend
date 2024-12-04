@@ -23,8 +23,8 @@
         <el-table v-loading="loading" :data="tableData" border max-height="705" style="width: 100%">
           <el-table-column label="#" type="index"/>
           <el-table-column :show-overflow-tooltip="true" label="标题" prop="title"/>
-          <el-table-column label="公寓号" prop="dormBuildId" sortable width="150px"/>
-          <el-table-column label="宿舍号" prop="dormRoomId" sortable width="150px"/>
+          <el-table-column label="公寓号" prop="dormId" sortable width="150px"/>
+          <el-table-column label="宿舍号" prop="roomId" sortable width="150px"/>
           <el-table-column label="申请人" prop="repairer" width="150px"/>
           <el-table-column
               :filter-method="filterTag"
@@ -34,17 +34,17 @@
             ]"
               filter-placement="bottom-end"
               label="订单状态"
-              prop="state"
+              prop="status"
               sortable
           >
             <template #default="scope">
-              <el-tag :type="scope.row.state === '完成' ? 'success' : 'info'" disable-transitions
-              >{{ scope.row.state }}
+              <el-tag :type="scope.row.status === '完成' ? 'success' : 'info'" disable-transitions
+              >{{ scope.row.status }}
               </el-tag>
             </template>
           </el-table-column>
-          <el-table-column label="订单创建时间" prop="orderBuildTime" sortable/>
-          <el-table-column label="订单完成时间" prop="orderFinishTime" sortable/>
+          <el-table-column label="订单创建时间" prop="createDate" sortable/>
+          <el-table-column label="订单完成时间" prop="finishDate" sortable/>
           <!--      详情栏-->
           <el-table-column label="详情" width="74px">
             <template #default="scope">
@@ -69,11 +69,11 @@
         <div>
           <el-dialog v-model="dialogVisible" title="添加" width="30%" @close="cancel">
             <el-form ref="formRef" :model="form" :rules="rules" label-width="120px">
-              <el-form-item label="公寓号" prop="dormBuildId" style="margin-bottom: 27px">
-                <el-input v-model="form.dormBuildId" disabled style="width: 80%">{{ this.room.dormBuildId }}</el-input>
+              <el-form-item label="公寓号" prop="dormId" style="margin-bottom: 27px">
+                <el-input v-model="form.dormId" disabled style="width: 80%">{{ this.room.dormId }}</el-input>
               </el-form-item>
-              <el-form-item label="宿舍号" prop="dormRoomId" style="margin-bottom: 27px">
-                <el-input v-model="form.dormRoomId" disabled style="width: 80%">{{ this.room.dormRoomId }}</el-input>
+              <el-form-item label="宿舍号" prop="roomId" style="margin-bottom: 27px">
+                <el-input v-model="form.roomId" disabled style="width: 80%">{{ this.room.roomId }}</el-input>
               </el-form-item>
               <el-form-item label="申请人" prop="repairer">
                 <el-input v-model="form.repairer" disabled style="width: 80%">{{ this.name }}</el-input>
@@ -91,9 +91,9 @@
                     type="textarea"
                 ></el-input>
               </el-form-item>
-              <el-form-item label="订单创建时间" prop="orderBuildTime" style="margin-top: 27px">
+              <el-form-item label="订单创建时间" prop="createDate" style="margin-top: 27px">
                 <el-date-picker
-                    v-model="form.orderBuildTime"
+                    v-model="form.createDate"
                     clearable
                     placeholder="选择时间"
                     style="width: 50%"
@@ -146,21 +146,21 @@ const detail = reactive({});
 const form = reactive({});
 const formRef = ref(null);
 const room = reactive({
-  dormRoomId: '',
-  dormBuildId: '',
+  roomId: '',
+  dormId: '',
 });
 const name = ref('');
 const userId = ref('');
 const rules = reactive({
   title: [{ required: true, message: '请输入标题', trigger: 'blur' }],
   content: [{ required: true, message: '请输入内容', trigger: 'blur' }],
-  orderBuildTime: [{ required: true, message: '请选择时间', trigger: 'blur' }],
+  createDate: [{ required: true, message: '请选择时间', trigger: 'blur' }],
 });
 
 // 初始化
 const init = () => {
   const user = useUserStore().userInfo;
-  name.value = user.username;
+  name.value = user.name;
   userId.value = user.userId;
   console.log(user);
 };
@@ -193,7 +193,7 @@ const load = async () => {
 };
 
 // 过滤标签
-const filterTag = (value, row) => row.state === value;
+const filterTag = (value, row) => row.status === value;
 
 // 展示详情
 const showDetail = (row) => {
@@ -216,8 +216,8 @@ const add = () => {
   dialogVisible.value = true;
   nextTick(() => {
     form.repairer = name.value;
-    form.dormBuildId = room.dormBuildId;
-    form.dormRoomId = room.dormRoomId;
+    form.dormId = room.dormId;
+    form.roomId = room.roomId;
     console.log(name.value);
     console.log(form);
   });

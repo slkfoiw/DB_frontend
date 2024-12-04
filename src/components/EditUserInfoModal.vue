@@ -5,8 +5,8 @@
       <h3 class="modal-title">编辑用户信息</h3>
       <form @submit.prevent="submitForm">
         <div class="edit-item">
-          <label for="username" class="form-label">姓名:</label>
-          <input type="text" id="username" v-model="formData.username" class="form-input" disabled/>
+          <label for="name" class="form-label">姓名:</label>
+          <input type="text" id="name" v-model="formData.name" class="form-input" disabled/>
         </div>
         <div class="edit-item">
           <label for="userId" class="form-label">学工号:</label>
@@ -56,7 +56,7 @@ const props = defineProps({
 const emit = defineEmits(['update:showModal', 'doUpdate'])
 
 const formData = ref({
-    username: props.userInfo.username,
+    name: props.userInfo.name,
     userId: props.userInfo.userId,
     email: props.userInfo.email,
     gender: props.userInfo.gender,
@@ -67,7 +67,7 @@ watch(() => props.showModal, (newVal) => {
     if (newVal) {
         // 填充用户信息
         formData.value = {
-            username: props.userInfo.username,
+            name: props.userInfo.name,
             userId: props.userInfo.userId,
             email: props.userInfo.email,
             gender: props.userInfo.gender,
@@ -130,7 +130,7 @@ const closeModal = () => {
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1000;
+  z-id: 1000;
 }
 
 .modal-content {

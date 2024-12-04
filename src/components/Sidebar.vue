@@ -81,7 +81,7 @@ export default {
     },
     computed:{
       show(){
-        if (this.userName == null) {
+        if (this.name == null) {
           return true;
         } else {
           return false;
@@ -90,14 +90,14 @@ export default {
     },
     setup() {
         const userStore = useUserStore();
-        const userName = computed(() => userStore.userInfo.username);
+        const name = computed(() => userStore.userInfo.name);
         const userId = computed(() => userStore.userInfo.userId);
         const identityLevel = computed(() => userStore.userInfo.identityLevel);
         // console.log('userInfo:', userStore.userInfo);
         // console.log('userId:', userId.value);
         return {
             userId,
-            userName,
+            name,
             identityLevel
         }
     }

@@ -54,9 +54,9 @@ export const updateDormManager = (manager) => {
     //     },
     //     data: manager
     // })
-    const index = mockDormManagers.findIndex(m => m.managerId === manager.managerId);
-    if (index !== -1) {
-        mockDormManagers[index] = manager; // 模拟更新
+    const id = mockDormManagers.findIndex(m => m.managerId === manager.managerId);
+    if (id !== -1) {
+        mockDormManagers[id] = manager; // 模拟更新
     }
     console.log(mockDormManagers);
     return { 
@@ -86,9 +86,9 @@ export const deleteDormManager = (managerId) => {
     //     url: `dormManager/delete-dorm-manager/${managerId}`,
     //     method: 'DELETE'
     // })
-    const index = mockDormManagers.findIndex(m => m.managerId === managerId);
-    if (index !== -1) {
-        mockDormManagers.splice(index, 1); // 模拟删除
+    const id = mockDormManagers.findIndex(m => m.managerId === managerId);
+    if (id !== -1) {
+        mockDormManagers.splice(id, 1); // 模拟删除
     }
     console.log(mockDormManagers);
     return { 

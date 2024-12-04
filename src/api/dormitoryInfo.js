@@ -1,35 +1,35 @@
 import http from "@/utils/http";
 
 let mockbuildingInfos = [
-    { dormBuildId: '01', dormBuildAddr: '校内', dormBuildDetail: '男宿舍'},
-    { dormBuildId: '02', dormBuildAddr: '校内', dormBuildDetail: '男宿舍'},
-    { dormBuildId: '03', dormBuildAddr: '校内', dormBuildDetail: '男宿舍'},
-    { dormBuildId: '04', dormBuildAddr: '校内', dormBuildDetail: '男宿舍'},
-    { dormBuildId: '05', dormBuildAddr: '校内', dormBuildDetail: '男宿舍'},
-    { dormBuildId: '06', dormBuildAddr: '校内', dormBuildDetail: '男宿舍'},
-    { dormBuildId: '07', dormBuildAddr: '校内', dormBuildDetail: '男宿舍'},
-    { dormBuildId: '08', dormBuildAddr: '校外', dormBuildDetail: '男宿舍'},
-    { dormBuildId: '09', dormBuildAddr: '校外', dormBuildDetail: '男宿舍'},
-    { dormBuildId: '10', dormBuildAddr: '校外', dormBuildDetail: '男宿舍'},
-    { dormBuildId: '11', dormBuildAddr: '校外', dormBuildDetail: '女宿舍'},
-    { dormBuildId: '12', dormBuildAddr: '北区', dormBuildDetail: '女宿舍'},
-    { dormBuildId: '13', dormBuildAddr: '北区', dormBuildDetail: '女宿舍'},
-    { dormBuildId: '14', dormBuildAddr: '北区', dormBuildDetail: '女宿舍'},
-    { dormBuildId: '15', dormBuildAddr: '北区', dormBuildDetail: '女宿舍'},
-    { dormBuildId: '16', dormBuildAddr: '北区', dormBuildDetail: '女宿舍'},
-    { dormBuildId: '17', dormBuildAddr: '校外', dormBuildDetail: '女宿舍'},
-    { dormBuildId: '18', dormBuildAddr: '校外', dormBuildDetail: '女宿舍'},
-    { dormBuildId: '19', dormBuildAddr: '校外', dormBuildDetail: '女宿舍'},
-    { dormBuildId: '20', dormBuildAddr: '校外', dormBuildDetail: '女宿舍'},
-    { dormBuildId: '21', dormBuildAddr: '校外', dormBuildDetail: '女宿舍'},
+    { dormId: '01', address: '校内', dormBuildDetail: '男宿舍'},
+    { dormId: '02', address: '校内', dormBuildDetail: '男宿舍'},
+    { dormId: '03', address: '校内', dormBuildDetail: '男宿舍'},
+    { dormId: '04', address: '校内', dormBuildDetail: '男宿舍'},
+    { dormId: '05', address: '校内', dormBuildDetail: '男宿舍'},
+    { dormId: '06', address: '校内', dormBuildDetail: '男宿舍'},
+    { dormId: '07', address: '校内', dormBuildDetail: '男宿舍'},
+    { dormId: '08', address: '校外', dormBuildDetail: '男宿舍'},
+    { dormId: '09', address: '校外', dormBuildDetail: '男宿舍'},
+    { dormId: '10', address: '校外', dormBuildDetail: '男宿舍'},
+    { dormId: '11', address: '校外', dormBuildDetail: '女宿舍'},
+    { dormId: '12', address: '北区', dormBuildDetail: '女宿舍'},
+    { dormId: '13', address: '北区', dormBuildDetail: '女宿舍'},
+    { dormId: '14', address: '北区', dormBuildDetail: '女宿舍'},
+    { dormId: '15', address: '北区', dormBuildDetail: '女宿舍'},
+    { dormId: '16', address: '北区', dormBuildDetail: '女宿舍'},
+    { dormId: '17', address: '校外', dormBuildDetail: '女宿舍'},
+    { dormId: '18', address: '校外', dormBuildDetail: '女宿舍'},
+    { dormId: '19', address: '校外', dormBuildDetail: '女宿舍'},
+    { dormId: '20', address: '校外', dormBuildDetail: '女宿舍'},
+    { dormId: '21', address: '校外', dormBuildDetail: '女宿舍'},
 ];
 
 export const rules = {
-    dormBuildId: [
+    dormId: [
         {required: true, message: "请输入楼宇号", trigger: "blur"},
         {pattern: /^[0-9]{2}$/, message: "范围：01-99", trigger: "blur"},
     ],
-    dormBuildAddr: [
+    address: [
         {required: true, message: "请输入楼宇地址", trigger: "blur"},
     ],
     dormBuildDetail: [
@@ -69,16 +69,16 @@ export const addDormBuild = (buildingInfo) => {
 
 export const updateDormBuild = (buildingInfo) => {
     // return http({
-    //     url: `buildingInfo/update-building-info/${buildingInfo.dormBuildId}`,
+    //     url: `buildingInfo/update-building-info/${buildingInfo.dormId}`,
     //     method: 'PUT',
     //     headers: {
     //         'Content-Type': 'application/json'
     //     },
     //     data: buildingInfo
     // })
-    const index = mockbuildingInfos.findIndex(s => s.dormBuildId === buildingInfo.dormBuildId);
-    if (index !== -1) {
-        mockbuildingInfos[index] = buildingInfo; // 模拟更新
+    const id = mockbuildingInfos.findIndex(s => s.dormId === buildingInfo.dormId);
+    if (id !== -1) {
+        mockbuildingInfos[id] = buildingInfo; // 模拟更新
     }
     return { 
         success: true,
@@ -86,15 +86,15 @@ export const updateDormBuild = (buildingInfo) => {
     };
 };
 
-export const deleteDormBuild = (dormBuildId) => {
+export const deleteDormBuild = (dormId) => {
     // return http({
-    //     url: `buildingInfo/delete-building-info/${dormBuildId}`,
+    //     url: `buildingInfo/delete-building-info/${dormId}`,
     //     method: 'DELETE',
     //     headers: {
     //         'Content-Type': 'application/json'
     //     }
     // })
-    mockbuildingInfos = mockbuildingInfos.filter(r => r.dormBuildId !== dormBuildId); // 模拟删除
+    mockbuildingInfos = mockbuildingInfos.filter(r => r.dormId !== dormId); // 模拟删除
     console.log(mockbuildingInfos);
     return { 
         success: true,

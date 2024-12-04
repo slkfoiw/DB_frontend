@@ -15,13 +15,13 @@ export const getNotifications = () => {
     return { data: [...mockNotifications] }; // 模拟数据
 };
 
-export const markAsRead = (index) => {
+export const markAsRead = (id) => {
     // return http({
-    //     url: `notifications/mark-as-read/${index}`,
+    //     url: `notifications/mark-as-read/${id}`,
     //     method: 'PUT',
     // });
-    if (mockNotifications[index]) {
-        mockNotifications[index].status = "已读"; // 模拟标记已读
+    if (mockNotifications[id]) {
+        mockNotifications[id].status = "已读"; // 模拟标记已读
     }
     return { success: true, message: "消息已标记为已读" };
 };

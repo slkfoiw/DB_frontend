@@ -23,8 +23,8 @@
                 <!--    表格-->
                 <el-table :data="paginatedBuildings" style="width: 100%">
                     <el-table-column label="#" type="index"/>
-                    <el-table-column label="编号" prop="dormBuildId" sortable/>
-                    <el-table-column label="地址" prop="dormBuildAddr"/>
+                    <el-table-column label="编号" prop="dormId" sortable/>
+                    <el-table-column label="地址" prop="address"/>
                     <el-table-column
                         :filter-method="filterTag"
                         :filters="[
@@ -40,7 +40,7 @@
                         <template #default="scope">
                             <el-button icon="Edit" type="primary" @click="handleEdit(scope.row)"
                             ></el-button>
-                            <el-popconfirm title="确认删除？" @confirm="handleDelete(scope.row.dormBuildId)">
+                            <el-popconfirm title="确认删除？" @confirm="handleDelete(scope.row.dormId)">
                             <template #reference>
                                 <el-button icon="Delete" type="danger"></el-button>
                             </template>
@@ -65,11 +65,11 @@
                 <div>
                     <el-dialog v-model="dialogVisible" title="操作" width="30%" @close="cancel">
                     <el-form ref="formRef" :model="form" :rules="rules" label-width="120px">
-                        <el-form-item label="编号" prop="dormBuildId">
-                        <el-input v-model.number="form.dormBuildId" :disabled="disabled" style="width: 80%"></el-input>
+                        <el-form-item label="编号" prop="dormId">
+                        <el-input v-model.number="form.dormId" :disabled="disabled" style="width: 80%"></el-input>
                         </el-form-item>
-                        <el-form-item label="地址" prop="dormBuildAddr">
-                        <el-input v-model="form.dormBuildAddr" style="width: 80%"></el-input>
+                        <el-form-item label="地址" prop="address">
+                        <el-input v-model="form.address" style="width: 80%"></el-input>
                         </el-form-item>
                         <el-form-item label="备注" prop="dormBuildDetail">
                         <el-input
@@ -103,8 +103,8 @@ const search = ref('');
 const filteredBuildings = ref([]);
 const totalitems = ref(0);
 const paginatedBuildings = ref([]);
-const form = ref({dormBuildId: '',
-                dormBuildAddr: '',
+const form = ref({dormId: '',
+                address: '',
                 dormBuildDetail: '',});
 const dialogVisible = ref(false);
 const disabled = ref(false);
@@ -112,15 +112,15 @@ const currentPage = ref(1);
 const pageSize = ref(10);
 
 const resetForm = () => {
-    form.value = {dormBuildId: '',
-                dormBuildAddr: '',
+    form.value = {dormId: '',
+                address: '',
                 dormBuildDetail: '',};
 };
 
 const load = () => {
     filteredBuildings.value = dormBuildings.value.filter(building => 
-                            String(building.dormBuildId).toLowerCase().includes(search.value.toLowerCase()) ||
-                            String(building.dormBuildAddr).toLowerCase().includes(search.value.toLowerCase()) ||
+                            String(building.dormId).toLowerCase().includes(search.value.toLowerCase()) ||
+                            String(building.address).toLowerCase().includes(search.value.toLowerCase()) ||
                             String(building.dormBuildDetail).toLowerCase().includes(search.value.toLowerCase()));
     totalitems.value = filteredBuildings.value.length;
     paginatedBuildings.value = filteredBuildings.value.slice((currentPage.value - 1) * pageSize.value, currentPage.value * pageSize.value);
@@ -181,8 +181,8 @@ const filterTag = (value, row) => {
 const handleEdit = (row) => {
     dialogVisible.value = true;
     disabled.value = true;
-    form.value = {dormBuildId: row.dormBuildId,
-                dormBuildAddr: row.dormBuildAddr,
+    form.value = {dormId: row.dormId,
+                address: row.address,
                 dormBuildDetail: row.dormBuildDetail,};
 };
 

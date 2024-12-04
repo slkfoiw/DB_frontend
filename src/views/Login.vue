@@ -8,7 +8,7 @@
         <div class="header">{{ siteHeader }}</div>
         <form @submit.prevent="login">
           <div class="simpleui-input-inline">
-            <el-input v-model="nickname" name="nickname" placeholder="昵称" autofocus :prefix-icon="User"></el-input>
+            <el-input v-model="username" name="username" placeholder="昵称" autofocus :prefix-icon="User"></el-input>
           </div>
           <div class="simpleui-input-inline">
             <el-input v-model="email" name="email" placeholder="邮箱" autofocus :prefix-icon="Message"></el-input>
@@ -49,7 +49,7 @@ export default {
   name: 'Login',
   setup() {
     const router = useRouter();
-    const nickname = ref('');
+    const username = ref('');
     const email = ref('');
     const password = ref('');
     const logoOpenEyes = 'https://buaaxiaolanshu.oss-cn-beijing.aliyuncs.com/static/logo-bg-no.svg';
@@ -71,7 +71,7 @@ export default {
     };
 
     const login = async () => {
-      if (!nickname.value || !email.value || !password.value) {
+      if (!username.value || !email.value || !password.value) {
         ElMessage({
           message: '昵称、邮箱、密码均不能为空',
           type: 'error',
@@ -81,7 +81,7 @@ export default {
       }
 
       try {
-        const response = await store.userLogin(nickname.value, password.value);
+        const response = await store.userLogin(username.value, password.value);
         if (!response) {
           ElMessage({
             message: '登录失败，请检查邮箱和密码',
@@ -92,7 +92,7 @@ export default {
         }
 
         // 解析token获取用户角色
-        const user = response.username;
+        const user = response.name;
         // 显示登录成功消息
         ElMessage({
           message: `欢迎 ${user} 登录成功`,
@@ -133,7 +133,7 @@ export default {
     });
 
     return {
-      nickname,
+      username,
       email,
       password,
       login,
@@ -163,7 +163,7 @@ export default {
   background-size: 100%;
   padding: 20px 0;
   position: relative;
-  z-index: 0;
+  z-id: 0;
   transition: transform 1s ease-in-out;
 }
 
@@ -181,7 +181,7 @@ export default {
   left: 0;
   right: 0;
   bottom: 0;
-  z-index: -1;
+  z-id: -1;
 }
 
 .login-decorator {
@@ -189,7 +189,7 @@ export default {
   justify-content: center;
   align-items: center;
   height: 94vh;
-  z-index: 1;
+  z-id: 1;
   transition: transform 1s ease-in-out;
 }
 
@@ -235,7 +235,7 @@ export default {
   justify-content: center;
   align-items: center;
   background: rgba(255, 255, 255, 0.9);
-  z-index: 1000;
+  z-id: 1000;
   animation: fadeIn 1s forwards;
 }
 

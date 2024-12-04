@@ -31,7 +31,7 @@
             </div>
             <!--    表格-->
             <el-table :data="paginatedDormRooms" style="width: 100%">
-            <el-table-column label="#" type="index"/>
+            <el-table-column label="#" type="id"/>
             <!-- 床位展开-->
             <el-table-column type="expand">
                 <template #default="props">
@@ -139,10 +139,10 @@
                     </el-form>
                 </template>
                 </el-table-column>
-                <el-table-column label="房间号" prop="dormRoomId" sortable/>
-                <el-table-column label="楼栋号" prop="dormBuildId" sortable/>
-                <el-table-column label="楼层" prop="floorNum" sortable/>
-                <el-table-column label="最多可住人数" prop="maxCapacity"/>
+                <el-table-column label="房间号" prop="roomId" sortable/>
+                <el-table-column label="楼栋号" prop="dormId" sortable/>
+                <el-table-column label="楼层" prop="floor" sortable/>
+                <el-table-column label="最多可住人数" prop="capacity"/>
                 <el-table-column
                     :filter-method="filterTag"
                     :filters="[
@@ -154,7 +154,7 @@
                     ]"
                     filter-placement="bottom-end"
                     label="已住人数"
-                    prop="currentCapacity"
+                    prop="peopleNum"
                     sortable
                 />
                 <!--      操作栏-->
@@ -162,7 +162,7 @@
                     <template #default="scope">
                     <el-button icon="Edit" type="primary" @click="editRoom(scope.row)"
                     ></el-button>
-                    <el-popconfirm title="确认删除？" @confirm="handleDelete(scope.row.dormRoomId)">
+                    <el-popconfirm title="确认删除？" @confirm="handleDelete(scope.row.roomId)">
                         <template #reference>
                         <el-button icon="Delete" type="danger"></el-button>
                         </template>
@@ -183,20 +183,20 @@
             <el-dialog v-model="addRoomDialog" title="房间信息" @close="cancel">
                 <h3>添加房间</h3>
                 <el-form ref="formRef" :model="form" :rules="rules" label-width="120px">
-                    <el-form-item label="楼栋号" prop="dormBuildId" required>
-                        <el-input v-model="form.dormBuildId" style="width: 80%"></el-input>
+                    <el-form-item label="楼栋号" prop="dormId" required>
+                        <el-input v-model="form.dormId" style="width: 80%"></el-input>
                     </el-form-item>
-                    <el-form-item label="楼层数" prop="floorNum" required>
-                        <el-input v-model="form.floorNum" style="width: 80%" ></el-input>
+                    <el-form-item label="楼层数" prop="floor" required>
+                        <el-input v-model="form.floor" style="width: 80%" ></el-input>
                     </el-form-item>
-                    <el-form-item label="房间号" prop="dormRoomId" required>
-                        <el-input v-model="form.dormRoomId" style="width: 80%"></el-input>
+                    <el-form-item label="房间号" prop="roomId" required>
+                        <el-input v-model="form.roomId" style="width: 80%"></el-input>
                     </el-form-item>
-                    <el-form-item label="最多可住人数" prop="maxCapacity" required>
-                        <el-input v-model="form.maxCapacity" style="width: 80%"></el-input>
+                    <el-form-item label="最多可住人数" prop="capacity" required>
+                        <el-input v-model="form.capacity" style="width: 80%"></el-input>
                     </el-form-item>
-                    <el-form-item label="已住人数" prop="currentCapacity" required>
-                        <el-input v-model="form.currentCapacity" style="width: 80%"></el-input>
+                    <el-form-item label="已住人数" prop="peopleNum" required>
+                        <el-input v-model="form.peopleNum" style="width: 80%"></el-input>
                     </el-form-item>
                     <el-form-item>
                         <el-button type="primary" @click="saveNewRoom">添加</el-button>
@@ -206,20 +206,20 @@
             </el-dialog>
           <el-dialog v-model="editRoomDialog" title="操作" width="30%" @close="cancel">
             <el-form ref="formRef" :model="form" :rules="rules" label-width="120px">
-              <el-form-item label="楼栋号" prop="dormBuildId">
-                <el-input v-model.number="form.dormBuildId" style="width: 80%"></el-input>
+              <el-form-item label="楼栋号" prop="dormId">
+                <el-input v-model.number="form.dormId" style="width: 80%"></el-input>
               </el-form-item>
-              <el-form-item label="楼层数" prop="floorNum">
-                <el-input v-model.number="form.floorNum" style="width: 80%"></el-input>
+              <el-form-item label="楼层数" prop="floor">
+                <el-input v-model.number="form.floor" style="width: 80%"></el-input>
               </el-form-item>
-              <el-form-item label="房间号" prop="dormRoomId">
-                <el-input v-model.number="form.dormRoomId" :disabled="disabled" style="width: 80%"></el-input>
+              <el-form-item label="房间号" prop="roomId">
+                <el-input v-model.number="form.roomId" :disabled="disabled" style="width: 80%"></el-input>
               </el-form-item>
-              <el-form-item label="最多可住人数" prop="maxCapacity">
-                <el-input v-model.number="form.maxCapacity" style="width: 80%"></el-input>
+              <el-form-item label="最多可住人数" prop="capacity">
+                <el-input v-model.number="form.capacity" style="width: 80%"></el-input>
               </el-form-item>
-              <el-form-item label="已住人数" prop="currentCapacity">
-                <el-input v-model.number="form.currentCapacity" style="width: 80%"></el-input>
+              <el-form-item label="已住人数" prop="peopleNum">
+                <el-input v-model.number="form.peopleNum" style="width: 80%"></el-input>
               </el-form-item>
             </el-form>
             <template #footer>
@@ -232,14 +232,14 @@
           <!-- 床位 弹窗-->
           <el-dialog v-model="bedDialog" title="操作" width="30%" @close="cancel">
             <el-form ref="formRef" :model="form" :rules="rules" label-width="120px">
-              <el-form-item label="楼栋号" prop="dormBuildId">
-                <el-input v-model.number="form.dormBuildId" disabled="true" style="width: 80%"></el-input>
+              <el-form-item label="楼栋号" prop="dormId">
+                <el-input v-model.number="form.dormId" disabled="true" style="width: 80%"></el-input>
               </el-form-item>
-              <el-form-item label="楼层数" prop="floorNum">
-                <el-input v-model.number="form.floorNum" disabled="true" style="width: 80%"></el-input>
+              <el-form-item label="楼层数" prop="floor">
+                <el-input v-model.number="form.floor" disabled="true" style="width: 80%"></el-input>
               </el-form-item>
-              <el-form-item label="房间号" prop="dormRoomId">
-                <el-input v-model.number="form.dormRoomId" disabled="true" style="width: 80%"></el-input>
+              <el-form-item label="房间号" prop="roomId">
+                <el-input v-model.number="form.roomId" disabled="true" style="width: 80%"></el-input>
               </el-form-item>
               <el-form-item v-if="bedNum === 1" label="床位(一)" prop="firstBed">
                 <el-input v-model.number="form.firstBed" placeholder="请输入学号" style="width: 80%"></el-input>
@@ -303,8 +303,8 @@ const dormRooms = ref([]);
 const filteredRooms = ref([]);
 const search = ref('');
 const totalitems = ref(0);
-const form = ref({ dormRoomId: '', dormBuildId: '', floorNum: '', maxCapacity: '', currentCapacity: '', firstBed: '', secondBed: '', thirdBed: '', fourthBed: '' });
-const oldDormRoomId = ref('');
+const form = ref({ roomId: '', dormId: '', floor: '', capacity: '', peopleNum: '', firstBed: '', secondBed: '', thirdBed: '', fourthBed: '' });
+const oldroomId = ref('');
 const currentPage = ref(1);
 const pageSize = ref(10);
 const paginatedDormRooms = ref([]);
@@ -319,7 +319,7 @@ const havePeopleNum = ref(0);
 const editRoomDialog = ref(false);
 
 const resetForm = () => {
-    form.value = {dormRoomId: '', dormBuildId: '', floorNum: '', maxCapacity: '', currentCapacity: '', firstBed: '', secondBed: '', thirdBed: '', fourthBed: ''};
+    form.value = {roomId: '', dormId: '', floor: '', capacity: '', peopleNum: '', firstBed: '', secondBed: '', thirdBed: '', fourthBed: ''};
 }
 const add = () => {
     disabled.value = false;
@@ -352,7 +352,7 @@ const saveNewRoom = async () => {
 
 const saveUpdateRoom = async () => {
     try {
-        const res = await updateDormRoom(form.value, oldDormRoomId.value);
+        const res = await updateDormRoom(form.value, oldroomId.value);
         if (!res.success) throw new Error(res.message);
         ElMessage.success(res.message);
     } catch (error) {
@@ -375,7 +375,7 @@ const fetchDormRooms = async () => {
 
 const load = () => {
     filteredRooms.value = dormRooms.value.filter(room =>
-        room.dormRoomId.toLowerCase().includes(search.value.toLowerCase()) ||
+        room.roomId.toLowerCase().includes(search.value.toLowerCase()) ||
         room.firstBed.toLowerCase().includes(search.value.toLowerCase()) ||
         room.secondBed.toLowerCase().includes(search.value.toLowerCase()) ||
         room.thirdBed.toLowerCase().includes(search.value.toLowerCase()) ||
@@ -461,7 +461,7 @@ const handleSizeChange = (newPageSize) => {
 };
 
 const filterTag = (value, row) => {
-    return row.currentCapacity === value;
+    return row.peopleNum === value;
 };
 
 const closeModal = () => {
@@ -471,7 +471,7 @@ const closeModal = () => {
 const save = async () => {
     try {
         if (isEdit.value) {
-            const res = await updateDormRoom(form.value, oldDormRoomId.value);
+            const res = await updateDormRoom(form.value, oldroomId.value);
             if (!res.success) throw new Error(res.message);
             ElMessage.success(res.message);
         } else {
@@ -572,14 +572,14 @@ const deleteStuBed = (num, info) => {
 
 const editRoom = (room) => {
     form.value = { ...room };
-    oldDormRoomId.value = room.dormRoomId;
+    oldroomId.value = room.roomId;
     editRoomDialog.value = true;
     disabled.value = true;
 };
 
-const handleDelete = async (dormRoomId) => {
+const handleDelete = async (roomId) => {
     try {
-        const res = await deleteDormRoom(dormRoomId);
+        const res = await deleteDormRoom(roomId);
         if (!res.success) throw new Error(res.message);
         ElMessage.success(res.message);
     } catch (error) {

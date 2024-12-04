@@ -53,9 +53,9 @@ export const updateStudent = (student) => {
     //     },
     //     data: student
     // })
-    const index = mockStudents.findIndex(s => s.studentId === student.studentId);
-    if (index !== -1) {
-        mockStudents[index] = student; // 模拟更新
+    const id = mockStudents.findIndex(s => s.studentId === student.studentId);
+    if (id !== -1) {
+        mockStudents[id] = student; // 模拟更新
     }
     return { 
         success: true,
@@ -84,9 +84,9 @@ export const deleteStudent = (studentId) => {
     //     url: `student/delete-student/${studentId}`,
     //     method: 'DELETE'
     // })
-    const index = mockStudents.findIndex(s => s.studentId === studentId);
-    if (index !== -1) {
-        mockStudents.splice(index, 1); // 模拟删除
+    const id = mockStudents.findIndex(s => s.studentId === studentId);
+    if (id !== -1) {
+        mockStudents.splice(id, 1); // 模拟删除
     }
     return { 
         success: true,

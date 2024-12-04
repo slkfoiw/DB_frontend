@@ -11,7 +11,7 @@
         </el-col>
         <el-col :span="12" style="width: 250px!important;">
           <h2>
-            {{ userInfo.username }}
+            {{ userInfo.name }}
             <span v-if="userInfo.gender === 'female'" class="gender-icon"><i class="fas fa-female"></i></span>
             <span v-if="userInfo.gender === 'male'" class="gender-icon"><i class="fas fa-male"></i></span>
             <span v-if="userInfo.gender === 'null'" class="gender-icon"><i class="fas fa-genderless"></i></span>
@@ -22,7 +22,7 @@
               {{ getIdentityName(userInfo.identityLevel) }}
             </el-tag>
           </p>
-          <p class="in-one"><strong>昵称：</strong>{{ userInfo.nickname }}</p>
+          <p class="in-one"><strong>用户名：</strong>{{ userInfo.username }}</p>
           <p class="in-one"><strong>邮箱：</strong>{{ userInfo.email }}</p>
           <p class="in-one"><strong>个性签名：</strong>{{ userInfo.introduction }}</p>
         </el-col>
@@ -58,7 +58,7 @@ const userStore = useUserStore();
 const userInfo = ref(userStore.userInfo);
 
 const getUserInfo = async () => {
-  document.title = userInfo.value.username + '的主页';
+  document.title = userInfo.value.name + '的主页';
 };
 
 const showEditModal = ref(false);

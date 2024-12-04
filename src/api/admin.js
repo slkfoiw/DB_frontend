@@ -73,9 +73,9 @@ export const updateAdmin = (admin) => {
     //     },
     //     data: admin
     // })
-    const index = mockAdmins.findIndex(a => a.adminId === admin.adminId);
-    if (index !== -1) {
-        mockAdmins[index] = admin; // 模拟更新
+    const id = mockAdmins.findIndex(a => a.adminId === admin.adminId);
+    if (id !== -1) {
+        mockAdmins[id] = admin; // 模拟更新
     }
     return { 
         success: true,
@@ -88,9 +88,9 @@ export const deleteAdmin = (adminId) => {
     //     url: `admin/delete-admin/${adminId}`,
     //     method: 'DELETE'
     // })
-    const index = mockAdmins.findIndex(a => a.adminId === adminId);
-    if (index !== -1) {
-        mockAdmins.splice(index, 1); // 模拟删除
+    const id = mockAdmins.findIndex(a => a.adminId === adminId);
+    if (id !== -1) {
+        mockAdmins.splice(id, 1); // 模拟删除
     }
     return { 
         success: true,
@@ -137,9 +137,9 @@ export const updateNotice = (notice) => {
     //     },
     //     data: notice
     // })
-    const index = mockNotices.findIndex(n => n.id === notice.id);
-    if (index !== -1) {
-        mockNotices[index] = notice; // 模拟更新
+    const id = mockNotices.findIndex(n => n.id === notice.id);
+    if (id !== -1) {
+        mockNotices[id] = notice; // 模拟更新
     }
     return { 
         success: true,
@@ -152,9 +152,9 @@ export const deleteNotice = (noticeId) => {
     //     url: `admin/delete-notice/${noticeId}`,
     //     method: 'DELETE'
     // })
-    const index = mockNotices.findIndex(n => n.id === noticeId);
-    if (index !== -1) {
-        mockNotices.splice(index, 1); // 模拟删除
+    const id = mockNotices.findIndex(n => n.id === noticeId);
+    if (id !== -1) {
+        mockNotices.splice(id, 1); // 模拟删除
     }
     return { 
         success: true,
@@ -184,9 +184,9 @@ export const updateChangeRoom = (changeRoom) => {
     //     },
     //     data: changeRoom
     // })
-    const index = mockChangeRoom.findIndex(c => c.id === changeRoom.id);
-    if (index !== -1) {
-        mockChangeRoom[index] = changeRoom; // 模拟更新
+    const id = mockChangeRoom.findIndex(c => c.id === changeRoom.id);
+    if (id !== -1) {
+        mockChangeRoom[id] = changeRoom; // 模拟更新
     }
     return { 
         success: true,
@@ -199,9 +199,9 @@ export const deleteChangeRoom = (changeRoomId) => {
     //     url: `admin/delete-change-room/${changeRoomId}`,
     //     method: 'DELETE'
     // })
-    const index = mockChangeRoom.findIndex(c => c.id === changeRoomId);
-    if (index !== -1) {
-        mockChangeRoom.splice(index, 1); // 模拟删除
+    const id = mockChangeRoom.findIndex(c => c.id === changeRoomId);
+    if (id !== -1) {
+        mockChangeRoom.splice(id, 1); // 模拟删除
     }
     return { 
         success: true,
@@ -247,9 +247,9 @@ export const updateRepair = async (repair) => {
     //         'Content-Type': 'application/json'
     //     }
     // })
-    const index = mockRepairs.findIndex(r => r.id === repair.id);
-    if (index !== -1) {
-        mockRepairs[index] = repair; // 更新报修状态
+    const id = mockRepairs.findIndex(r => r.id === repair.id);
+    if (id !== -1) {
+        mockRepairs[id] = repair; // 更新报修状态
     }
     return { 
         success: true,
@@ -262,9 +262,9 @@ export const deleteRepair = async (repairId) => {
     //     url: `admin/delete-repair/${repairId}`,
     //     method: 'DELETE'
     // })
-    const index = mockRepairs.findIndex(r => r.id === repairId);
-    if (index !== -1) {
-        mockRepairs.splice(index, 1); // 模拟删除
+    const id = mockRepairs.findIndex(r => r.id === repairId);
+    if (id !== -1) {
+        mockRepairs.splice(id, 1); // 模拟删除
     }
     return { 
         success: true,

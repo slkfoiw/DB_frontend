@@ -11,7 +11,7 @@
             <el-input v-model="userId" name="userId" placeholder="学工号" autofocus :prefix-icon="User"></el-input>
           </div>
           <div class="simpleui-input-inline">
-            <el-input v-model="username" name="username" placeholder="姓名" :prefix-icon="User"></el-input>
+            <el-input v-model="name" name="name" placeholder="姓名" :prefix-icon="User"></el-input>
           </div>
           <div class="simpleui-input-inline">
             <el-input type="password" v-model="password" name="password" @focus="changeLogoToClosedEyes"
@@ -50,9 +50,9 @@ export default {
   name: 'Register',
   setup() {
     const router = useRouter();
-    const nickname = ref('');
-    const userId = ref('');
     const username = ref('');
+    const userId = ref('');
+    const name = ref('');
     const password = ref('');
     const confirmPassword = ref('');
     const email = ref('');
@@ -72,7 +72,7 @@ export default {
 
     const handleRegister = async () => {
 
-      if (!nickname.value || !userId.value || !username.value || !password.value || !confirmPassword.value || !email.value) {
+      if (!username.value || !userId.value || !name.value || !password.value || !confirmPassword.value || !email.value) {
         ElMessage({
           message: '请填写所有字段。',
           type: 'error',
@@ -91,8 +91,8 @@ export default {
         return;
       }
 
-      const nicknameRegex = /^[a-zA-Z0-9]+$/; // 正则表达式：仅允许英文字母和数字
-      if (!nicknameRegex.test(nickname.value)) {
+      const usernameRegex = /^[a-zA-Z0-9]+$/; // 正则表达式：仅允许英文字母和数字
+      if (!usernameRegex.test(username.value)) {
         ElMessage({
           message: '昵称只能包含英文字母和数字。',
           type: 'error',
@@ -120,16 +120,16 @@ export default {
       }
       try {
         // 检查学工号是否已经被注册
-        const checkRes = await checkuserIdandName(userId.value, username.value, password.value, email.value);
+        const checkRes = await checkuserIdandName(userId.value, name.value, password.value, email.value);
         if (!checkRes.success) {
           ElMessage.error("该学工号已被注册或姓名不匹配");
           return;
         }
 
         const res = await register({
-          nickname: nickname.value,
-          userId: userId.value,
           username: username.value,
+          userId: userId.value,
+          name: name.value,
           password: password.value,
           email: email.value
         });
@@ -168,9 +168,9 @@ export default {
     });
 
     return {
-      nickname,
-      userId,
       username,
+      userId,
+      name,
       password,
       confirmPassword,
       email,

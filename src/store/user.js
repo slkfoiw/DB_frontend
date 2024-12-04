@@ -9,26 +9,26 @@ export const useUserStore = defineStore('user', () => {
     const token = ref('');
     // 下面的个人信息之后应该在 userLogin 里面获取 对接完成之后可以删除
     userInfo.value = {
-        nickname: 'Fanziyu',
+        username: 'Fanziyu',
         userId: 22373474,
         gender: 'female',
         introduction: '这个人很懒，什么都没留下',
-        username: '樊孜昱',
+        name: '樊孜昱',
         email: '123@qq.com',
-        identityLevel: 0,
+        identityLevel: 2,
     }
     // 
 
-    const userRegister = async ({ email, username, password }) => {
-        await register({ email, username, password });
+    const userRegister = async ({ email, name, password }) => {
+        await register({ email, name, password });
     };
 
-    const userLogin = async (nickname, password) => {
-        const response = await login({ nickname, password });
+    const userLogin = async (username, password) => {
+        const response = await login({ username, password });
 
         if (response.success) {
             // 1. 返回数据
-            const { token, refresh_token, username } = response.data;
+            const { token, refresh_token, name } = response.data;
 
             // 2. 设置token
             setToken(token);
@@ -37,7 +37,7 @@ export const useUserStore = defineStore('user', () => {
             // 3. 获取用户个人信息
             await updateUserBaseInfo();
 
-            return { username }; // 返回包含用户名和角色的对象
+            return { name }; // 返回包含用户名和角色的对象
         } else {
             return null;
         }
@@ -45,11 +45,11 @@ export const useUserStore = defineStore('user', () => {
 
     const updateUserBaseInfo = async () => {
         const res = await getUserInfo();
-        userInfo.value.nickname = res.data.nickname;
+        userInfo.value.username = res.data.username;
         userInfo.value.userId = res.data.id;
         userInfo.value.gender = res.data.gender;
         userInfo.value.introduction = res.data.introduction;
-        userInfo.value.username = res.data.username;
+        userInfo.value.name = res.data.name;
         userInfo.value.email = res.data.email;
         userInfo.value.identityLevel = res.data.identityLevel;
     }
@@ -97,12 +97,12 @@ export const useUserStore = defineStore('user', () => {
             const refreshToken = Cookies.get('myRefreshToken');
             const response = await refreshAccessToken({ refreshToken: refreshToken }); // 传递 refresh_token 到请求体中
             setToken(response.data.token);
-            if (userInfo.value.username == null) {
+            if (userInfo.value.name == null) {
                 await updateUserBaseInfo();
             }
             ElMessage({
                 type: 'success',
-                message: userInfo.value.username + `欢迎回来`,
+                message: userInfo.value.name + `欢迎回来`,
             });
         } catch (error) {
             console.error('刷新token失败:', error);

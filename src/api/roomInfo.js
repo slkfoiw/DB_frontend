@@ -3,19 +3,19 @@ import { checkIfIdExists } from "./student.js";
 
 // 学生用学号表示床位
 let mockRoomInfos = [
-    { dormRoomId: '257', dormBuildId: '13', floorNum: '2', maxCapacity: '4', currentCapacity: '4', firstBed: "22371001", secondBed: "22371002", thirdBed: "22371003", fourthBed: "樊孜昱" },
-    { dormRoomId: '258', dormBuildId: '13', floorNum: '2', maxCapacity: '4', currentCapacity: '4', firstBed: "22371004", secondBed: "22371005", thirdBed: "22371006", fourthBed: "name7" },
-    { dormRoomId: '259', dormBuildId: '13', floorNum: '2', maxCapacity: '4', currentCapacity: '4', firstBed: "name8", secondBed: "name9", thirdBed: "name10", fourthBed: "name11" },
-    { dormRoomId: '260', dormBuildId: '13', floorNum: '2', maxCapacity: '4', currentCapacity: '4', firstBed: "name12", secondBed: "name13", thirdBed: "name14", fourthBed: "name15" },
-    { dormRoomId: '261', dormBuildId: '13', floorNum: '2', maxCapacity: '4', currentCapacity: '4', firstBed: "name16", secondBed: "name17", thirdBed: "name18", fourthBed: "name19" },
-    { dormRoomId: '262', dormBuildId: '13', floorNum: '2', maxCapacity: '4', currentCapacity: '4', firstBed: "name20", secondBed: "name21", thirdBed: "name22", fourthBed: "name23" },
-    { dormRoomId: '263', dormBuildId: '13', floorNum: '2', maxCapacity: '4', currentCapacity: '4', firstBed: "name24", secondBed: "name25", thirdBed: "name26", fourthBed: "name27" },
-    { dormRoomId: '264', dormBuildId: '13', floorNum: '2', maxCapacity: '4', currentCapacity: '4', firstBed: "name28", secondBed: "name29", thirdBed: "name30", fourthBed: "name31" },
-    { dormRoomId: '265', dormBuildId: '13', floorNum: '2', maxCapacity: '4', currentCapacity: '4', firstBed: "name32", secondBed: "name33", thirdBed: "name34", fourthBed: "name35" },
-    { dormRoomId: '266', dormBuildId: '13', floorNum: '2', maxCapacity: '4', currentCapacity: '4', firstBed: "name36", secondBed: "name37", thirdBed: "name38", fourthBed: "name39" },
-    { dormRoomId: '267', dormBuildId: '13', floorNum: '2', maxCapacity: '4', currentCapacity: '4', firstBed: "name40", secondBed: "name41", thirdBed: "name42", fourthBed: "name43" },
-    { dormRoomId: '268', dormBuildId: '13', floorNum: '2', maxCapacity: '4', currentCapacity: '4', firstBed: "name44", secondBed: "name45", thirdBed: "name46", fourthBed: "name47" },
-    { dormRoomId: '269', dormBuildId: '13', floorNum: '2', maxCapacity: '4', currentCapacity: '4', firstBed: "name48", secondBed: "name49", thirdBed: "name50", fourthBed: "name51" },
+    { roomId: '257', dormId: '13', floor: '2', capacity: '4', peopleNum: '4', firstBed: "22371001", secondBed: "22371002", thirdBed: "22371003", fourthBed: "樊孜昱" },
+    { roomId: '258', dormId: '13', floor: '2', capacity: '4', peopleNum: '4', firstBed: "22371004", secondBed: "22371005", thirdBed: "22371006", fourthBed: "name7" },
+    { roomId: '259', dormId: '13', floor: '2', capacity: '4', peopleNum: '4', firstBed: "name8", secondBed: "name9", thirdBed: "name10", fourthBed: "name11" },
+    { roomId: '260', dormId: '13', floor: '2', capacity: '4', peopleNum: '4', firstBed: "name12", secondBed: "name13", thirdBed: "name14", fourthBed: "name15" },
+    { roomId: '261', dormId: '13', floor: '2', capacity: '4', peopleNum: '4', firstBed: "name16", secondBed: "name17", thirdBed: "name18", fourthBed: "name19" },
+    { roomId: '262', dormId: '13', floor: '2', capacity: '4', peopleNum: '4', firstBed: "name20", secondBed: "name21", thirdBed: "name22", fourthBed: "name23" },
+    { roomId: '263', dormId: '13', floor: '2', capacity: '4', peopleNum: '4', firstBed: "name24", secondBed: "name25", thirdBed: "name26", fourthBed: "name27" },
+    { roomId: '264', dormId: '13', floor: '2', capacity: '4', peopleNum: '4', firstBed: "name28", secondBed: "name29", thirdBed: "name30", fourthBed: "name31" },
+    { roomId: '265', dormId: '13', floor: '2', capacity: '4', peopleNum: '4', firstBed: "name32", secondBed: "name33", thirdBed: "name34", fourthBed: "name35" },
+    { roomId: '266', dormId: '13', floor: '2', capacity: '4', peopleNum: '4', firstBed: "name36", secondBed: "name37", thirdBed: "name38", fourthBed: "name39" },
+    { roomId: '267', dormId: '13', floor: '2', capacity: '4', peopleNum: '4', firstBed: "name40", secondBed: "name41", thirdBed: "name42", fourthBed: "name43" },
+    { roomId: '268', dormId: '13', floor: '2', capacity: '4', peopleNum: '4', firstBed: "name44", secondBed: "name45", thirdBed: "name46", fourthBed: "name47" },
+    { roomId: '269', dormId: '13', floor: '2', capacity: '4', peopleNum: '4', firstBed: "name48", secondBed: "name49", thirdBed: "name50", fourthBed: "name51" },
 ];
 
 const checkStuNum = (rule, value) => {
@@ -29,23 +29,23 @@ const checkStuNum = (rule, value) => {
 };
 
 export const rules = {
-    dormRoomId: [
+    roomId: [
         {required: true, message: "请输入房间号", trigger: "blur"},
         {pattern: /^[0-9]{3}$/, message: "范围：100-999", trigger: "blur"},
     ],
-    floorNum: [
+    floor: [
         {required: true, message: "请输入楼层数", trigger: "blur"},
         {pattern: /^[1-3]$/, message: "范围：1-3", trigger: "blur"},
     ],
-    dormBuildId: [
+    dormId: [
         {required: true, message: "请输入楼宇号数", trigger: "blur"},
         {pattern: /^[1-4]$/, message: "范围：1-4", trigger: "blur"},
     ],
-    maxCapacity: [
+    capacity: [
         {required: true, message: "请输入房间可住人数", trigger: "blur"},
         {pattern: /^[0-4]$/, message: "范围：0-4", trigger: "blur"},
     ],
-    currentCapacity: [
+    peopleNum: [
         {required: true, message: "请输入当前已住人数", trigger: "blur"},
         {pattern: /^[0-4]$/, message: "范围：0-4", trigger: "blur"},
     ],
@@ -87,16 +87,16 @@ export const addDormRoom = (roomInfo) => {
 
 export const updateDormRoom = (roomInfo) => {
     // return http({
-    //     url: `roomInfo/update-room-info/${roomInfo.dormRoomId}`,
+    //     url: `roomInfo/update-room-info/${roomInfo.roomId}`,
     //     method: 'PUT',
     //     headers: {
     //         'Content-Type': 'application/json'
     //     },
     //     data: roomInfo
     // })
-    const index = mockRoomInfos.findIndex(r => r.dormRoomId === roomInfo.dormRoomId);
-    if (index !== -1) {
-        mockRoomInfos[index] = roomInfo; // 模拟更新
+    const id = mockRoomInfos.findIndex(r => r.roomId === roomInfo.roomId);
+    if (id !== -1) {
+        mockRoomInfos[id] = roomInfo; // 模拟更新
     }
     console.log(mockRoomInfos);
     return { 
@@ -121,12 +121,12 @@ export const updateAllRoomInfos = (data) => {
     };
 };
 
-export const deleteDormRoom = (dormRoomId) => {
+export const deleteDormRoom = (roomId) => {
     // return http({
-    //     url: `roomInfo/delete-room-info/${dormRoomId}`,
+    //     url: `roomInfo/delete-room-info/${roomId}`,
     //     method: 'DELETE'
     // })
-    mockRoomInfos = mockRoomInfos.filter(r => r.dormRoomId !== dormRoomId); // 模拟删除
+    mockRoomInfos = mockRoomInfos.filter(r => r.roomId !== roomId); // 模拟删除
     console.log(mockRoomInfos);
     return { 
         success: true,
@@ -136,9 +136,9 @@ export const deleteDormRoom = (dormRoomId) => {
 
 export const updateBed = (data) => {
     return new Promise((resolve, reject) => {
-        const index = mockRoomInfos.findIndex(r => r.dormRoomId === data.dormRoomId);
-        if (index !== -1) {
-            mockRoomInfos[index] = data; // 模拟更新
+        const id = mockRoomInfos.findIndex(r => r.roomId === data.roomId);
+        if (id !== -1) {
+            mockRoomInfos[id] = data; // 模拟更新
             console.log(mockRoomInfos);
             resolve({ 
                 code: "0", // 模拟成功状态码

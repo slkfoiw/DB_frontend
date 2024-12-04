@@ -25,12 +25,12 @@
           <el-table-column label="#" type="index" />
           <el-table-column label="学号" prop="studentId" sortable width="100px" />
           <el-table-column label="姓名" prop="name" width="100px" />
-          <el-table-column label="当前公寓号" prop="currentDormId" sortable />
-          <el-table-column label="当前宿舍号" prop="currentRoomId" sortable />
-          <el-table-column label="当前床位号" prop="currentBedId" sortable />
-          <el-table-column label="目标公寓号" prop="towardsDormId" sortable/>
-          <el-table-column label="目标宿舍号" prop="towardsRoomId" sortable />
-          <el-table-column label="目标床位号" prop="towardsBedId" sortable />
+          <el-table-column label="当前公寓号" prop="curDormId" sortable />
+          <el-table-column label="当前宿舍号" prop="curRoomId" sortable />
+          <el-table-column label="当前床位号" prop="curBedId" sortable />
+          <el-table-column label="目标公寓号" prop="toDormId" sortable/>
+          <el-table-column label="目标宿舍号" prop="toRoomId" sortable />
+          <el-table-column label="目标床位号" prop="toBedId" sortable />
           <el-table-column
             :filter-method="filterTag"
             :filters="[
@@ -40,26 +40,26 @@
             ]"
             filter-placement="bottom-end"
             label="申请状态"
-            prop="state"
+            prop="status"
             sortable
             width="130px"
           >
             <template #default="scope">
               <el-tag
-                :type="scope.row.state === '通过' ? 'success' : (scope.row.state === '驳回' ? 'danger' : 'info')"
+                :type="scope.row.status === '通过' ? 'success' : (scope.row.status === '驳回' ? 'danger' : 'info')"
                 disable-transitions
               >
-                {{ scope.row.state }}
+                {{ scope.row.status }}
               </el-tag>
             </template>
           </el-table-column>
-          <el-table-column label="申请时间" prop="applyTime" sortable />
-          <el-table-column label="处理时间" prop="finishTime" sortable />
+          <el-table-column label="申请时间" prop="createDate" sortable />
+          <el-table-column label="处理时间" prop="finishDate" sortable />
           <!-- 操作栏 -->
           <el-table-column label="操作" width="130px">
             <template #default="scope">
               <el-button icon="MoreFilled" type="default" @click="showDetail(scope.row)"></el-button>
-              <el-button v-if="scope.row.state === '未处理' && scope.row.studentId === user.userId" icon="Edit" type="primary" @click="handleEdit(scope.row)"></el-button>
+              <el-button v-if="scope.row.status === '未处理' && scope.row.studentId === user.userId" icon="Edit" type="primary" @click="handleEdit(scope.row)"></el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -84,29 +84,29 @@
             <el-form-item label="姓名" prop="name">
               <el-input v-model="form.name" disabled style="width: 80%" />
             </el-form-item>
-            <el-form-item label="当前公寓号" prop="currentDormId">
-              <el-input v-model="form.currentDormId" disabled style="width: 80%" />
+            <el-form-item label="当前公寓号" prop="curDormId">
+              <el-input v-model="form.curDormId" disabled style="width: 80%" />
             </el-form-item>
-            <el-form-item label="当前宿舍号" prop="currentRoomId">
-              <el-input v-model="form.currentRoomId" disabled style="width: 80%" />
+            <el-form-item label="当前宿舍号" prop="curRoomId">
+              <el-input v-model="form.curRoomId" disabled style="width: 80%" />
             </el-form-item>
-            <el-form-item label="当前床位号" prop="currentBedId">
-              <el-input v-model="form.currentBedId" disabled style="width: 80%" />
+            <el-form-item label="当前床位号" prop="curBedId">
+              <el-input v-model="form.curBedId" disabled style="width: 80%" />
             </el-form-item>
-            <el-form-item label="目标公寓号" prop="towardsDormId">
-              <el-select v-model="form.towardsDormId" placeholder="选择公寓号" style="width: 80%">
+            <el-form-item label="目标公寓号" prop="toDormId">
+              <el-select v-model="form.toDormId" placeholder="选择公寓号" style="width: 80%">
                 <el-option v-for="build in dormBuildings" :key="build.id" :label="build.name" :value="build.id" />
               </el-select>
             </el-form-item>
-            <el-form-item label="目标宿舍号" prop="towardsRoomId">
-              <el-input v-model.number="form.towardsRoomId" style="width: 80%" />
+            <el-form-item label="目标宿舍号" prop="toRoomId">
+              <el-input v-model.number="form.toRoomId" style="width: 80%" />
             </el-form-item>
-            <el-form-item label="目标床位号" prop="towardsBedId">
-              <el-input v-model.number="form.towardsBedId" style="width: 80%" />
+            <el-form-item label="目标床位号" prop="toBedId">
+              <el-input v-model.number="form.toBedId" style="width: 80%" />
             </el-form-item>
-            <el-form-item label="申请时间" prop="applyTime" style="margin-top: 27px">
+            <el-form-item label="申请时间" prop="createDate" style="margin-top: 27px">
               <el-date-picker
-                v-model="form.applyTime"
+                v-model="form.createDate"
                 :disabled="judgeOption"
                 clearable
                 placeholder="选择时间"
@@ -132,32 +132,32 @@
             <el-form-item label="姓名：" prop="name">
               <span>{{ form.name }}</span>
             </el-form-item>
-            <el-form-item label="当前公寓号：" prop="currentDormId">
-              <span>{{ form.currentDormId }}</span>
+            <el-form-item label="当前公寓号：" prop="curDormId">
+              <span>{{ form.curDormId }}</span>
             </el-form-item>
-            <el-form-item label="当前宿舍号：" prop="currentRoomId">
-              <span>{{ form.currentRoomId }}</span>
+            <el-form-item label="当前宿舍号：" prop="curRoomId">
+              <span>{{ form.curRoomId }}</span>
             </el-form-item>
-            <el-form-item label="当前床位号：" prop="currentBedId">
-              <span>{{ form.currentBedId }}</span>
+            <el-form-item label="当前床位号：" prop="curBedId">
+              <span>{{ form.curBedId }}</span>
             </el-form-item>
-            <el-form-item label="目标公寓号：" prop="towardsDormId">
-              <span>{{ form.towardsDormId }}</span>
+            <el-form-item label="目标公寓号：" prop="toDormId">
+              <span>{{ form.toDormId }}</span>
             </el-form-item>
-            <el-form-item label="目标宿舍号：" prop="towardsRoomId">
-              <span>{{ form.towardsRoomId }}</span>
+            <el-form-item label="目标宿舍号：" prop="toRoomId">
+              <span>{{ form.toRoomId }}</span>
             </el-form-item>
-            <el-form-item label="目标床位号：" prop="towardsBedId">
-              <span>{{ form.towardsBedId }}</span>
+            <el-form-item label="目标床位号：" prop="toBedId">
+              <span>{{ form.toBedId }}</span>
             </el-form-item>
-            <el-form-item label="申请时间：" prop="applyTime">
-              <span>{{ form.applyTime }}</span>
+            <el-form-item label="申请时间：" prop="createDate">
+              <span>{{ form.createDate }}</span>
             </el-form-item>
-            <el-form-item label="申请状态：" prop="state">
-              <span>{{ form.state }}</span>
+            <el-form-item label="申请状态：" prop="status">
+              <span>{{ form.status }}</span>
             </el-form-item>
-            <el-form-item label="处理时间：" prop="finishTime">
-              <span>{{ form.finishTime }}</span>
+            <el-form-item label="处理时间：" prop="finishDate">
+              <span>{{ form.finishDate }}</span>
             </el-form-item>
           </el-form>
         </el-dialog>
@@ -174,7 +174,7 @@ import { getRoomBedUserId } from '@/api/myRoomInfo';
 import { useUserStore } from '@/store/user';
 
 const filterTag = (value, row) => {
-  return row.state === value;
+  return row.status === value;
 };
 const user = useUserStore().userInfo;
 const loading = ref(true);
@@ -190,18 +190,18 @@ const orderState = ref(false);
 const judgeOption = ref(false);
 const formRef = ref(null);
 const form = reactive({
-  changeRoomApplyId:'',
+  id:'',
       studentId: '',
       name: '',
-      currentDormId: '',
-      currentRoomId: '',
-      currentBedId: '',
-      towardsDormId: '',
-      towardsRoomId: '',
-      towardsBedId: '',
-      applyTime: '',
-      state: '',
-      finishTime: ''
+      curDormId: '',
+      curRoomId: '',
+      curBedId: '',
+      toDormId: '',
+      toRoomId: '',
+      toBedId: '',
+      createDate: '',
+      status: '',
+      finishDate: ''
     });
 
 // 检查房间状态
@@ -209,8 +209,8 @@ const checkRoomStateHandler = async (rule, value, callback) => {
   dormRoomId.value = value;
   if (typeof value === "number") {
     try {
-      const res = await checkRoomState(form.towardsDormId, value);
-      const result = await checkRoomExist(form.towardsDormId, value);
+      const res = await checkRoomState(form.toDormId, value);
+      const result = await checkRoomExist(form.toDormId, value);
       if (result.data.code === "-1") {
         callback(new Error(result.data.msg));
       } else if (res.data.code === "-1") {
@@ -229,7 +229,7 @@ const checkRoomStateHandler = async (rule, value, callback) => {
 // 检查床位状态
 const checkBedStateHandler = async (rule, value, callback) => {
   try {
-    const res = await checkBedState(form.towardsDormId, dormRoomId.value, value);
+    const res = await checkBedState(form.toDormId, dormRoomId.value, value);
     if (res.data.code === "0") {
       callback();
     } else {
@@ -249,16 +249,16 @@ const rules = reactive({
     { required: true, message: "请输入姓名", trigger: "blur" },
     { pattern: /^(?:[\u4E00-\u9FA5·]{2,10})$/, message: "必须由 2 到 10 个汉字组成", trigger: "blur" },
   ],
-  currentRoomId: [
+  curRoomId: [
     { required: true, message: "请输入当前宿舍号", trigger: "blur" },
   ],
-  currentBedId: [
+  curBedId: [
     { required: true, message: "请输入当前床位号", trigger: "blur" },
   ],
-  towardsRoomId: [
+  toRoomId: [
     { validator: checkRoomStateHandler, trigger: "blur" },
   ],
-  towardsBedId: [
+  toBedId: [
     { validator: checkBedStateHandler, trigger: "blur" },
   ],
 });
@@ -289,9 +289,9 @@ const add = () => {
     form.name = user.username;
     try {
       const res = await getRoomBedUserId(form.studentId);
-      form.currentDormId = res.data.info.dormBuildId;
-      form.currentRoomId = res.data.info.dormRoomId;
-      form.currentBedId = calBedNum(form.studentId, res.data.info);
+      form.curDormId = res.data.info.dormBuildId;
+      form.curRoomId = res.data.info.dormRoomId;
+      form.curBedId = calBedNum(form.studentId, res.data.info);
     } catch (error) {
       console.error('获取房间信息失败', error);
     }
@@ -305,7 +305,7 @@ const save = () => {
     if (valid) {
       try {
         if (!judgeOption.value) {
-          judgeOrderState(form.state);
+          judgeOrderState(form.status);
           const res = await updateAdjustRoom(orderState.value, form);
           handleResponse(res.data, "修改成功");
         } else {
@@ -328,8 +328,8 @@ const calBedNum = (studentId, data) => {
 };
 
 // 判断订单状态
-const judgeOrderState = (state) => {
-  if (state === '通过') orderState.value = true;
+const judgeOrderState = (status) => {
+  if (status === '通过') orderState.value = true;
   else orderState.value = false;
 };
 
