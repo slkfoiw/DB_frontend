@@ -120,7 +120,7 @@ export default {
       }
       try {
         // 检查学工号是否已经被注册
-        const checkRes = await checkuserIdandName(userId.value, name.value, password.value, email.value);
+        const checkRes = await checkuserIdandName(userId.value, name.value);
         if (!checkRes.success) {
           ElMessage.error("该学工号已被注册或姓名不匹配");
           return;

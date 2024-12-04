@@ -65,7 +65,7 @@ export const checkuserIdandName = ({userId, name}) => {
             'Content-Type': 'application/json'
         },
         data: {
-            id: userId,
+            userId: userId,
             name: name
         }
     })
