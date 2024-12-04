@@ -289,8 +289,8 @@ const add = () => {
     form.name = user.username;
     try {
       const res = await getRoomBedUserId(form.studentId);
-      form.curDormId = res.data.info.dormBuildId;
-      form.curRoomId = res.data.info.dormRoomId;
+      form.curDormId = res.data.dormBuildId;
+      form.curRoomId = res.data.dormRoomId;
       form.curBedId = calBedNum(form.studentId, res.data.info);
     } catch (error) {
       console.error('获取房间信息失败', error);

@@ -8,6 +8,9 @@
         <div class="header">{{ siteHeader }}</div>
         <form @submit.prevent="register">
           <div class="simpleui-input-inline">
+            <el-input v-model="username" name="username" placeholder="用户名" autofocus :prefix-icon="User"></el-input>
+          </div>
+          <div class="simpleui-input-inline">
             <el-input v-model="userId" name="userId" placeholder="学工号" autofocus :prefix-icon="User"></el-input>
           </div>
           <div class="simpleui-input-inline">
