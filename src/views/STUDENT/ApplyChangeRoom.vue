@@ -209,12 +209,12 @@ const checkRoomStateHandler = async (rule, value, callback) => {
   dormRoomId.value = value;
   if (typeof value === "number") {
     try {
-      const res = await checkRoomState(form.toDormId, value);
-      const result = await checkRoomExist(form.toDormId, value);
-      if (result.data.code === "-1") {
-        callback(new Error(result.data.msg));
-      } else if (res.data.code === "-1") {
-        callback(new Error(res.data.msg));
+      const res = await checkRoomState(form.toDormId, dormRoomId.value);
+      const result = await checkRoomExist(form.toDormId, dormRoomId.value);
+      if (result.code === "-1") {
+        callback(new Error(result.msg));
+      } else if (res.code === "-1") {
+        callback(new Error(res.msg));
       } else {
         callback();
       }
@@ -230,10 +230,10 @@ const checkRoomStateHandler = async (rule, value, callback) => {
 const checkBedStateHandler = async (rule, value, callback) => {
   try {
     const res = await checkBedState(form.toDormId, dormRoomId.value, value);
-    if (res.data.code === "0") {
+    if (res.code === "0") {
       callback();
     } else {
-      callback(new Error(res.data.msg));
+      callback(new Error(res.msg));
     }
   } catch (error) {
     callback(new Error("请求失败"));
@@ -307,10 +307,10 @@ const save = () => {
         if (!judgeOption.value) {
           judgeOrderState(form.status);
           const res = await updateAdjustRoom(orderState.value, form);
-          handleResponse(res.data, "修改成功");
+          handleResponse(res, "修改成功");
         } else {
           const res = await addAdjustRoom(form);
-          handleResponse(res.data, "添加成功");
+          handleResponse(res, "添加成功");
         }
       } catch (error) {
         ElMessage({ message: "请求失败", type: "error" });

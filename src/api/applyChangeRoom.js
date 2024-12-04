@@ -11,10 +11,8 @@ export const checkRoomState = (dormId, roomId) => {
     //     }
     // });
     return {
-            data: {
-                code: "0",
-                msg: 'success',
-            }
+        code: "0",
+        msg: 'success',
     }
 };
 
@@ -28,10 +26,8 @@ export const checkRoomExist = (dormId, roomId) => {
     //     }
     // });
     return {
-            data: {
-                code: "0",
-                msg: 'success',
-            }
+        code: "0",
+        msg: 'success',
     }
 };
 
@@ -45,10 +41,8 @@ export const checkBedState = (dormId, roomId, bedId) => {
     //     }
     // });
     return {
-            data: {
-                code: "0",
-                msg: 'success',
-            }
+        code: "0",
+        msg: 'success',
     }
 };
 
@@ -91,10 +85,8 @@ export const updateAdjustRoom = (orderState, data) => {
     //     data: data
     // });
     return {
-        data: {
-            code: "0",
-            msg: 'success'
-        }
+        code: "0",
+        msg: 'success'
     }
 };
 
@@ -109,10 +101,8 @@ export const addAdjustRoom = (data) => {
     //     data: data
     // });
     return {
-        data: {
-            code: "0",
-            msg: 'success'
-        }
+        code: "0",
+        msg: 'success'
     }
 };
 

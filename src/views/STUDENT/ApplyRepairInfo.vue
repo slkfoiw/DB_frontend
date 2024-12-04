@@ -168,11 +168,11 @@ const init = () => {
 // 获取房间信息
 const getInfo = async () => {
   const res = await getRoomInfo(userId.value);
-  if (res.data.code === '0') {
-    Object.assign(room, res.data.info);
+  if (res.code === '0') {
+    Object.assign(room, res.data);
   } else {
     ElMessage({
-      message: res.data.msg,
+      message: res.msg,
       type: 'error',
     });
   }
@@ -228,7 +228,7 @@ const save = async () => {
   formRef.value.validate(async (valid) => {
     if (valid) {
       const res = await addRepair(form);
-      if (res.data.code === '0') {
+      if (res.code === '0') {
         ElMessage({
           message: '新增成功',
           type: 'success',

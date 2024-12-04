@@ -134,7 +134,7 @@ export default {
           email: email.value
         });
 
-        if (res.success) {
+        if (res.data.success) {
           ElMessage({
             message: '注册成功，即将跳转到登录页面',
             type: 'success',
