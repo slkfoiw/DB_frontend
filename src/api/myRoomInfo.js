@@ -25,19 +25,18 @@ export const getRoomInfo = (studentId) => {
 };
 
 // 获取当前用户房间人员学号
-export const getRoomBedUserId = (userId) => {
+export const getRoomBedUserId = (studentId) => {
   // return http({
-  //     url: `room/getRoomBeduserId/${userId}`,
+  //     url: `room/getRoomBedStudentId/${studentId}`,
   //     method: 'GET',
   //     headers: {
   //         'Content-Type': 'application/json'
   //     }
   // });
   return {
-    data: {
       code: "0",
       mes: 'success',
-      info: {
+      data: {
         dormId: 13,
         roomId: 257,
         firstBed: 4,
@@ -45,6 +44,5 @@ export const getRoomBedUserId = (userId) => {
         thirdBed: 2,
         fourthBed: 22373474
       }
-    }
   }
 };
