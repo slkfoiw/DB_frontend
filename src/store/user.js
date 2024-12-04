@@ -16,11 +16,6 @@ export const useUserStore = defineStore('user', () => {
         name: '樊孜昱',
         email: '123@qq.com',
         identityLevel: 2,
-    }
-    // 
-
-    const userRegister = async ({ email, name, password }) => {
-        await register({ email, name, password });
     };
 
     const userLogin = async (username, password) => {
@@ -122,7 +117,6 @@ export const useUserStore = defineStore('user', () => {
 
     return {
         userInfo,
-        userRegister,
         userLogin,
         updateUserBaseInfo,
         userLogout,
