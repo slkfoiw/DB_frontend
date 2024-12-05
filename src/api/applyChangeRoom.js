@@ -4,7 +4,7 @@ import { info } from 'sass';
 // 检查房间状态
 export const checkRoomState = (dormId, roomId) => {
     // return http({
-    //     url: `room/checkRoomState/${dormId}/${roomId}`,
+    //     url: `/room/checkRoomState/${dormId}/${roomId}`,
     //     method: 'GET',
     //     headers: {
     //         'Content-Type': 'application/json'
@@ -19,7 +19,7 @@ export const checkRoomState = (dormId, roomId) => {
 // 检查房间是否存在
 export const checkRoomExist = (dormId, roomId) => {
     // return http({
-    //     url: `room/checkRoomExist/${dormId}/${roomId}`,
+    //     url: `/room/checkRoomExist/${dormId}/${roomId}`,
     //     method: 'GET',
     //     headers: {
     //         'Content-Type': 'application/json'
@@ -34,7 +34,7 @@ export const checkRoomExist = (dormId, roomId) => {
 // 检查床位状态
 export const checkBedState = (dormId, roomId, bedId) => {
     // return http({
-    //     url: `room/checkBedState/${dormId}/${roomId}/${bedId}`,
+    //     url: `/room/checkBedState/${dormId}/${roomId}/${bedId}`,
     //     method: 'GET',
     //     headers: {
     //         'Content-Type': 'application/json'
@@ -77,7 +77,7 @@ export const fetchAdjustRoomData = (params) => {
 // 更新调整房间信息
 export const updateAdjustRoom = (orderState, data) => {
     // return http({
-    //     url: `adjustRoom/update/${orderState}`,
+    //     url: `/adjustRoom/update/${orderState}`,
     //     method: 'PUT',
     //     headers: {
     //         'Content-Type': 'application/json'
@@ -93,7 +93,7 @@ export const updateAdjustRoom = (orderState, data) => {
 // 添加调整房间信息
 export const addAdjustRoom = (data) => {
     // return http({
-    //     url: 'adjustRoom/add',
+    //     url: '/adjustRoom/add',
     //     method: 'POST',
     //     headers: {
     //         'Content-Type': 'application/json'

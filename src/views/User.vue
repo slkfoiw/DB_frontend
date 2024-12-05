@@ -57,7 +57,7 @@ import 'particles.js';
 const userStore = useUserStore();
 const userInfo = ref(userStore.userInfo);
 
-const getUserInfo = async () => {
+const getUserName = async () => {
   document.title = userInfo.value.name + '的主页';
 };
 
@@ -90,7 +90,7 @@ const getIdentityTagType = (identityLevel) => {
 
 // onMounted 生命周期钩子
 onMounted(async () => {
-  await getUserInfo();
+  await getUserName();
 });
 
     onMounted(() => {

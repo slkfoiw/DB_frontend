@@ -3,7 +3,7 @@ import http from "@/utils/http";
 // 登录
 export const login = ({username, password}) => {
     return http({
-        url: 'user/login/',
+        url: '/user/login/',
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -18,7 +18,7 @@ export const login = ({username, password}) => {
 // 获取用户个人信息
 export const getUserInfo = () => {
     // return http({
-    //     url: 'user/getUserInfo',
+    //     url: '/user/getUserInfo',
     //     method: 'GET',
     //     headers: {
     //         'Content-Type': 'application/json'
