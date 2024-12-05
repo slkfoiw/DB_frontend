@@ -2,6 +2,9 @@
 <template>
   <div class="bg">
     <div id="logout">
+      <ConfirmModal :exeName="'注销账号'"/>
+    </div>
+    <div id="logout">
       <ConfirmModal :exeName="'退出登录'"/>
     </div>
     <div class="userInfo" v-if="userInfo">

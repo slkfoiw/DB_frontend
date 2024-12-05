@@ -33,14 +33,17 @@ export default {
     const router = useRouter(); // 添加这一行
 
     const confirm = async () => {
+        let res;
         if (props.exeName === '退出登录') {
-            await userStore.userLogout();
+            res = await userStore.userLogout();
         } else if (props.exeName === '注销账号') {
-            await userStore.userLogout();
-            await deleteAccount({});
+            res = await userStore.userDeleteAccount();
+        }
+        if (res !== 0) {//有错误
+            return;
         }
         emit('confirmed');
-        
+
         // 把isAuthenticated置为false
         store.dispatch('logout');
 
@@ -48,7 +51,7 @@ export default {
             {
                 message: '已' + props.exeName,
                 type: 'success',
-                duration: 2000
+                duration: 3000
             }
         )
 

@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 import { ref, computed } from "vue";
-import { login, register, refreshAccessToken, logout, getUserInfo } from "@/api/user.js";
+import { login, register, refreshAccessToken, logout, getUserInfo, deleteAccount } from "@/api/user.js";
 import { ElMessage } from 'element-plus';
 import Cookies from 'js-cookie';
 
@@ -52,26 +52,25 @@ export const useUserStore = defineStore('user', () => {
     }
 
     const userLogout = async () => {
-        try {
-            // 调用 logout API
-            await logout();
-
+            const res = await logout();
+            if (res.code !== 0) {
+                ElMessage.error(res.msg);
+                return res.code;
+            }
             // 清理用户信息和相关状态
             refreshLocal();
-
-            // 返回登出成功信息
-            return { info: "成功退出登录" };
-        } catch (error) {
-            // 捕获错误并打印
-            console.error('退出登录失败:', error);
-
-            // 通知用户登出失败
-            ElMessage({
-                type: 'error',
-                message: '退出登录失败，请稍后再试',
-            });
-        }
+            return 0;
     };
+
+    const userDeleteAccount = async () => {
+        const res = await deleteAccount();
+        if (res.code !== 0) {
+            ElMessage.error(res.msg);
+            return res.code;
+        }
+        refreshLocal();
+        return 0;
+    }
 
     const refreshLocal = () => {
         userInfo.value = {};
@@ -114,7 +113,7 @@ export const useUserStore = defineStore('user', () => {
 
     const setToken = (newToken) => {
         token.value = newToken;
-        // console.log('login token:', token.value);
+        console.log('login token:', token.value);
         localStorage.setItem('token', newToken);
     };
 
@@ -123,6 +122,7 @@ export const useUserStore = defineStore('user', () => {
         userLogin,
         updateUserBaseInfo,
         userLogout,
+        userDeleteAccount,
         refreshLocal,
         changeInfo,
 

@@ -83,9 +83,9 @@ export const logout = () => {
 };
 
 //注销账号
-export const deleteAccount = ({}) => {
+export const deleteAccount = () => {
     return http({
-        url: 'user/delete/',
+        url: '/user/delete',
         method: 'DELETE',
         headers: {
             'Content-Type': 'application/json'
