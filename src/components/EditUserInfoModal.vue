@@ -78,40 +78,30 @@ watch(() => props.showModal, (newVal) => {
 
 
 const submitForm = async () => {
-  try {
-        // 更新用户信息（文本）
-        const userInfoResponse = await updateUserInfo({
-            email: formData.value.email,
-            gender: formData.value.gender,
-            introduction: formData.value.introduction
-        });
+      // 更新用户信息（文本）
+      const userInfoResponse = await updateUserInfo({
+          email: formData.value.email,
+          gender: formData.value.gender,
+          introduction: formData.value.introduction
+      });
 
-        if (!userInfoResponse.success) {
-            ElMessage({
-                message: '更新用户信息失败，请稍后重试。',
-                type: 'error',
-                duration: 2000
-            });
-            return;
-        }
+      if (userInfoResponse.code !== 0) {
+          ElMessage({
+              message: '更新用户信息失败，请稍后重试。',
+              type: 'error',
+              duration: 2000
+          });
+          return;
+      }
 
-        ElMessage({
-            message: '更新成功',
-            type: 'success',
-            duration: 2000
-        });
+      ElMessage({
+          message: userInfoResponse.msg,
+          type: 'success',
+          duration: 2000
+      });
 
-        emit('doUpdate');
-        closeModal();
-
-    } catch (error) {
-        console.error('更新失败:', error);
-        ElMessage({
-            message: '更新失败：请检查用户名格式，或者用户名或邮箱已存在',
-            type: 'error',
-            duration: 2000
-        });
-    }
+      emit('doUpdate');
+      closeModal();
 }
 
 const closeModal = () => {

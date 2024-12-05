@@ -112,8 +112,8 @@ export const updateUserPassword = ({oldPassword, newPassword}) => {
         url: '/user/change-password',
         method: 'POST',
         data: {
-            old_password: oldPassword,
-            new_password: newPassword
+            oldPassword: oldPassword,
+            newPassword: newPassword
         }
     })
 }

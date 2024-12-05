@@ -15,7 +15,6 @@
 import { useRouter } from 'vue-router'; // 添加这一行
 import { ref } from 'vue';
 import { useUserStore } from '@/store/user';
-import { deleteAccount } from '@/api';
 import { ElMessage } from 'element-plus';
 import { useStore } from 'vuex';
 

@@ -58,47 +58,35 @@ watch(() => props.showModal, (newVal) => {
 
 const submitForm = async () => {
     if (formData.value.newPassword !== formData.value.confirmPassword) {
-        ElMessage(
-            {
-                message: '两次输入的新密码不一致',
-                type: 'error',
-                duration: 2000
-            }
-        )
-        return
+        ElMessage.error({
+            message: '两次输入的新密码不一致',
+            type: 'error',
+            duration: 2000
+        })
+        return;
     }
 
-    try {
-        const response = await updateUserPassword({
-            oldPassword: formData.value.oldPassword,
-            newPassword: formData.value.newPassword
-        });
+    const response = await updateUserPassword({
+        oldPassword: formData.value.oldPassword,
+        newPassword: formData.value.newPassword
+    });
+    console.log('change password res:', response)
+    if (response.code !== 0) {
+      ElMessage({
+          message: response.msg,
+          type: 'error',
+          duration: 3000
+      });
 
-        if (!response.success) {
-            alert('更新密码失败，请稍后重试。')
-            return
-        }
-
-        ElMessage(
-            {
-                message: '密码更新成功',
-                type: 'success',
-                duration: 2000
-            }
-        )
-
-        closeModal();
-    } catch (error) {
-        console.error('更新密码失败:', error);
-        ElMessage(
-            {
-                message: '更新密码失败，原密码错误',
-                type: 'error',
-                duration: 2000
-            }
-        )
-        closeModal()
+        return;
     }
+
+    ElMessage({
+            message: '密码更新成功',
+            type: 'success',
+            duration: 2000
+    })
+    closeModal();
 }
 
 const closeModal = () => {
