@@ -16,6 +16,10 @@ npm install -D sass
 npm install vue-infinite-scroll
 npm install xlsx
 
+npm install echarts vue-echarts
+npm install file-saver
+npm install echarts-gl --save
+
 ```
 不全，可以根据控制台运行的报错提示安装相应的库
 

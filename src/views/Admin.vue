@@ -4,27 +4,27 @@
         <div>
             <el-row :gutter="20" class="topInfo">
                 <el-col :span="6">
-                    <el-button @click="selectAnalysis('student')" class="el-colDiv">
+                    <el-button @click="selectAnalysis('student')" class="el-colDiv student-btn">
                         <span class="title">学生统计</span><br />
                         <span class="digital">{{ studentNum }}人</span><br />
                     </el-button>
                 </el-col>
                 <el-col :span="6">
-                    <el-button @click="selectAnalysis('dormManager')" class="el-colDiv">
+                    <el-button @click="selectAnalysis('dormManager')" class="el-colDiv dorm-manager-btn">
                         <span class="title">宿管统计</span><br />
                         <span class="digital">{{ dormManaNum }}人</span><br />
                     </el-button>
                 </el-col>
                 <el-col :span="6">
-                    <el-button @click="selectAnalysis('repair')" class="el-colDiv">
+                    <el-button @click="selectAnalysis('repair')" class="el-colDiv repair-btn">
                         <span class="title">报修统计</span><br />
                         <span class="digital">{{ repairNum }}条</span><br />
                     </el-button>
                 </el-col>
                 <el-col :span="6">
-                    <el-button @click="selectAnalysis('notice')" class="el-colDiv">
-                        <span class="title">公告统计</span><br />
-                        <span class="digital">{{ noticeNum }}条</span><br />
+                    <el-button @click="selectAnalysis('spareRoom')" class="el-colDiv spare-room-btn">
+                        <span class="title">空宿舍统计</span><br />
+                        <span class="digital">{{ spareRoomNum }}条</span><br />
                     </el-button>
                 </el-col>
             </el-row>
@@ -32,8 +32,8 @@
 
         <!-- 下部显示区域 -->
         <div style="display: flex; width: 100%; margin-top: 40px; align-items: center; justify-content: center;">
-            <div style="height: 588px">
-                <span style="font-size: 22px; display: block; margin-bottom: 30px; margin-left: 10px;">
+            <div :style="{height: analysisHeight, width: '100%', marginBottom: '40px'}"> <!-- 动态高度 -->
+                <span style="font-size: 22px; display: block; margin-bottom: 30px;">
                     {{ title }}
                 </span>
                 <component :is="analysisOption" />
@@ -41,24 +41,35 @@
         </div>
     </el-card>
 </template>
+
 <script setup>
 import { ref, onMounted } from 'vue';
 import http from "@/utils/http";
 import StuDataAnalysis from "@/components/StuDataAnalysis.vue";
 import DormManaDataAnalysis from "@/components/DormManaDataAnalysis.vue"; // 宿管统计图表组件
 import RepairDataAnalysis from "@/components/RepairDataAnalysis.vue"; // 报修统计图表组件
-import NoticeDataAnalysis from "@/components/NoticeDataAnalysis.vue"; // 公告统计图表组件
+import SpareRoomDataAnalysis from "@/components/SpareRoomDataAnalysis.vue"; // 公告统计图表组件
 import { ElMessage } from 'element-plus';
 
 const studentNum = ref("");
 const dormManaNum = ref("");
 const repairNum = ref("");
-const noticeNum = ref("");
+const spareRoomNum = ref("");
 const title = ref("");
 const analysisOption = ref("");
+const analysisHeight = ref("588px"); // 默认高度
 
 const getStuNum = async () => {
-    // const res = await http.get("/stu/stuNum");
+    // try {
+    //     const res = await http.get("/stu/stuNum");  // 从后端请求学生人数
+    //     if (res.success) {
+    //         studentNum.value = res.data;
+    //     } else {
+    //         ElMessage.error(res.message);
+    //     }
+    // } catch (error) {
+    //     ElMessage.error("请求失败，请稍后重试");
+    // }
     const res = {
         succuss: true,
         data: 12,
@@ -71,7 +82,16 @@ const getStuNum = async () => {
 };
 
 const getDormManaNum = async () => {
-    // const res = await http.get("/dormMana/get-dorm-mana-num");
+    // try {
+    //     const res = await http.get("/dormMana/get-dorm-mana-num");  // 从后端请求宿管人数
+    //     if (res.success) {
+    //         dormManaNum.value = res.data;
+    //     } else {
+    //         ElMessage.error(res.message);
+    //     }
+    // } catch (error) {
+    //     ElMessage.error("请求失败，请稍后重试");
+    // }
     const res = {
         succuss: true,
         data: 12,
@@ -84,7 +104,16 @@ const getDormManaNum = async () => {
 };
 
 const getRepairNum = async () => {
-    // const res = await http.get("/repair/get-repair-num");
+    // try {
+    //     const res = await http.get("/repair/get-repair-num");  // 从后端请求报修数量
+    //     if (res.success) {
+    //         repairNum.value = res.data;
+    //     } else {
+    //         ElMessage.error(res.message);
+    //     }
+    // } catch (error) {
+    //     ElMessage.error("请求失败，请稍后重试");
+    // }
     const res = {
         succuss: true,
         data: 20,
@@ -96,40 +125,53 @@ const getRepairNum = async () => {
     }
 };
 
-const getNoticeNum = async () => {
-    // const res = await http.get("/notice/get-notice-num");
+const getspareRoomNum = async () => {
+    // try {
+    //     const res = await http.get("/notice/get-notice-num");  // 从后端请求空宿舍数量
+    //     if (res.success) {
+    //         spareRoomNum.value = res.data;
+    //     } else {
+    //         ElMessage.error(res.message);
+    //     }
+    // } catch (error) {
+    //     ElMessage.error("请求失败，请稍后重试");
+    // }
     const res = {
         succuss: true,
         data: 22,
     }
     if (res.succuss) {
-        noticeNum.value = res.data;
+        spareRoomNum.value = res.data;
     } else {
         ElMessage.error(res.message);
     }
 };
 
 const selectAnalysis = (type) => {
-    // 根据不同类型选择对应的图标
     switch (type) {
         case 'student':
             title.value = '公寓人数分布统计';
             analysisOption.value = StuDataAnalysis;
+            analysisHeight.value = "600px"; // 学生统计时默认高度
             break;
         case 'dormManager':
             title.value = '宿管人数分布统计';
             analysisOption.value = DormManaDataAnalysis;
+            analysisHeight.value = "588px"; // 宿管统计时默认高度
             break;
         case 'repair':
             title.value = '报修类型统计分析';
             analysisOption.value = RepairDataAnalysis;
+            analysisHeight.value = "900px"; // 报修统计时增加高度
             break;
-        case 'notice':
-            title.value = '公告类型统计分析';
-            analysisOption.value = NoticeDataAnalysis;
+        case 'spareRoom':
+            title.value = '空宿舍统计分析';
+            analysisOption.value = SpareRoomDataAnalysis;
+            analysisHeight.value = "800px"; // 空宿舍统计时增加高度
             break;
         default:
             analysisOption.value = '';
+            analysisHeight.value = "588px"; // 默认高度
     }
 };
 
@@ -137,9 +179,8 @@ onMounted(() => {
     getStuNum();
     getDormManaNum();
     getRepairNum();
-    getNoticeNum();
+    getspareRoomNum();
 });
-
 </script>
 
 <style scoped>
@@ -161,14 +202,28 @@ onMounted(() => {
     overflow: hidden;
     height: 115px;
     border-radius: 5px;
-    background-color: black;
-    color: white;
     padding-left: 15px;
     padding-top: 15px;
     position: relative;
-    background-image: linear-gradient(to left, #FFC312, #EE5A24, #FFC312);
-    background-size: 200%;
     transition: 0.6s;
+}
+
+/* 按钮的渐变色 */
+.student-btn {
+    background-image: linear-gradient(to left, #FF6347, #FF4500);  /* 红色渐变 */
+    color: white;
+}
+.dorm-manager-btn {
+    background-image: linear-gradient(to left, #4682B4, #5F9EA0);  /* 蓝色渐变 */
+    color: white;
+}
+.repair-btn {
+    background-image: linear-gradient(to left, #32CD32, #228B22);  /* 绿色渐变 */
+    color: white;
+}
+.spare-room-btn {
+    background-image: linear-gradient(to left, #FFD700, #FF8C00);  /* 金色渐变 */
+    color: white;
 }
 
 .el-colDiv:hover {
@@ -205,16 +260,13 @@ onMounted(() => {
     background-color: #1398ff;
 }
 
-
 #ssv2-main-text {
     background-color: #2e4057;
 }
 
-
 #ssv3-main-text {
     background-color: #ffb400;
 }
-
 
 #ssv4-main-text {
     background-color: #008789;
