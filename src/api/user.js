@@ -2,31 +2,30 @@ import http from "@/utils/http";
 
 // 登录
 export const login = ({username, password}) => {
+    const params = new URLSearchParams();
+    params.append('username', username);
+    params.append('password', password);
+    console.log('params:', params);
+
     return http({
-        url: 'user/login/',
+        url: '/user/login',
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/x-www-form-urlencoded',
         },
-        data: {
-            username,
-            password
-        }
-    })
+        data: params.toString()
+    });
 }
 
 // 获取用户个人信息
 export const getUserInfo = () => {
-    // return http({
-    //     url: 'user/getUserInfo',
-    //     method: 'GET',
-    //     headers: {
-    //         'Content-Type': 'application/json'
-    //     },
-    // })
-    return {
-        data: userInfo
-    }
+    return http({
+        url: '/user/getUserInfo',
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+    })
 }
 
 export const refreshAccessToken = (refreshToken) => {
@@ -41,7 +40,7 @@ export const refreshAccessToken = (refreshToken) => {
 // 注册
 export const register = ({username, userId, name, password, email}) => {
     return http({
-        url: 'user/register/',
+        url: '/user/register',
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -58,8 +57,9 @@ export const register = ({username, userId, name, password, email}) => {
 
 // 检测学工号是否已经被注册 或 学工号与姓名是否匹配
 export const checkuserIdandName = ({userId, name}) => {
+    console.log({userId, name});
     return http({
-        url: 'user/register/checkIdIsOnly/',
+        url: '/user/register/checkIdIsOnly',
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -74,7 +74,7 @@ export const checkuserIdandName = ({userId, name}) => {
 //登出
 export const logout = () => {
     return http({
-        url: 'user/logout/',
+        url: '/user/logout',
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'

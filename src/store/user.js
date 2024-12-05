@@ -8,30 +8,30 @@ export const useUserStore = defineStore('user', () => {
     const userInfo = ref({});
     const token = ref('');
     // 下面的个人信息之后应该在 userLogin 里面获取 对接完成之后可以删除
-    userInfo.value = {
-        username: 'Fanziyu',
-        userId: 22373474,
-        gender: 'female',
-        introduction: '这个人很懒，什么都没留下',
-        name: '樊孜昱',
-        email: '123@qq.com',
-        identityLevel: 2,
-    };
+    // userInfo.value = {
+    //     username: 'Fanziyu',
+    //     userId: 22373474,
+    //     gender: 'female',
+    //     introduction: '这个人很懒，什么都没留下',
+    //     name: '樊孜昱',
+    //     email: '123@qq.com',
+    //     identityLevel: 2,
+    // };
 
     const userLogin = async (username, password) => {
         const response = await login({ username, password });
-
-        if (response.success) {
+        if (response.status === 0) {
             // 1. 返回数据
-            const { token, refresh_token, name } = response.data;
-
+            const name = response.data;
+            const token = response.token;
+            const refresh_token = response.refresh_token;
             // 2. 设置token
             setToken(token);
             Cookies.set('myRefreshToken', refresh_token);
 
             // 3. 获取用户个人信息
             await updateUserBaseInfo();
-
+            console.log('name:', name);
             return { name }; // 返回包含用户名和角色的对象
         } else {
             return null;
@@ -40,13 +40,15 @@ export const useUserStore = defineStore('user', () => {
 
     const updateUserBaseInfo = async () => {
         const res = await getUserInfo();
+        console.log('updateUserBaseInfo res:', res);
         userInfo.value.username = res.data.username;
-        userInfo.value.userId = res.data.id;
+        userInfo.value.userId = res.data.userId;
         userInfo.value.gender = res.data.gender;
         userInfo.value.introduction = res.data.introduction;
         userInfo.value.name = res.data.name;
         userInfo.value.email = res.data.email;
         userInfo.value.identityLevel = res.data.identityLevel;
+        console.log('updateUserBaseInfo userInfo:', userInfo.value);
     }
 
     const userLogout = async () => {
@@ -112,6 +114,7 @@ export const useUserStore = defineStore('user', () => {
 
     const setToken = (newToken) => {
         token.value = newToken;
+        // console.log('login token:', token.value);
         localStorage.setItem('token', newToken);
     };
 

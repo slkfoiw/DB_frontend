@@ -17,6 +17,7 @@ import { ref } from 'vue';
 import { useUserStore } from '@/store/user';
 import { deleteAccount } from '@/api';
 import { ElMessage } from 'element-plus';
+import { useStore } from 'vuex';
 
 export default {
     props: {
@@ -28,6 +29,7 @@ export default {
     setup(props, { emit }) {
     const showModal = ref(false);
     const userStore = useUserStore();
+    const store = useStore();
     const router = useRouter(); // 添加这一行
 
     const confirm = async () => {
@@ -38,6 +40,9 @@ export default {
             await deleteAccount({});
         }
         emit('confirmed');
+        
+        // 把isAuthenticated置为false
+        store.dispatch('logout');
 
         ElMessage(
             {

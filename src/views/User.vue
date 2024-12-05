@@ -93,16 +93,16 @@ onMounted(async () => {
   await getUserInfo();
 });
 
-    onMounted(() => {
-      const script = document.createElement('script');
-      script.src = '/src/utils/particles.js';
-      script.onload = () => {
-        particlesJS.load('particles-js', '/particles.json', function () {
-          console.log('particles.js loaded - callback');
-        });
-      };
-      document.body.appendChild(script);
+onMounted(() => {
+  const script = document.createElement('script');
+  script.src = '/src/utils/particles.js';
+  script.onload = () => {
+    particlesJS.load('particles-js', '/particles.json', function () {
+      console.log('particles.js loaded - callback');
     });
+  };
+  document.body.appendChild(script);
+});
 
 
 </script>

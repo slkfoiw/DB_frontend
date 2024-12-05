@@ -78,7 +78,7 @@ const routes = [
     path: '/user/:userId',
     name: 'User',
     component: User,
-    // meta: { requiresAuth: true }
+    meta: { requiresAuth: true },
     props: true
   },
 
@@ -114,12 +114,12 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
   const requiresAuth = to.matched.some(record => record.meta.requiresAuth);
   const isAuthenticated = store.state.isAuthenticated;
-
-  // if (requiresAuth && !isAuthenticated) {
-  //   next('/login');
-  // } else {
-  //   next();
-  // }
+  console.log('router.beforeEach', requiresAuth, isAuthenticated);
+  if (requiresAuth && !isAuthenticated) {
+    next('/login');
+  } else {
+    next();
+  }
   next();
 });
 

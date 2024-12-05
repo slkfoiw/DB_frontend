@@ -44,6 +44,7 @@ import {useRouter} from 'vue-router';
 import {User, Message, Lock} from '@element-plus/icons-vue';
 import 'particles.js';
 import { ElMessage } from 'element-plus';
+import { useStore } from 'vuex';
 
 export default {
   name: 'Login',
@@ -60,7 +61,8 @@ export default {
     const isRedirecting = ref(false);
     const isRegistering = ref(false);
 
-    const store = useUserStore();
+    const userStore = useUserStore();
+    const store = useStore();
 
     const changeLogoToClosedEyes = () => {
       logo.value = logoClosedEyes;
@@ -81,7 +83,7 @@ export default {
       }
 
       try {
-        const response = await store.userLogin(username.value, password.value);
+        const response = await userStore.userLogin(username.value, password.value);
         if (!response) {
           ElMessage({
             message: '登录失败，请检查邮箱和密码',
@@ -90,6 +92,9 @@ export default {
           });
           return;
         }
+        
+        // 把isAuthenticated置为true
+        store.dispatch('login');
 
         // 解析token获取用户角色
         const user = response.name;
@@ -140,7 +145,7 @@ export default {
       logo,
       siteHeader,
       next,
-      store,
+      store: userStore,
       User,
       Message,
       Lock,

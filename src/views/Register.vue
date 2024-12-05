@@ -8,6 +8,9 @@
         <div class="header">{{ siteHeader }}</div>
         <form @submit.prevent="register">
           <div class="simpleui-input-inline">
+            <el-input v-model="username" name="username" placeholder="用户名" autofocus :prefix-icon="User"></el-input>
+          </div>
+          <div class="simpleui-input-inline">
             <el-input v-model="userId" name="userId" placeholder="学工号" autofocus :prefix-icon="User"></el-input>
           </div>
           <div class="simpleui-input-inline">
@@ -43,7 +46,8 @@ import { useRouter } from 'vue-router';
 import { register, checkuserIdandName } from '@/api/user';
 import { User, Lock, Message } from '@element-plus/icons-vue';
 import 'particles.js';
-import { ElMessage } from 'element-plus';
+import { ElMessage, namespaceContextKey } from 'element-plus';
+import { useUserStore } from '@/store/user';
 
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
@@ -71,44 +75,43 @@ export default {
     };
 
     const handleRegister = async () => {
+      // if (!username.value || !userId.value || !name.value || !password.value || !confirmPassword.value || !email.value) {
+      //   ElMessage({
+      //     message: '请填写所有字段。',
+      //     type: 'error',
+      //     duration: 1000,
+      //   });
+      //   return;
+      // }
 
-      if (!username.value || !userId.value || !name.value || !password.value || !confirmPassword.value || !email.value) {
-        ElMessage({
-          message: '请填写所有字段。',
-          type: 'error',
-          duration: 1000,
-        });
-        return;
-      }
+      // const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+      // if (!emailRegex.test(email.value)) {
+      //   ElMessage({
+      //     message: '请输入有效的邮箱地址。',
+      //     type: 'error',
+      //     duration: 1000,
+      //   });
+      //   return;
+      // }
 
-      const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-      if (!emailRegex.test(email.value)) {
-        ElMessage({
-          message: '请输入有效的邮箱地址。',
-          type: 'error',
-          duration: 1000,
-        });
-        return;
-      }
+      // const usernameRegex = /^[a-zA-Z0-9]+$/; // 正则表达式：仅允许英文字母和数字
+      // if (!usernameRegex.test(username.value)) {
+      //   ElMessage({
+      //     message: '昵称只能包含英文字母和数字。',
+      //     type: 'error',
+      //     duration: 1000,
+      //   });
+      //   return;
+      // }
 
-      const usernameRegex = /^[a-zA-Z0-9]+$/; // 正则表达式：仅允许英文字母和数字
-      if (!usernameRegex.test(username.value)) {
-        ElMessage({
-          message: '昵称只能包含英文字母和数字。',
-          type: 'error',
-          duration: 1000,
-        });
-        return;
-      }
-
-      if (password.value.length < 6) {
-        ElMessage({
-          message: '密码必须至少包含6个字符。',
-          type: 'error',
-          duration: 1000,
-        });
-        return;
-      }
+      // if (password.value.length < 6) {
+      //   ElMessage({
+      //     message: '密码必须至少包含6个字符。',
+      //     type: 'error',
+      //     duration: 1000,
+      //   });
+      //   return;
+      // }
 
       if (password.value !== confirmPassword.value) {
         ElMessage({
@@ -120,12 +123,11 @@ export default {
       }
       try {
         // 检查学工号是否已经被注册
-        const checkRes = await checkuserIdandName(userId.value, name.value);
-        if (!checkRes.success) {
+        const checkRes = await checkuserIdandName({userId:userId.value, name:name.value});
+        if (!checkRes.data.success) {
           ElMessage.error("该学工号已被注册或姓名不匹配");
           return;
         }
-
         const res = await register({
           username: username.value,
           userId: userId.value,
@@ -133,7 +135,7 @@ export default {
           password: password.value,
           email: email.value
         });
-
+        console.log(res);
         if (res.data.success) {
           ElMessage({
             message: '注册成功，即将跳转到登录页面',
