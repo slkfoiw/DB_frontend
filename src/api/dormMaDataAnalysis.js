@@ -5,7 +5,7 @@ import http from "@/utils/http"; // 假定你有一个封装好的 http 模块
 export const getDormManagerStats = async () => {
   // 示例接口调用（实际情况根据后端接口调整）
   // return http({
-  //   url: "/admin/get-dorm-manager-stats",
+  //   url: "/dormManager/get-dorm-manager-stats",
   //   method: "GET",
   //   headers: { "Content-Type": "application/json" },
   // });

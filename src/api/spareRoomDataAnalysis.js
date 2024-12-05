@@ -20,7 +20,7 @@ const mockRepairHistoryData = [
 export const getSpareRoomData = async () => {
     // 模拟直接返回完整数据
     // return http({
-    //     url: "/api/spare-room/data",
+    //     url: "/spare-room/data",
     //     method: "GET",
     //     headers: { "Content-Type": "application/json" },
     // });
@@ -39,7 +39,7 @@ export const getSpareRoomData = async () => {
 export const getEmptyRoomRepairHistory = async (buildingId) => {
     // 模拟从后端获取指定楼栋的空宿舍报修历史
     // return http({
-    //     url: `/api/spare-room/repair-history?buildingId=${buildingId}`,
+    //     url: `/spare-room/repair-history?buildingId=${buildingId}`,
     //     method: "GET",
     //     headers: { "Content-Type": "application/json" },
     // });

@@ -21,7 +21,7 @@ const mockData = [
 export const getRepairStatusStats = async () => {
     // 实际后端调用代码
     // return http({
-    //     url: '/api/repair/status-stats',
+    //     url: '/repair/status-stats',
     //     method: 'GET',
     //     headers: { 'Content-Type': 'application/json' }
     // });
@@ -46,7 +46,7 @@ export const getRepairStatusStats = async () => {
 export const getRepairTrendStats = async () => {
     // 实际后端调用代码
     // return http({
-    //     url: '/api/repair/trend-stats',
+    //     url: '/repair/trend-stats',
     //     method: 'GET',
     //     headers: { 'Content-Type': 'application/json' }
     // });
@@ -78,7 +78,7 @@ export const getRepairTrendStats = async () => {
 export const getRepairTypeStatsByBuilding = async () => {
     // 实际后端调用代码
     // return http({
-    //     url: '/api/repair/type-stats',
+    //     url: '/repair/type-stats',
     //     method: 'GET',
     //     headers: { 'Content-Type': 'application/json' }
     // });

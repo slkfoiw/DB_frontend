@@ -48,7 +48,7 @@ import http from "@/utils/http";
 import StuDataAnalysis from "@/components/StuDataAnalysis.vue";
 import DormManaDataAnalysis from "@/components/DormManaDataAnalysis.vue"; // 宿管统计图表组件
 import RepairDataAnalysis from "@/components/RepairDataAnalysis.vue"; // 报修统计图表组件
-import SpareRoomDataAnalysis from "@/components/SpareRoomDataAnalysis.vue"; // 公告统计图表组件
+import SpareRoomDataAnalysis from "@/components/SpareRoomDataAnalysis.vue"; // 空宿舍统计图表组件
 import { ElMessage } from 'element-plus';
 
 const studentNum = ref("");
@@ -61,7 +61,7 @@ const analysisHeight = ref("588px"); // 默认高度
 
 const getStuNum = async () => {
     // try {
-    //     const res = await http.get("/stu/stuNum");  // 从后端请求学生人数
+    //     const res = await http.get("/stuAna/stuNum");  // 从后端请求学生人数
     //     if (res.success) {
     //         studentNum.value = res.data;
     //     } else {
@@ -83,7 +83,7 @@ const getStuNum = async () => {
 
 const getDormManaNum = async () => {
     // try {
-    //     const res = await http.get("/dormMana/get-dorm-mana-num");  // 从后端请求宿管人数
+    //     const res = await http.get("/dormManager/get-dorm-mana-num");  // 从后端请求宿管人数
     //     if (res.success) {
     //         dormManaNum.value = res.data;
     //     } else {
@@ -127,7 +127,7 @@ const getRepairNum = async () => {
 
 const getspareRoomNum = async () => {
     // try {
-    //     const res = await http.get("/notice/get-notice-num");  // 从后端请求空宿舍数量
+    //     const res = await http.get("/spare-room/get-spare-room-num");  // 从后端请求空宿舍数量
     //     if (res.success) {
     //         spareRoomNum.value = res.data;
     //     } else {

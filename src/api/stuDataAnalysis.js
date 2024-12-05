@@ -22,7 +22,7 @@ const mockData = [
 export const getBuildingStats = () => {
     // 实际后端调用代码（注释掉，适配模拟数据）
     // return http({
-    //     url: 'api/building-stats',
+    //     url: '/stuAna/building-stats',
     //     method: 'GET',
     //     headers: {
     //         'Content-Type': 'application/json'
@@ -59,7 +59,7 @@ export const getBuildingDrilldown = (payload) => {
 
     // 实际后端调用代码（注释掉，适配模拟数据）
     // return http({
-    //     url: 'api/building-drilldown',
+    //     url: '/stuAna/building-drilldown',
     //     method: 'POST',
     //     data: payload,
     //     headers: {
@@ -98,7 +98,7 @@ export const getBuildingFloorDrilldown = (payload) => {
 
     // 实际后端调用代码（注释掉，适配模拟数据）
     // return http({
-    //     url: 'api/building-floor-drilldown',
+    //     url: '/stuAna/building-floor-drilldown',
     //     method: 'POST',
     //     data: payload,
     //     headers: {
