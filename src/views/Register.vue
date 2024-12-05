@@ -151,7 +151,7 @@ export default {
         }
       } catch (error) {
         ElMessage({
-          message: '注册失败，请检查用户名和邮箱是否已经被注册。',
+          message: res.msg,
           type: 'error',
           duration: 1000,
         });

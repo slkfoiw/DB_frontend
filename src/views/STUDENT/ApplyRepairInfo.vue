@@ -168,8 +168,9 @@ const init = () => {
 // 获取房间信息
 const getInfo = async () => {
   const res = await getRoomInfo(userId.value);
-  if (res.code === '0') {
-    Object.assign(room, res.data);
+  if (res.code === 0) {
+    room.roomId = res.data.roomId;
+    room.dormId = res.data.dormId;
   } else {
     ElMessage({
       message: res.msg,
