@@ -184,7 +184,6 @@ const load = async () => {
     pageNum: currentPage.value,
     pageSize: pageSize.value,
     search: search.value,
-    userId: userId.value,
   };
   const res = await getRepairRecords(params);
   tableData.value = res.data.records;

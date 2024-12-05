@@ -75,43 +75,43 @@ export default {
     };
 
     const handleRegister = async () => {
-      // if (!username.value || !userId.value || !name.value || !password.value || !confirmPassword.value || !email.value) {
-      //   ElMessage({
-      //     message: '请填写所有字段。',
-      //     type: 'error',
-      //     duration: 1000,
-      //   });
-      //   return;
-      // }
+      if (!username.value || !userId.value || !name.value || !password.value || !confirmPassword.value || !email.value) {
+        ElMessage({
+          message: '请填写所有字段。',
+          type: 'error',
+          duration: 1000,
+        });
+        return;
+      }
 
-      // const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-      // if (!emailRegex.test(email.value)) {
-      //   ElMessage({
-      //     message: '请输入有效的邮箱地址。',
-      //     type: 'error',
-      //     duration: 1000,
-      //   });
-      //   return;
-      // }
+      const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+      if (!emailRegex.test(email.value)) {
+        ElMessage({
+          message: '请输入有效的邮箱地址。',
+          type: 'error',
+          duration: 1000,
+        });
+        return;
+      }
 
-      // const usernameRegex = /^[a-zA-Z0-9]+$/; // 正则表达式：仅允许英文字母和数字
-      // if (!usernameRegex.test(username.value)) {
-      //   ElMessage({
-      //     message: '昵称只能包含英文字母和数字。',
-      //     type: 'error',
-      //     duration: 1000,
-      //   });
-      //   return;
-      // }
+      const usernameRegex = /^[a-zA-Z0-9]+$/; // 正则表达式：仅允许英文字母和数字
+      if (!usernameRegex.test(username.value)) {
+        ElMessage({
+          message: '用户名只能包含英文字母和数字。',
+          type: 'error',
+          duration: 1000,
+        });
+        return;
+      }
 
-      // if (password.value.length < 6) {
-      //   ElMessage({
-      //     message: '密码必须至少包含6个字符。',
-      //     type: 'error',
-      //     duration: 1000,
-      //   });
-      //   return;
-      // }
+      if (password.value.length < 6) {
+        ElMessage({
+          message: '密码必须至少包含6个字符。',
+          type: 'error',
+          duration: 1000,
+        });
+        return;
+      }
 
       if (password.value !== confirmPassword.value) {
         ElMessage({
@@ -124,8 +124,8 @@ export default {
       try {
         // 检查学工号是否已经被注册
         const checkRes = await checkuserIdandName({userId:userId.value, name:name.value});
-        if (!checkRes.data.success) {
-          ElMessage.error("该学工号已被注册或姓名不匹配");
+        if (checkRes.code !== 0) {
+          ElMessage.error(checkRes.msg);
           return;
         }
         const res = await register({
@@ -136,9 +136,9 @@ export default {
           email: email.value
         });
         console.log(res);
-        if (res.data.success) {
+        if (res.code === 0) {
           ElMessage({
-            message: '注册成功，即将跳转到登录页面',
+            message: res.msg,
             type: 'success',
             duration: 1000,
           });
@@ -146,6 +146,8 @@ export default {
           setTimeout(() => {
             router.push('/login');
           }, 1000); // 1秒钟的过渡动画
+        } else {
+          ElMessage.error(res.msg);
         }
       } catch (error) {
         ElMessage({

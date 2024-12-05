@@ -540,7 +540,7 @@ const detailIcon = (num, info) => {
         stu = info.fourthBed;
     }
     getStudentById(stu).then((res) => {
-        if (res.code === "0") {
+        if (res.code === 0) {
             form.value = res.data;
             stuInfoDialog.value = true;
         } else {
@@ -562,7 +562,7 @@ const deleteStuBed = (num, info) => {
     }
     calCurrentNum(info);
     updateBed(info).then((res) => {
-        if (res.code === "0") {
+        if (res.code === 0) {
             ElMessage.success("删除成功");
         } else {
             ElMessage.error("删除失败");
@@ -602,7 +602,7 @@ const addStuBed = () => {
     }
     calCurrentNum(form);
     updateBed(form.value).then((res) => {
-        if (res.code === "0") {
+        if (res.code === 0) {
             ElMessage.success("添加成功");
         } else {
             ElMessage.error("添加失败");
@@ -625,7 +625,7 @@ const editStuBed = () => {
     }
     calCurrentNum(form);
     updateBed(form.value).then((res) => {
-        if (res.code === "0") {
+        if (res.code === 0) {
             ElMessage.success("修改成功");
         } else {
             ElMessage.error("修改失败");

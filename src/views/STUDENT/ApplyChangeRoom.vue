@@ -211,9 +211,9 @@ const checkRoomStateHandler = async (rule, value, callback) => {
     try {
       const res = await checkRoomState(form.toDormId, dormRoomId.value);
       const result = await checkRoomExist(form.toDormId, dormRoomId.value);
-      if (result.code === "-1") {
+      if (result.code === -1) {
         callback(new Error(result.msg));
-      } else if (res.code === "-1") {
+      } else if (res.code === -1) {
         callback(new Error(res.msg));
       } else {
         callback();
@@ -230,7 +230,7 @@ const checkRoomStateHandler = async (rule, value, callback) => {
 const checkBedStateHandler = async (rule, value, callback) => {
   try {
     const res = await checkBedState(form.toDormId, dormRoomId.value, value);
-    if (res.code === "0") {
+    if (res.code === 0) {
       callback();
     } else {
       callback(new Error(res.msg));
@@ -289,8 +289,8 @@ const add = () => {
     form.name = user.username;
     try {
       const res = await getRoomBedUserId(form.studentId);
-      form.curDormId = res.data.info.dormBuildId;
-      form.curRoomId = res.data.info.dormRoomId;
+      form.curDormId = res.data.dormBuildId;
+      form.curRoomId = res.data.dormRoomId;
       form.curBedId = calBedNum(form.studentId, res.data.info);
     } catch (error) {
       console.error('获取房间信息失败', error);
@@ -335,7 +335,7 @@ const judgeOrderState = (status) => {
 
 // 处理响应
 const handleResponse = (res, successMessage) => {
-  if (res.code === "0") {
+  if (res.code === 0) {
     ElMessage({
       message: successMessage,
       type: "success",

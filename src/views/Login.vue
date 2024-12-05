@@ -8,7 +8,7 @@
         <div class="header">{{ siteHeader }}</div>
         <form @submit.prevent="login">
           <div class="simpleui-input-inline">
-            <el-input v-model="username" name="username" placeholder="昵称" autofocus :prefix-icon="User"></el-input>
+            <el-input v-model="username" name="username" placeholder="用户名" autofocus :prefix-icon="User"></el-input>
           </div>
           <div class="simpleui-input-inline">
             <el-input v-model="email" name="email" placeholder="邮箱" autofocus :prefix-icon="Message"></el-input>
@@ -75,7 +75,7 @@ export default {
     const login = async () => {
       if (!username.value || !email.value || !password.value) {
         ElMessage({
-          message: '昵称、邮箱、密码均不能为空',
+          message: '用户名、邮箱、密码均不能为空',
           type: 'error',
           duration: 1000,
         });
