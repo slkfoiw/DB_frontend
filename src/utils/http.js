@@ -28,7 +28,7 @@ http.interceptors.response.use(
     async e => {
         const userStore = useUserStore();
 
-        console.log(e.response)
+        console.log('e:', e)
         if (e.response) {
             // 处理401错误
             if (e.response.status === 401) {

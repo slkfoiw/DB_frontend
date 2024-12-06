@@ -96,7 +96,7 @@ export const deleteStudent = (studentId) => {
 
 export const checkIfIdExists = (studentId) => {
     // return http({
-    //     url: `dormManager/check-if-id-exits/${managerId}`,
+    //     url: `student/check-if-id-exits/${managerId}`,
     //     method: 'GET'
     // })
     return mockStudents.some(m => m.studentId === String(studentId));

@@ -10,7 +10,8 @@
             <!-- 导入和导出功能 -->
             <div>
                 <el-upload class="upload-demo" drag accept=".xls, .xlsx, .xml" multiple
-                    :on-change="handleFileUpload" :before-upload="beforeUpload">
+                    :on-change="handleFileUpload" :before-upload="beforeUpload"
+                    auto-upload="false">
                     <i class="el-icon-upload"></i>
                     <div class="el-upload__text">重新导入宿管信息，将文件拖到此处，或<em>点击上传</em></div>
                 </el-upload>
@@ -30,11 +31,11 @@
             </div>
 
             <!-- 表格显示宿管信息 -->
-            <el-table :data="paginatedDormManagers" style="width: 100%">
+            <el-table :data="dormManagers" style="width: 100%">
                 <el-table-column label="序号" type="index" />
                 <el-table-column prop="managerId" label="宿管ID" sortable />
-                <el-table-column prop="managerName" label="姓名" sortable />
-                <el-table-column prop="dormitoryNumber" label="公寓号" sortable />
+                <el-table-column prop="name" label="姓名" sortable />
+                <el-table-column prop="dormId" label="公寓号" sortable />
                 <el-table-column label="操作">
                     <template v-slot="scope">
                         <el-button icon="Edit" @click="openModal(scope.row)">编辑</el-button>
@@ -61,11 +62,11 @@
                         <el-form-item label="宿管ID" prop="managerId" required>
                             <el-input v-model="form.managerId" placeholder="请输入宿管ID"></el-input>
                         </el-form-item>
-                        <el-form-item label="宿管姓名" prop="managerName" required>
-                            <el-input v-model="form.managerName" placeholder="请输入宿管姓名"></el-input>
+                        <el-form-item label="宿管姓名" prop="name" required>
+                            <el-input v-model="form.name" placeholder="请输入宿管姓名"></el-input>
                         </el-form-item>
-                        <el-form-item label="公寓号" prop="dormitoryNumber" required>
-                            <el-input v-model="form.dormitoryNumber" placeholder="请输入公寓号"></el-input>
+                        <el-form-item label="公寓号" prop="dormId" required>
+                            <el-input v-model="form.dormId" placeholder="请输入公寓号"></el-input>
                         </el-form-item>
                         <el-form-item>
                             <el-button type="primary" @click="saveDormMana">{{ isEdit ? '更新' : '添加' }}</el-button>
@@ -86,34 +87,23 @@ import { ElMessage } from 'element-plus';
 import { parseString } from 'xml2js';
 
 const dormManagers = ref([]);
-const filteredManagers = ref([]);
 const searchQuery = ref('');
 const totalitems = ref(0);
-const form = ref({ managerId: '', managerName: '', dormitoryNumber: '' });
+const form = ref({ managerId: '', name: '', dormId: '' });
 const oldManagerId = ref('');
 const isEdit = ref(false);
 const showModal = ref(false);
 const currentPage = ref(1);
 const pageSize = ref(10);
-const paginatedDormManagers = ref([]);
 
-const fetchDormManagers = async () => {
+const load = async () => {
     try {
-        const response = await getDormManagers();
-        dormManagers.value = response.data;
-        load(); // 加载初始页面
+        const response = await getDormManagers({pageNum: currentPage.value, pageSize: pageSize.value, search: searchQuery.value});
+        dormManagers.value = response.data.records;
+        totalitems.value = response.data.total;
     } catch (error) {
         ElMessage.error('获取宿管信息失败: ' + error.message);
     }
-};
-
-const load = () => {
-    filteredManagers.value = dormManagers.value.filter(manager =>
-        manager.managerId.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-        manager.managerName.toLowerCase().includes(searchQuery.value.toLowerCase())
-    );
-    totalitems.value = filteredManagers.value.length;
-    paginatedDormManagers.value = filteredManagers.value.slice((currentPage.value - 1) * pageSize.value, currentPage.value * pageSize.value);
 };
 
 const handleCurrentChange = (pageNum) => {
@@ -144,50 +134,49 @@ const closeModal = () => {
 };
 
 const saveDormMana = async () => {
-    const { managerId, managerName, dormitoryNumber } = form.value;
-
-    if (!/^\d{8}$/.test(managerId)) {
-        ElMessage.error('宿管ID必须是8位数字！');
-        return;
-    }
+    console.log('form:', form.value);
+    const { managerId, name, dormId } = form.value;
     
-    if (!managerName || !dormitoryNumber) {
+    // if (!/^\d{8}$/.test(managerId)) {
+    //     ElMessage.error('宿管ID必须是8位数字！');
+    //     return;
+    // }
+    
+    if (!name || !dormId) {
         ElMessage.error('请填写完整信息！');
         return;
     }
     
     if (!isEdit.value || managerId !== oldManagerId.value) {
         const idExists = await checkIfIdExists(managerId);
-        if (idExists) {
-            ElMessage.error('宿管ID已被其他人使用，请选择另一个ID！');
+        if (idExists.code !== 0) {
+            ElMessage.error(idExists.msg);
             return;
         }
     }
-
-    const res = isEdit.value ? await updateDormManager(form.value) : await addDormManager(form.value);
-    if (res.success) {
-        ElMessage.success(res.message);
+    const res = isEdit.value ? await updateDormManager({oldManagerId:oldManagerId.value, manager:form.value}) : await addDormManager(form.value);
+    console.log('res:', res);
+    if (res.code === 0) {
+        ElMessage.success(res.msg);
     } else {
-        ElMessage.error(res.message);
+        ElMessage.error(res.msg);
     }
-    fetchDormManagers(); 
+    load(); 
     closeModal();
 };
 
 const handleDelete = async (managerId) => {
-    try {
-        const res = await deleteDormManager(managerId);
-        if (!res.success) throw new Error(res.message);
-        ElMessage.success(res.message);
-    } catch (error) {
-        ElMessage.error(error.message);
-    } finally {
-        fetchDormManagers();
+    const res = await deleteDormManager(managerId);
+    if (res.code !== 0) {
+        ElMessage.error(res.msg);
+    } else {
+        ElMessage.success(res.msg);
     }
+    load();
 };
 
 const resetForm = () => {
-    form.value = { managerId: '', managerName: '', dormitoryNumber: '' };
+    form.value = { managerId: '', name: '', dormId: '' };
 };
 
 const beforeUpload = (file) => {
@@ -202,6 +191,7 @@ const beforeUpload = (file) => {
 };
 
 const handleFileUpload = (file) => {
+    console.log('file.raw: ', file.raw);
     if (file.raw) {
         const extension = file.raw.name.split('.').pop().toLowerCase();
         const reader = new FileReader();
@@ -214,47 +204,50 @@ const handleFileUpload = (file) => {
                 parseExcel(fileData);
             }
         };
+        reader.readAsArrayBuffer(file.raw);
     } else {
         ElMessage.error('文件上传失败');
     }
 };
 
 const parseExcel = async (data) => {
-    try {
-        const workbook = XLSX.read(data, { type: 'array' });
-        const jsonData = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]]);
-        const res = await updateAllDormManagers(jsonData);
-        if (!res.success) throw new Error(res.message);
-        ElMessage.success(res.message);
-    } catch (error) {
-        ElMessage.error(error.message);
+    console.log('data:', data);
+    const workbook = XLSX.read(data, { type: 'array' });
+    const jsonData = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]]);
+    console.log('jsonData:', jsonData);
+    const res = await updateAllDormManagers(jsonData);
+    console.log('res:', res);
+    if (res.code !== 0) {
+        ElMessage.error(res.msg);
+        return;
     }
+    ElMessage.success(res.msg);
 };
 
 const parseXML = async (data) => {
     parseString(data, async (err, result) => {
         if (err) {
+            console.log('err:', err);
             ElMessage.error('XML解析失败!');
             return;
         }
-        try {
-            const res = await updateAllDormManagers(result);
-            if (!res.success) throw new Error(res.message);
-            ElMessage.success(res.message);
-        } catch (error) {
-            ElMessage.error(error.message);
+        const res = await updateAllDormManagers(result);
+        if (res.code !== 0) {
+            ElMessage.error(res.msg);
+            return;
         }
+        ElMessage.success(res.msg);
     });
 };
 
 const exportDormManagers = () => {
     const wb = XLSX.utils.book_new();
-    const ws = XLSX.utils.json_to_sheet(sortedDormManagers.value);
+    const ws = XLSX.utils.json_to_sheet(dormManagers.value);
     XLSX.utils.book_append_sheet(wb, ws, '宿管信息');
     XLSX.writeFile(wb, '宿管信息.xlsx');
 };
 
-onMounted(fetchDormManagers)
+onMounted(load)
 </script>
 
 <style scoped>
