@@ -23,7 +23,7 @@
                 <!--    表格-->
                 <el-table :data="dormBuildings" style="width: 100%">
                     <el-table-column label="#" type="index"/>
-                    <el-table-column label="编号" prop="dormId" sortable/>
+                    <el-table-column label="楼栋号" prop="dormId" sortable/>
                     <el-table-column label="地址" prop="address"/>
                     <el-table-column
                         :filter-method="filterTag"
