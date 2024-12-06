@@ -15,28 +15,33 @@ let mockStudents = [
     { studentId: '22371012', stuName: '周十四', dormitoryNumber: '13', roomNumber: '602', major: '软件开发' },
   ];
 
-export const getStudents = () => {
-    // return http({
-    //     url: 'student/get-students',
-    //     method: 'GET',
-    //     headers: {
-    //         'Content-Type': 'application/json'
-    //     }
-    // })
-    return {
-        data: [...mockStudents]
-    };
+export const getStudents = ({pageNum, pageSize, search}) => {
+    return http({
+        url: '/student/get-students',
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        params: {
+            pageNum,
+            pageSize,
+            search
+        }
+    })
+    // return {
+    //     data: [...mockStudents]
+    // };
 };
 
 export const addStudent = (student) => {
-    // return http({
-    //     url: 'student/add-student',
-    //     method: 'POST',
-    //     headers: {
-    //         'Content-Type': 'application/json'
-    //     },
-    //     data: student
-    // })
+    return http({
+        url: '/student/add-student',
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        data: student
+    })
     mockStudents.push(student); // 模拟添加
     return { 
         success: true,
@@ -44,15 +49,15 @@ export const addStudent = (student) => {
     };
 };
 
-export const updateStudent = (student) => {
-    // return http({
-    //     url: `student/update-student/${student.studentId}`,
-    //     method: 'PUT',
-    //     headers: {
-    //         'Content-Type': 'application/json'
-    //     },
-    //     data: student
-    // })
+export const updateStudent = ({oldStudentId, student}) => {
+    return http({
+        url: `/student/update-student/${oldStudentId}`,
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        data: student
+    })
     const id = mockStudents.findIndex(s => s.studentId === student.studentId);
     if (id !== -1) {
         mockStudents[id] = student; // 模拟更新
@@ -64,14 +69,14 @@ export const updateStudent = (student) => {
 };
 
 export const updateAllStudents = (data) => {
-    // return http({
-    //     url: `student/update-all-students`,
-    //     method: 'PUT',
-    //     headers: {
-    //         'Content-Type': 'application/json'
-    //     },
-    //     data: data
-    // })
+    return http({
+        url: `/student/update-all-students`,
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        data: data
+    })
     mockStudents = data;
     return { 
         success: true,
@@ -80,10 +85,10 @@ export const updateAllStudents = (data) => {
 }
 
 export const deleteStudent = (studentId) => {
-    // return http({
-    //     url: `student/delete-student/${studentId}`,
-    //     method: 'DELETE'
-    // })
+    return http({
+        url: `/student/delete-student/${studentId}`,
+        method: 'DELETE'
+    })
     const id = mockStudents.findIndex(s => s.studentId === studentId);
     if (id !== -1) {
         mockStudents.splice(id, 1); // 模拟删除
@@ -94,19 +99,11 @@ export const deleteStudent = (studentId) => {
     };
 };
 
-export const checkIfIdExists = (studentId) => {
-    // return http({
-    //     url: `dormManager/check-if-id-exits/${managerId}`,
-    //     method: 'GET'
-    // })
-    return mockStudents.some(m => m.studentId === String(studentId));
-}
-
 export const getStudentById = (studentId) => {
-    // return http({
-    //     url: `student/get-student-by-id/${studentId}`,
-    //     method: 'GET'
-    // })
+    return http({
+        url: `/student/get-student-by-id/${studentId}`,
+        method: 'GET'
+    })
     return new Promise((resolve, reject) => {
         const student = mockStudents.find(s => s.studentId === String(studentId));
         if (student) {
@@ -115,4 +112,14 @@ export const getStudentById = (studentId) => {
             reject({ code: "1", message: "学生信息不存在" });
         }
     });
+}
+
+export const getMajors = () => {
+    return http({
+        url: '/major/get-majors',
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+    })
 }

@@ -21,24 +21,25 @@
                     </div>
                 </div>
                 <!--    表格-->
-                <el-table :data="paginatedBuildings" style="width: 100%">
+                <el-table :data="dormBuildings" style="width: 100%">
                     <el-table-column label="#" type="index"/>
-                    <el-table-column label="编号" prop="dormId" sortable/>
+                    <el-table-column label="楼栋号" prop="dormId" sortable/>
                     <el-table-column label="地址" prop="address"/>
                     <el-table-column
                         :filter-method="filterTag"
                         :filters="[
-                        { text: '男宿舍', value: '男宿舍' },
-                        { text: '女宿舍', value: '女宿舍' },
+                        { text: '男', value: '男' },
+                        { text: '女', value: '女' },
+                        { text: '混合', value: '混合' }
                     ]"
                         filter-placement="bottom-end"
                         label="备注"
-                        prop="dormBuildDetail"
+                        prop="gender"
                     />
                     <!--      操作栏-->
                     <el-table-column label="操作" width="130px">
                         <template #default="scope">
-                            <el-button icon="Edit" type="primary" @click="handleEdit(scope.row)"
+                            <el-button icon="Edit" type="primary" @click="edit(scope.row)"
                             ></el-button>
                             <el-popconfirm title="确认删除？" @confirm="handleDelete(scope.row.dormId)">
                             <template #reference>
@@ -66,19 +67,19 @@
                     <el-dialog v-model="dialogVisible" title="操作" width="30%" @close="cancel">
                     <el-form ref="formRef" :model="form" :rules="rules" label-width="120px">
                         <el-form-item label="编号" prop="dormId">
-                        <el-input v-model.number="form.dormId" :disabled="disabled" style="width: 80%"></el-input>
+                        <el-input v-model.number="form.dormId" style="width: 80%"></el-input>
                         </el-form-item>
                         <el-form-item label="地址" prop="address">
                         <el-input v-model="form.address" style="width: 80%"></el-input>
                         </el-form-item>
-                        <el-form-item label="备注" prop="dormBuildDetail">
-                        <el-input
-                            v-model="form.dormBuildDetail"
-                            :autosize="{ minRows: 2, maxRows: 4 }"
-                            style="width: 80%"
-                            type="textarea"
-                        ></el-input>
-                        </el-form-item>
+                        <el-select v-model="form.gender" placeholder="请选择类型">
+                        <el-option
+                            v-for="gender in genders" 
+                            :key="gender.genderId" 
+                            :label="gender.gender" 
+                            :value="gender.genderId" 
+                        />
+                        </el-select>
                     </el-form>
                     <template #footer>
                         <span class="dialog-footer">
@@ -100,114 +101,103 @@ import { ElMessage } from "element-plus";
 
 const dormBuildings = ref([]);
 const search = ref('');
-const filteredBuildings = ref([]);
 const totalitems = ref(0);
-const paginatedBuildings = ref([]);
 const form = ref({dormId: '',
                 address: '',
-                dormBuildDetail: '',});
+                gender: '',});
 const dialogVisible = ref(false);
-const disabled = ref(false);
+const isEdit = ref(false);
 const currentPage = ref(1);
 const pageSize = ref(10);
-
+const oldDormId = ref('');
+const genders = ref([
+    {genderId: 0, gender: '女'},
+    {genderId: 1, gender: '男'},
+    {genderId: 2, gender: '混合'}
+])
 const resetForm = () => {
     form.value = {dormId: '',
                 address: '',
-                dormBuildDetail: '',};
+                gender: '',};
 };
 
-const load = () => {
-    filteredBuildings.value = dormBuildings.value.filter(building => 
-                            String(building.dormId).toLowerCase().includes(search.value.toLowerCase()) ||
-                            String(building.address).toLowerCase().includes(search.value.toLowerCase()) ||
-                            String(building.dormBuildDetail).toLowerCase().includes(search.value.toLowerCase()));
-    totalitems.value = filteredBuildings.value.length;
-    paginatedBuildings.value = filteredBuildings.value.slice((currentPage.value - 1) * pageSize.value, currentPage.value * pageSize.value);
-};
-
-const fetchDormBuilds = async () => {
-    try {
-        const response = await getDormBuilds();
-        dormBuildings.value = response.data;
-        load();
-    } catch (error) {
-        ElMessage.error('获取公寓信息失败: ' + error.message);
+const load = async () => {
+    const response = await getDormBuilds({pageNum: currentPage.value, pageSize: pageSize.value, search: search.value});
+    if (response.code !== 0) {
+        ElMessage.error('获取公寓信息失败: ' + response.msg);
+        return;
     }
+    console.log('response:', response);
+    dormBuildings.value = response.data.records;
+    totalitems.value = response.data.total;
 };
 
 const add = () => {
     dialogVisible.value = true;
-    disabled.value = false;
-    form.value = {};
+    isEdit.value = false;
+    resetForm();
+};
+
+
+const edit = (row) => {
+    dialogVisible.value = true;
+    isEdit.value = true;
+    oldDormId.value = row.dormId;
+    let genderId = 0;
+    if (row.gender === '女') {
+        genderId = 0;
+    } else if (row.gender === '男') {
+        genderId = 1;
+    } else {
+        genderId = 2;
+    }
+    form.value = {dormId: row.dormId,
+                address: row.address,
+                gender: genderId,};
 };
 
 const cancel = () => {
     resetForm();
     dialogVisible.value = false;
-    disabled.value = false;
+    isEdit.value = false;
 };
 
 const save = async () => {
-    if(!disabled.value) {
-        try {
-            const res = await addDormBuild(form.value);
-            if (!res.success) throw new Error(res.message);
-            ElMessage.success(res.message);
-        } catch (error) {
-            ElMessage.error(error.message);
-        } finally {
-            fetchDormBuilds();
-            cancel();
-        }
-    } else {
-        try {
-            const res = await updateDormBuild(form.value);
-            if (!res.success) throw new Error(res.message);
-            ElMessage.success(res.message);
-        } catch (error) {
-            ElMessage.error(error.message);
-        } finally {
-            fetchDormBuilds();
-            cancel();
-        }
+    console.log('form:', form.value);
+    const res = isEdit.value? await updateDormBuild({oldDormId: oldDormId.value, dorm: form.value}) : await addDormBuild(form.value);
+    if (res.code !== 0) {
+        ElMessage.error(res.msg);
+        return;
     }
+    ElMessage.success(res.message);
+    await load();
+    cancel();
 };
 
 const filterTag = (value, row) => {
-    return row.dormBuildDetail === value;
-};
-
-const handleEdit = (row) => {
-    dialogVisible.value = true;
-    disabled.value = true;
-    form.value = {dormId: row.dormId,
-                address: row.address,
-                dormBuildDetail: row.dormBuildDetail,};
+    return row.gender === value;
 };
 
 const handleDelete = async (id) => {
-    try {
-        const res = await deleteDormBuild(id);
-        if (!res.success) throw new Error(res.message);
-        ElMessage.success(res.message);
-    } catch (error) {
-        ElMessage.error(error.message);
-    } finally {
-        fetchDormBuilds();
+    const res = await deleteDormBuild(id);
+    if (res.code !== 0) {
+        ElMessage.error(res.msg);
+        return;
     }
+    ElMessage.success(res.message);
+    await load();
 };
 
-const handleCurrentChange = (pageNum) => {
+const handleCurrentChange = async (pageNum) => {
     currentPage.value = pageNum;
-    load();
+    await load();
 };
 
-const handleSizeChange = (newPageSize) => {
+const handleSizeChange = async(newPageSize) => {
     pageSize.value = newPageSize;
-    load();
+    await load();
 };
 
-onMounted(fetchDormBuilds);
+onMounted(load);
 
 </script>

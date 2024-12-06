@@ -9,8 +9,9 @@
         <el-card>
             <!-- 导入和导出功能 -->
             <div>
-                <el-upload class="upload-demo" drag accept=".xls, .xlsx, .xml" action="" multiple
-                    :on-change="handleFileUpload" :before-upload="beforeUpload">
+                <el-upload class="upload-demo" drag accept=".xls, .xlsx, .xml" action=""
+                    :on-change="handleFileUpload" 
+                    :auto-upload="false">
                     <i class="el-icon-upload"></i>
                     <div class="el-upload__text">重新导入学生信息，将文件拖到此处，或<em>点击上传</em></div>
                 </el-upload>
@@ -31,12 +32,12 @@
             </div>
 
             <!-- 表格显示宿管信息 -->
-            <el-table :data="paginatedStudents" style="width: 100%">
+            <el-table :data="students" style="width: 100%">
                 <el-table-column label="序号" type="index" />
                 <el-table-column prop="studentId" label="学号" sortable />
-                <el-table-column prop="stuName" label="姓名" sortable />
-                <el-table-column prop="dormitoryNumber" label="公寓号" sortable />
-                <el-table-column prop="roomNumber" label="宿舍号" sortable />
+                <el-table-column prop="name" label="姓名" sortable />
+                <el-table-column prop="dormId" label="公寓号" sortable />
+                <el-table-column prop="roomId" label="宿舍号" sortable />
                 <el-table-column prop="major" label="专业" />
                 <el-table-column label="操作">
                     <template v-slot="scope">
@@ -62,20 +63,25 @@
                     <h3>{{ isEdit ? '编辑学生' : '添加学生' }}</h3>
                     <el-form :model="form" ref="formRef">
                         <el-form-item label="学号" prop="studentId">
-                            <el-input v-model="form.studentId" :disabled="isEdit" />
+                            <el-input v-model="form.studentId" placeholder="请输入学号" :disabled="isEdit" />
                         </el-form-item>
-                        <el-form-item label="姓名" prop="stuName">
-                            <el-input v-model="form.stuName" placeholder="请输入姓名" />
+                        <el-form-item label="姓名" prop="name">
+                            <el-input v-model="form.name" placeholder="请输入姓名" />
                         </el-form-item>
-                        <el-form-item label="公寓号" prop="dormitoryNumber">
-                            <el-input v-model="form.dormitoryNumber" placeholder="请输入公寓号" />
+                        <el-form-item label="公寓号" prop="dormId">
+                            <el-input v-model="form.dormId" placeholder="请输入公寓号" />
                         </el-form-item>
-                        <el-form-item label="宿舍号" prop="roomNumber">
-                            <el-input v-model="form.roomNumber" placeholder="请输入宿舍号" />
+                        <el-form-item label="宿舍号" prop="roomId">
+                            <el-input v-model="form.roomId" placeholder="请输入宿舍号" />
                         </el-form-item>
-                        <el-form-item label="专业" prop="major">
-                            <el-input v-model="form.major" placeholder="请输入专业" />
-                        </el-form-item>
+                        <el-select v-model="form.majorId" placeholder="请选择专业">
+                            <el-option
+                                v-for="major in majors" 
+                                :key="major.majorId" 
+                                :label="major.major" 
+                                :value="major.majorId" 
+                            />
+                        </el-select>
                         <el-form-item>
                             <el-button type="primary" @click="saveStudent">{{ isEdit ? '保存' : '添加' }}</el-button>
                             <el-button type="default" @click="closeModal">取消</el-button>
@@ -89,18 +95,18 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue';
-import { getStudents, addStudent, updateStudent, deleteStudent, checkIfIdExists, updateAllStudents } from '@/api/student';
+import { getStudents, addStudent, updateStudent, deleteStudent, updateAllStudents, getMajors } from '@/api/student';
 import * as XLSX from 'xlsx';
 import { ElMessage } from 'element-plus';
 
 const students = ref([]);
-const filteredStudents = ref([]);
 const searchQuery = ref('');
 const form = ref({
     studentId: '',
-    stuName: '',
-    dormitoryNumber: '',
-    roomNumber: '',
+    name: '',
+    dormId: '',
+    roomId: '',
+    majorId: '',
     major: ''
 });
 const totalitems = ref(0);
@@ -108,40 +114,36 @@ const oldStudentId = ref('');
 const isEdit = ref(false);
 const showModal = ref(false);
 const currentPage = ref(1);
-const pageSize = ref(10); // 每页显示10条数据
-const paginatedStudents = ref([]);
+const pageSize = ref(10);
+const majors = ref([]);
 
-const fetchStudents = async () => {
-    try {
-        const response = await getStudents();
-        students.value = response.data;
-        load();
-    } catch (error) {
-        console.error('获取学生信息失败:', error);
+const load = async () => {
+    const response = await getStudents({pageNum: currentPage.value, pageSize: pageSize.value, search: searchQuery.value});
+    if (response.code !== 0) {
+        ElMessage.error(response.msg);
+        return;
     }
+    students.value = response.data.records;
+    totalitems.value = response.data.total;
+}
+
+const loadMajors = async () => {
+    const response = await getMajors();
+    if (response.code !== 0) {
+        ElMessage.error(response.msg);
+        return;
+    }
+    majors.value = response.data;  // 将后端返回的专业列表存入 majors
 };
 
-// 搜索功能
-const load = () => {
-    filteredStudents.value = students.value.filter(student => {
-            return (
-                student.studentId.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-                student.stuName.toLowerCase().includes(searchQuery.value.toLowerCase())
-            );
-        });
-    totalitems.value = filteredStudents.value.length;
-    paginatedStudents.value = filteredStudents.value.slice((currentPage.value - 1) * pageSize.value, currentPage.value * pageSize.value);
-}
-
-// 翻页功能
-const handleCurrentChange = (pageNum) => {
+const handleCurrentChange = async (pageNum) => {
     currentPage.value = pageNum;
-    load();
+    await load();
 }
 
-const handleSizeChange = (newPageSize) => {
+const handleSizeChange = async (newPageSize) => {
     pageSize.value = newPageSize;
-    load();
+    await load();
 }
 
 const openModal = (student = null) => {
@@ -150,7 +152,7 @@ const openModal = (student = null) => {
         oldStudentId.value = student.studentId;
         isEdit.value = true;
     } else {
-        form.value = { studentId: '', stuName: '', dormitoryNumber: '', roomNumber: '', major: '' };
+        form.value = { studentId: '', name: '', dormId: '', roomId: '', major: '' };
         oldStudentId.value = null;
         isEdit.value = false;
     }
@@ -162,73 +164,48 @@ const closeModal = () => {
 };
 
 const saveStudent = async () => {
-    // 验证学号是否满足8位数字的条件
-    const studentId = form.value.studentId;
-    const isValidStudentId = /^\d{8}$/.test(studentId);
-    if (!isValidStudentId) {
-        alert('学号必须是8位数字！');
-        return;
-    }
+    
     // 验证信息是否为空
-    if (form.value.stuName === '' || form.value.dormitoryNumber === '' || form.value.roomNumber === '' || form.value.major === '') {
+    if (form.value.name === '' || form.value.dormId === '' || form.value.roomId === '' || form.value.major === '') {
         alert('请填写完整信息！');
         return;
     }
-    // 检查ID是否已被使用
-    if (!isEdit.value || studentId !== oldStudentId) {
-        const idExists = await checkIfIdExists(studentId);
-        if (idExists) {
-            ElMessage.error('学号已被其他人使用！');
-            return;
-        }
-    }
 
-    const res = isEdit.value ? await updateStudent(form.value) : await addStudent(form.value);
-    if (res.success) {
-        ElMessage.success(res.message);
-    } else {
-        ElMessage.error(res.message);
+    const res = isEdit.value ? await updateStudent({oldStudentId: oldStudentId.value, student: form.value}) : await addStudent(form.value);
+    if (res.code !== 0) {
+        ElMessage.error(res.msg);
+        return;
     }
-    fetchStudents();
+    ElMessage.success(res.msg);
+    await load();
     closeModal();
 };
 
 const handleDelete = async (studentId) => {
     const res = await deleteStudent(studentId);
-    if (res.success) {
-        ElMessage.success(res.message);
+    if (res.code !== 0) {
+        ElMessage.error(res.msg);
     } else {
-        ElMessage.error(res.message);
+        ElMessage.success(res.msg);
     }
-    fetchStudents();
+    await load();
 }
 
-const beforeUpload = (file) => {
-    const isExcel = file.type === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' ||
-        file.type === 'application/vnd.ms-excel';
-    const isXML = file.type === 'text/xml';
-
-    if (!isExcel && !isXML) {
-        ElMessage.error('上传文件只能是表格或XML格式!');
-        return false;
-    }
-    return true;
-};
-
-const handleFileUpload = (file) => {
+const handleFileUpload = async (file) => {
     if (file.raw) {
         const extension = file.raw.name.split('.').pop().toLowerCase();
         const reader = new FileReader();
 
-        reader.onload = (event) => {
+        reader.onload = async (event) => {
             const fileData = event.target.result;
-
             if (extension === 'xml') {
-                parseXML(fileData);
+                await parseXML(fileData);
             } else {
-                parseExcel(fileData);
+                await parseExcel(fileData);
             }
+            await load();
         };
+        reader.readAsArrayBuffer(file.raw);
     } else {
         ElMessage.error('文件上传失败');
     }
@@ -240,13 +217,12 @@ const parseExcel = async (data) => {
     const firstSheetName = workbook.SheetNames[0];
     const worksheet = workbook.Sheets[firstSheetName];
     const jsonData = XLSX.utils.sheet_to_json(worksheet);
-    console.log('Excel数据:', jsonData);
     const res = await updateAllStudents(jsonData);
-    if (res.success) {
-        ElMessage.success(res.message);
-    } else {
-        ElMessage.error(res.message);
+    if (res.code !== 0) {
+        ElMessage.error(res.msg);
+        return;
     }
+    ElMessage.success(res.msg);
 };
 
 const parseXML = async (data) => {
@@ -256,11 +232,11 @@ const parseXML = async (data) => {
         } else {
             console.log('XML数据:', result);
             const res = await updateAllStudents(result);
-            if (res.success) {
-                ElMessage.success(res.message);
-            } else {
-                ElMessage.error(res.message);
+            if (res.code !== 0) {
+                ElMessage.error(res.msg);
+                return;
             }
+            ElMessage.success(res.msg);
         }
     });
 };
@@ -272,7 +248,10 @@ const exportStudents = () => {
     XLSX.writeFile(wb, '学生信息.xlsx'); // 导出为 Excel 文件
 };
 
-onMounted(fetchStudents);
+onMounted(async () => {
+    await load();
+    await loadMajors();  // 加载专业列表
+});
 
 </script>
 

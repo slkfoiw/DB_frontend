@@ -1,5 +1,4 @@
 import http from "@/utils/http";
-import { checkIfIdExists } from "./student.js";
 
 // 学生用学号表示床位
 let mockRoomInfos = [
