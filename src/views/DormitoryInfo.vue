@@ -143,9 +143,17 @@ const edit = (row) => {
     dialogVisible.value = true;
     isEdit.value = true;
     oldDormId.value = row.dormId;
+    let genderId = 0;
+    if (row.gender === '女') {
+        genderId = 0;
+    } else if (row.gender === '男') {
+        genderId = 1;
+    } else {
+        genderId = 2;
+    }
     form.value = {dormId: row.dormId,
                 address: row.address,
-                gender: row.gender,};
+                gender: genderId,};
 };
 
 const cancel = () => {
@@ -155,6 +163,7 @@ const cancel = () => {
 };
 
 const save = async () => {
+    console.log('form:', form.value);
     const res = isEdit.value? await updateDormBuild({oldDormId: oldDormId.value, dorm: form.value}) : await addDormBuild(form.value);
     if (res.code !== 0) {
         ElMessage.error(res.msg);

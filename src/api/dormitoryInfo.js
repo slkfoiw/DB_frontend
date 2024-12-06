@@ -27,13 +27,10 @@ let mockbuildingInfos = [
 export const rules = {
     dormId: [
         {required: true, message: "请输入楼宇号", trigger: "blur"},
-        {pattern: /^[0-9]{2}$/, message: "范围：01-99", trigger: "blur"},
+        {pattern: /^[0-9]{1,2}$/, message: "范围：1-99", trigger: "blur"},
     ],
     address: [
         {required: true, message: "请输入楼宇地址", trigger: "blur"},
-    ],
-    dormBuildDetail: [
-        {required: true, message: "请输入楼宇详情", trigger: "blur"},
     ],
 };
 
