@@ -53,7 +53,7 @@ export const useUserStore = defineStore('user', () => {
 
     const userLogout = async () => {
             const res = await logout();
-            if (res.code !== 0) {
+            if (res.status !== 0) {
                 ElMessage.error(res.msg);
                 return res.code;
             }
