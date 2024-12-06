@@ -38,6 +38,7 @@ export const updateDormManager = ({oldManagerId, manager}) => {
 };
 
 export const updateAllDormManagers = (data) => {
+    console.log('Calling updateAllDormManagers data:', data);
     return http({
         url: `/manager/update-all-dorm-managers`,
         method: 'PUT',

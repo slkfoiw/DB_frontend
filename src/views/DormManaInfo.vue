@@ -9,9 +9,9 @@
         <el-card>
             <!-- 导入和导出功能 -->
             <div>
-                <el-upload class="upload-demo" drag accept=".xls, .xlsx, .xml" multiple
-                    :on-change="handleFileUpload" :before-upload="beforeUpload"
-                    auto-upload="false">
+                <el-upload class="upload-demo" drag accept=".xls, .xlsx, .xml"
+                    :on-change="handleFileUpload"
+                    :auto-upload="false">
                     <i class="el-icon-upload"></i>
                     <div class="el-upload__text">重新导入宿管信息，将文件拖到此处，或<em>点击上传</em></div>
                 </el-upload>
@@ -106,14 +106,14 @@ const load = async () => {
     }
 };
 
-const handleCurrentChange = (pageNum) => {
+const handleCurrentChange = async (pageNum) => {
     currentPage.value = pageNum;
-    load();
+    await load();
 }
 
-const handleSizeChange = (newPageSize) => {
+const handleSizeChange = async (newPageSize) => {
     pageSize.value = newPageSize;
-    load();
+    await load();
 }
 
 const openModal = (manager = null) => {
@@ -156,12 +156,12 @@ const saveDormMana = async () => {
     }
     const res = isEdit.value ? await updateDormManager({oldManagerId:oldManagerId.value, manager:form.value}) : await addDormManager(form.value);
     console.log('res:', res);
-    if (res.code === 0) {
-        ElMessage.success(res.msg);
-    } else {
+    if (res.code !== 0) {
         ElMessage.error(res.msg);
+        return;
     }
-    load(); 
+    ElMessage.success(res.msg);
+    await load(); 
     closeModal();
 };
 
@@ -172,37 +172,26 @@ const handleDelete = async (managerId) => {
     } else {
         ElMessage.success(res.msg);
     }
-    load();
+    await load();
 };
 
 const resetForm = () => {
     form.value = { managerId: '', name: '', dormId: '' };
 };
 
-const beforeUpload = (file) => {
-    const isExcel = ['application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'application/vnd.ms-excel'].includes(file.type);
-    const isXML = file.type === 'text/xml';
-
-    if (!isExcel && !isXML) {
-        ElMessage.error('上传文件只能是表格或XML格式!');
-        return false;
-    }
-    return true;
-};
-
-const handleFileUpload = (file) => {
-    console.log('file.raw: ', file.raw);
+const handleFileUpload = async (file) => {
     if (file.raw) {
         const extension = file.raw.name.split('.').pop().toLowerCase();
         const reader = new FileReader();
 
-        reader.onload = (event) => {
+        reader.onload = async (event) => {
             const fileData = event.target.result;
             if (extension === 'xml') {
-                parseXML(fileData);
+                await parseXML(fileData);
             } else {
-                parseExcel(fileData);
+                await parseExcel(fileData);
             }
+            await load();
         };
         reader.readAsArrayBuffer(file.raw);
     } else {
@@ -211,12 +200,9 @@ const handleFileUpload = (file) => {
 };
 
 const parseExcel = async (data) => {
-    console.log('data:', data);
     const workbook = XLSX.read(data, { type: 'array' });
     const jsonData = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]]);
-    console.log('jsonData:', jsonData);
     const res = await updateAllDormManagers(jsonData);
-    console.log('res:', res);
     if (res.code !== 0) {
         ElMessage.error(res.msg);
         return;
