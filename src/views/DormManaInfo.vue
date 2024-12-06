@@ -80,7 +80,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue';
+import { ref, onMounted } from 'vue';
 import { getDormManagers, addDormManager, updateDormManager, deleteDormManager, checkIfIdExists, updateAllDormManagers } from '@/api/dormManager';
 import * as XLSX from 'xlsx';
 import { ElMessage } from 'element-plus';
