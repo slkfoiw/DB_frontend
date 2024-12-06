@@ -66,7 +66,7 @@
                 <div>
                     <el-dialog v-model="dialogVisible" title="操作" width="30%" @close="cancel">
                     <el-form ref="formRef" :model="form" :rules="rules" label-width="120px">
-                        <el-form-item label="编号" prop="dormId">
+                        <el-form-item label="楼栋号" prop="dormId">
                         <el-input v-model.number="form.dormId" style="width: 80%"></el-input>
                         </el-form-item>
                         <el-form-item label="地址" prop="address">
