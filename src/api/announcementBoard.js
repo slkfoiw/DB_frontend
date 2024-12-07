@@ -1,12 +1,16 @@
 // announcementApi.js
 import http from "@/utils/http";
+import { use } from "echarts";
 
 // 获取公告列表
 export const fetchAnnouncements = (userId) => {
-    // return http({
-    //   url: '/announcement/list/${userId}',
-    //   method: 'GET'
-    // });
+    return http({
+      url: `/announcement/list/${userId}`,
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+    }
+    });
     
     return {
         code: "0",
@@ -24,10 +28,13 @@ export const fetchAnnouncements = (userId) => {
 
 // 标记公告为已读
 export const markRead = (announcementId, userId) => {
-    // return http({
-    //   url: `/announcement/markRead/${announcementId}/${userId}`,
-    //   method: 'POST'
-    // });
+    return http({
+      url: `/announcement/markRead/${announcementId}/${userId}`,
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+    }
+    });
 
     return {
         code: "0",

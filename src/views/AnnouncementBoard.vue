@@ -1,3 +1,4 @@
+<!-- AnnouncementBoard.vue -->
 <template>
   <div>
     <!-- 面包屑导航 -->
@@ -86,9 +87,15 @@ const showDetail = (announcement) => {
 // 标记已读
 const markAsRead = async (announcement) => {
   const result = await markRead(announcement.id, userStore.userInfo.userId);
-  if (result.success) {
+  if (result.data.success == 1) {
     announcement.isRead = true;
+    const index = announcements.value.findIndex((item) => item.id === announcement.id);
+    if (index !== -1) {
+      announcements.value[index].isRead = true;
+    }
     ElMessage.success('已标记为已读');
+  } else {
+    ElMessage.error('标记为已读失败，请稍后重试');
   }
 };
 
