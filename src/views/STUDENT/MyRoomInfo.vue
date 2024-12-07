@@ -138,6 +138,7 @@
 import { ref, onMounted } from 'vue';
 import { getRoomInfo } from '@/api/myRoomInfo';
 import { useUserStore } from '@/store/user';
+import { ElMessage } from 'element-plus';
 
 // 存储用户信息
 const form = ref({
@@ -171,12 +172,12 @@ const init = () => {
 
 // 获取房间信息
 const getInfo = async () => {
-  try {
     const roomData = await getRoomInfo(form.userId);
+    if(roomData.code !== 0) {
+      ElMessage.error(roomData.msg);
+      return;
+    }
     room.value = roomData.data;
-  } catch (error) {
-    console.error(error);
-  }
 };
 
 onMounted(() => {

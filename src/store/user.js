@@ -55,6 +55,7 @@ export const useUserStore = defineStore('user', () => {
             const res = await logout();
             if (res.status !== 0) {
                 ElMessage.error(res.msg);
+                console.log('登出失败:', res.msg);
                 return res.code;
             }
             // 清理用户信息和相关状态

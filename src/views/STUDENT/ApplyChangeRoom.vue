@@ -107,7 +107,7 @@
             <el-form-item label="申请时间" prop="createDate" style="margin-top: 27px">
               <el-date-picker
                 v-model="form.createDate"
-                :disabled="judgeOption"
+                :disabled="!judgeOption"
                 clearable
                 placeholder="选择时间"
                 style="width: 50%"
@@ -190,7 +190,7 @@ const orderState = ref(false);
 const judgeOption = ref(false);
 const formRef = ref(null);
 const form = reactive({
-  id:'',
+      id:'',
       studentId: '',
       name: '',
       curDormId: '',
@@ -203,6 +203,15 @@ const form = reactive({
       status: '',
       finishDate: ''
     });
+
+const roomForm = reactive({
+  dormId:'',
+	roomId:'',
+  firstBed: '',
+  secondBed: '',
+  thirdBed: '',
+  fourthBed: ''
+});
 
 // 检查房间状态
 const checkRoomStateHandler = async (rule, value, callback) => {
@@ -231,6 +240,7 @@ const checkBedStateHandler = async (rule, value, callback) => {
   try {
     const res = await checkBedState(form.toDormId, dormRoomId.value, value);
     if (res.code === 0) {
+      console.log(res);
       callback();
     } else {
       callback(new Error(res.msg));
@@ -286,14 +296,19 @@ const add = () => {
     formRef.value.resetFields();
     const user = useUserStore().userInfo;
     form.studentId = user.userId;
-    form.name = user.username;
-    try {
-      const res = await getRoomBedUserId(form.studentId);
-      form.curDormId = res.data.dormBuildId;
-      form.curRoomId = res.data.dormRoomId;
-      form.curBedId = calBedNum(form.studentId, res.data.info);
-    } catch (error) {
-      console.error('获取房间信息失败', error);
+    form.name = user.name;
+    
+    const res = await getRoomBedUserId(form.studentId);
+    if (res.code === 0) {
+      form.curDormId = res.data.dormId;
+      form.curRoomId = res.data.roomId;
+      roomForm.value = res.data;
+      form.curBedId = calBedNum(form.studentId, roomForm.value);
+    } else {
+      ElMessage({
+        message: res.msg,
+        type: "error",
+      });
     }
     judgeOption.value = true;
   });
@@ -321,10 +336,11 @@ const save = () => {
 
 // 计算床位号
 const calBedNum = (studentId, data) => {
-  if (data.firstBed === studentId) return 1;
-  if (data.secondBed === studentId) return 2;
-  if (data.thirdBed === studentId) return 3;
-  if (data.fourthBed === studentId) return 4;
+  console.log(data.firstBed === null);
+  if (data.firstBed != null && data.firstBed === studentId) return 1;
+  if (data.secondBed != null && data.secondBed === studentId) return 2;
+  if (data.thirdBed != null && data.thirdBed === studentId) return 3;
+  if (data.fourthBed != null && data.fourthBed === studentId) return 4;
 };
 
 // 判断订单状态
@@ -389,10 +405,21 @@ const handleCurrentChange = (pageNum) => {
 };
 
 const dormBuildings = ref([
-  { id: '1', name: '13' },
-  { id: '2', name: '14' },
-  { id: '3', name: '15' },
-  // 其他楼宇数据...
+  {id: '1', name: '1-南区学生公寓-女'},
+  {id: '2', name: '2-南区学生公寓-女'},
+  {id: '3', name: '3-南区学生公寓-女'},
+  {id: '4', name: '4-南区学生公寓-男'},
+  {id: '5', name: '5-南区学生公寓-男'},
+  {id: '6', name: '6-南区学生公寓-男'},
+  {id: '11', name: '11-北区学生公寓-混合'},
+  {id: '12', name: '12-北区学生公寓-女'},
+  {id: '13', name: '13-北区学生公寓-女'},
+  {id: '15', name: '15-北区学生公寓-男'},
+  {id: '16', name: '16-北区学生公寓-男'},
+  {id: '21', name: '21-大运村学生公寓-混合'},
+  {id: '22', name: '22-大运村学生公寓-混合'},
+  {id: '23', name: '23-大运村学生公寓-女'},
+  {id: '24', name: '24-大运村学生公寓-男'},
 ]);
 
 onMounted(() => {

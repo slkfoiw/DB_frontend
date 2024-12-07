@@ -17,52 +17,62 @@ const routes = [
   {
     path: '/home',
     name: 'ORIGIN',
+    meta: { requiresAuth: true },
     component: Admin
   },
   {
     path: "/notifications",
     name: "Notifications",
+    meta: { requiresAuth: true },
     component: () => import("@/components/Notifications.vue"),
   },
   {
     path: '/dormManagerInfo',
     name: 'DormManagerInfo',
+    meta: { requiresAuth: true },
     component: () => import('@/views/DormManaInfo.vue')
   },
   {
     path: '/stuInfo',
     name: 'StuInfo',
+    meta: { requiresAuth: true },
     component: () => import('@/views/StuInfo.vue')
   },
   {
     path: '/dormitoryInfo',
     name: 'DormitoryInfo',
+    meta: { requiresAuth: true },
     component: () => import('@/views/DormitoryInfo.vue')
   },
   {
     path: '/roomInfo',
     name: 'RoomInfo',
+    meta: { requiresAuth: true },
     component: () => import('@/views/RoomInfo.vue')
   },
   {
     path: '/announcementList',
     name: 'AnnouncementList',
+    meta: { requiresAuth: true },
     component: () => import('@/views/AnnouncementList.vue')
   },
   {
     path: '/repairList',
     name: 'RepairList',
+    meta: { requiresAuth: true },
     component: () => import('@/views/RepairList.vue')
   },
   {
     path: '/changeRoomList',
     name: 'ChangeRoomList',
+    meta: { requiresAuth: true },
     component: () => import('@/views/ChangeRoomList.vue')
   },
   {
     path: '/sendAnnouncement',
     name: 'SendAnnouncement',
-    component: SendAnnouncement
+    component: SendAnnouncement,
+    meta: { requiresAuth: true },
   },
   {
     path: '/register',
@@ -86,23 +96,27 @@ const routes = [
     {
       path: '/myRoomInfo',
       name: 'MyRoomInfo',
-      component: MyRoomInfo
+      component: MyRoomInfo,
+      meta: { requiresAuth: true },
     },
     {
       path: '/applyChangeRoom',
       name: 'ApplyChangeRoom',
-      component: ApplyChangeRoom
+      component: ApplyChangeRoom,
+      meta: { requiresAuth: true },
     },
     {
       path: '/applyRepairInfo',
       name: 'ApplyRepairInfo',
-      component: ApplyRepairInfo
+      component: ApplyRepairInfo,
+      meta: { requiresAuth: true },
     },
 
     {
       path: '/announcementBoard',
       name: 'AnnouncementBoard',
-      component: AnnouncementBoard
+      component: AnnouncementBoard,
+      meta: { requiresAuth: true },
     }
 ];
 

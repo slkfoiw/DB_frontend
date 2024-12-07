@@ -77,7 +77,7 @@
                             <el-input v-model="form.roomId" :disabled="isEdit" placeholder="请输入房间号"></el-input>
                         </el-form-item>
                         <el-form-item label="申请人学号" prop="applicantId" required>
-                            <el-input v-model="form.roomId" :disabled="isEdit" placeholder="请输入申请人学号"></el-input>
+                            <el-input v-model="form.applicantId" :disabled="isEdit" placeholder="请输入申请人学号"></el-input>
                         </el-form-item>
                         <el-form-item label="内容" prop="content" required>
                             <el-input v-model="form.content" type="textarea" placeholder="请输入具体内容"></el-input>
@@ -181,6 +181,7 @@ const closeDetail = () => {
 
 const handleChange = async () => {
     const res = isEdit.value ? await updateRepair(form.value) : await addRepair(form.value);
+    console.log('handleChange: ', res);
     if (res.code !== 0) {
         ElMessage.error(res.msg);
         return;
