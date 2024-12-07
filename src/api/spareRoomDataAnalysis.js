@@ -18,13 +18,13 @@ const mockRepairHistoryData = [
 
 // 获取所有房间信息（包含每层容量、空床位等）
 export const getSpareRoomData = async () => {
+    // 实际api
+    return http({
+        url: "/room/data",
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+    });
     // 模拟直接返回完整数据
-    // return http({
-    //     url: "/spare-room/data",
-    //     method: "GET",
-    //     headers: { "Content-Type": "application/json" },
-    // });
-
     return {
         data: mockSpareRoomData, // 返回完整数据
     };
@@ -37,13 +37,13 @@ export const getSpareRoomData = async () => {
 //     { "roomId": "201", "type": "家具", "count": 1 }
 // ]
 export const getEmptyRoomRepairHistory = async (buildingId) => {
+    // 实际api
+    return http({
+        url: `/room/repair-history?buildingId=${buildingId}`,
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+    });
     // 模拟从后端获取指定楼栋的空宿舍报修历史
-    // return http({
-    //     url: `/spare-room/repair-history?buildingId=${buildingId}`,
-    //     method: "GET",
-    //     headers: { "Content-Type": "application/json" },
-    // });
-
     const data = mockRepairHistoryData
         .filter((item) => item.buildingId === buildingId)
         .map((item) => ({

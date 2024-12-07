@@ -240,9 +240,7 @@ export default {
               color: ["#99ccff", "#0066ff", "#0033cc"], // 更鲜艳的蓝色渐变
             },
             text: ["More Beds", "Fewer Beds"], // 标签说明
-            textStyle: {
-              color: "#000", // 黑色文字
-            },
+            color: "#000", // 黑色文字
           },
           grid3D: {
             viewControl: {
@@ -260,10 +258,8 @@ export default {
             name: "", // 隐藏 X 轴标题
             axisLabel: {
               margin: 8, // 增加标签与轴的距离
-              textStyle: {
-                color: "#333",
-                fontSize: 12,
-              },
+              color: "#333",
+              fontSize: 12,
             },
           },
           yAxis3D: {
@@ -272,10 +268,8 @@ export default {
             name: "", // 隐藏 Y 轴标题
             axisLabel: {
               margin: 8, // 增加标签与轴的距离
-              textStyle: {
-                color: "#333",
-                fontSize: 12,
-              },
+              color: "#333",
+              fontSize: 12,
             },
           },
           zAxis3D: {
@@ -299,10 +293,8 @@ export default {
                   return `${building}\n${floor}`;
                 },
                 position: "top", // 标签显示在柱子顶部
-                textStyle: {
-                  color: "#000",
-                  fontSize: 10,
-                },
+                color: "#000",
+                fontSize: 10,
               },
             },
           ],

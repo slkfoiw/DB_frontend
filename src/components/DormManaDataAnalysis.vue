@@ -63,7 +63,7 @@
         ? res.data
         : res.data.filter((item) => item.buildingType === buildingFilter.value);
   
-    updateCharts();
+    await updateCharts();
   };
   
   const updateCharts = async () => {

@@ -351,29 +351,25 @@ const cancel = () => {
 };
 
 const saveNewRoom = async () => {
-    try {
-        const res = await addDormRoom(form.value);
-        if (res.code !== 0) throw new Error(res.msg);
-        ElMessage.success(res.msg);
-    } catch (error) {
-        ElMessage.error(error.message);
-    } finally {
-        await load();
-        cancel();
+    const res = await addDormRoom(form.value);
+    if (res.code !== 0) {
+        ElMessage.error(res.msg);
+        return;
     }
+    ElMessage.success(res.msg);
+    cancel();
+    await load();
 }
 
 const saveUpdateRoom = async () => {
-    try {
-        const res = await updateDormRoom(form.value);
-        if (res.code !== 0) throw new Error(res.msg);
-        ElMessage.success(res.msg);
-    } catch (error) {
-        ElMessage.error(error.message);
-    } finally {
-        cancel();
-        await load();
+    const res = await updateDormRoom(form.value);
+    if (res.code !== 0) {
+        ElMessage.error(res.msg);
+        return;
     }
+    ElMessage.success(res.msg);
+    cancel();
+    await load();
 }
 
 const load = async () => {

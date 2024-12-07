@@ -4,11 +4,11 @@ import http from "@/utils/http"; // 假定你有一个封装好的 http 模块
 // 获取宿管统计数据
 export const getDormManagerStats = async () => {
   // 示例接口调用（实际情况根据后端接口调整）
-  // return http({
-  //   url: "/dormManager/get-dorm-manager-stats",
-  //   method: "GET",
-  //   headers: { "Content-Type": "application/json" },
-  // });
+  return http({
+    url: "/manager/get-manager-stats",
+    method: "GET",
+    headers: { "Content-Type": "application/json" },
+  });
 
   // 模拟数据返回
   return {

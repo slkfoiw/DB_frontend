@@ -20,11 +20,11 @@ const mockData = [
 // { processedCount: 27, unprocessedCount: 31 }
 export const getRepairStatusStats = async () => {
     // 实际后端调用代码
-    // return http({
-    //     url: '/repair/status-stats',
-    //     method: 'GET',
-    //     headers: { 'Content-Type': 'application/json' }
-    // });
+    return http({
+        url: '/repair/status-stats',
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' }
+    });
 
     // 模拟数据返回
     const processedCount = mockData.filter((item) => item.status === "已处理").reduce((sum, item) => sum + item.count, 0);
@@ -45,11 +45,11 @@ export const getRepairStatusStats = async () => {
 // 注意一定要按照时间顺序返回，每个月份都至少有一个类型，count可以为0.前端表格按照返回数据的顺序展示
 export const getRepairTrendStats = async () => {
     // 实际后端调用代码
-    // return http({
-    //     url: '/repair/trend-stats',
-    //     method: 'GET',
-    //     headers: { 'Content-Type': 'application/json' }
-    // });
+    return http({
+        url: '/repair/trend-stats',
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' }
+    });
 
     // 模拟数据返回
     const groupedData = mockData.reduce((result, item) => {
@@ -77,11 +77,11 @@ export const getRepairTrendStats = async () => {
 
 export const getRepairTypeStatsByBuilding = async () => {
     // 实际后端调用代码
-    // return http({
-    //     url: '/repair/type-stats',
-    //     method: 'GET',
-    //     headers: { 'Content-Type': 'application/json' }
-    // });
+    return http({
+        url: '/repair/type-stats',
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' }
+    });
 
     // 模拟数据返回
     const groupedData = mockData.reduce((result, item) => {

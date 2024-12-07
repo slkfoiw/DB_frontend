@@ -60,90 +60,54 @@ const analysisOption = ref("");
 const analysisHeight = ref("588px"); // 默认高度
 
 const getStuNum = async () => {
-    // try {
-    //     const res = await http.get("/stuAna/stuNum");  // 从后端请求学生人数
-    //     if (res.success) {
-    //         studentNum.value = res.data;
-    //     } else {
-    //         ElMessage.error(res.message);
-    //     }
-    // } catch (error) {
-    //     ElMessage.error("请求失败，请稍后重试");
-    // }
-    const res = {
-        succuss: true,
-        data: 12,
-    }
-    if (res.succuss) {
-        studentNum.value = res.data;
-    } else {
-        ElMessage.error(res.message);
+    try {
+        const res = await http.get("/student/get-student-count");  // 从后端请求学生人数
+        if (res.code === 0) {
+            studentNum.value = res.data;
+        } else {
+            ElMessage.error(res.message);
+        }
+    } catch (error) {
+        ElMessage.error("请求失败，请稍后重试");
     }
 };
 
 const getDormManaNum = async () => {
-    // try {
-    //     const res = await http.get("/dormManager/get-dorm-mana-num");  // 从后端请求宿管人数
-    //     if (res.success) {
-    //         dormManaNum.value = res.data;
-    //     } else {
-    //         ElMessage.error(res.message);
-    //     }
-    // } catch (error) {
-    //     ElMessage.error("请求失败，请稍后重试");
-    // }
-    const res = {
-        succuss: true,
-        data: 12,
-    }
-    if (res.succuss) {
-        dormManaNum.value = res.data;
-    } else {
-        ElMessage.error(res.message);
+    try {
+        const res = await http.get("/manager/get-manager-count");  // 从后端请求宿管人数
+        if (res.code === 0) {
+            dormManaNum.value = res.data;
+        } else {
+            ElMessage.error(res.message);
+        }
+    } catch (error) {
+        ElMessage.error("请求失败，请稍后重试");
     }
 };
 
 const getRepairNum = async () => {
-    // try {
-    //     const res = await http.get("/repair/get-repair-num");  // 从后端请求报修数量
-    //     if (res.success) {
-    //         repairNum.value = res.data;
-    //     } else {
-    //         ElMessage.error(res.message);
-    //     }
-    // } catch (error) {
-    //     ElMessage.error("请求失败，请稍后重试");
-    // }
-    const res = {
-        succuss: true,
-        data: 20,
-    }
-    if (res.succuss) {
-        repairNum.value = res.data;
-    } else {
-        ElMessage.error(res.message);
+    try {
+        const res = await http.get("/repair/get-repair-count");  // 从后端请求报修数量
+        if (res.code === 0) {
+            repairNum.value = res.data;
+        } else {
+            ElMessage.error(res.message);
+        }
+    } catch (error) {
+        ElMessage.error("请求失败，请稍后重试");
     }
 };
 
 const getspareRoomNum = async () => {
-    // try {
-    //     const res = await http.get("/spare-room/get-spare-room-num");  // 从后端请求空宿舍数量
-    //     if (res.success) {
-    //         spareRoomNum.value = res.data;
-    //     } else {
-    //         ElMessage.error(res.message);
-    //     }
-    // } catch (error) {
-    //     ElMessage.error("请求失败，请稍后重试");
-    // }
-    const res = {
-        succuss: true,
-        data: 22,
-    }
-    if (res.succuss) {
-        spareRoomNum.value = res.data;
-    } else {
-        ElMessage.error(res.message);
+    try {
+        const res = await http.get("/room/get-spare-room-count");  // 从后端请求空宿舍数量
+        if (res.code === 0) {
+            spareRoomNum.value = res.data;
+        } else {
+            ElMessage.error(res.message);
+        }
+    } catch (error) {
+        ElMessage.error("请求失败，请稍后重试");
     }
 };
 
@@ -171,15 +135,15 @@ const selectAnalysis = (type) => {
             break;
         default:
             analysisOption.value = '';
-            analysisHeight.value = "588px"; // 默认高度
+            analysisHeight.value = "100px"; // 默认高度
     }
 };
 
-onMounted(() => {
-    getStuNum();
-    getDormManaNum();
-    getRepairNum();
-    getspareRoomNum();
+onMounted(async () => {
+    await getStuNum();
+    await getDormManaNum();
+    await getRepairNum();
+    await getspareRoomNum();
 });
 </script>
 

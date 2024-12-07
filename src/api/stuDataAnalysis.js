@@ -20,14 +20,14 @@ const mockData = [
 //     { buildingId: "3C", buildingType: "混合", studentCount: 31 }
 // ]
 export const getBuildingStats = () => {
-    // 实际后端调用代码（注释掉，适配模拟数据）
-    // return http({
-    //     url: '/stuAna/building-stats',
-    //     method: 'GET',
-    //     headers: {
-    //         'Content-Type': 'application/json'
-    //     }
-    // });
+    // 实际后端调用代码
+    return http({
+        url: '/student/building-stats',
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    });
 
     // 模拟数据返回
     const aggregatedData = mockData.reduce((result, item) => {
@@ -58,14 +58,14 @@ export const getBuildingDrilldown = (payload) => {
     const { buildingId, drillBy } = payload;
 
     // 实际后端调用代码（注释掉，适配模拟数据）
-    // return http({
-    //     url: '/stuAna/building-drilldown',
-    //     method: 'POST',
-    //     data: payload,
-    //     headers: {
-    //         'Content-Type': 'application/json'
-    //     }
-    // });
+    return http({
+        url: '/student/building-drilldown',
+        method: 'POST',
+        data: payload,
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    });
 
     // 模拟数据返回
     const filteredData = mockData.filter((item) => item.buildingId === buildingId);
@@ -97,14 +97,14 @@ export const getBuildingFloorDrilldown = (payload) => {
     const { buildingId, filterBy, value } = payload;
 
     // 实际后端调用代码（注释掉，适配模拟数据）
-    // return http({
-    //     url: '/stuAna/building-floor-drilldown',
-    //     method: 'POST',
-    //     data: payload,
-    //     headers: {
-    //         'Content-Type': 'application/json'
-    //     }
-    // });
+    return http({
+        url: '/student/building-floor-drilldown',
+        method: 'POST',
+        data: payload,
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    });
 
     // 模拟数据返回
     const filteredData = mockData.filter(

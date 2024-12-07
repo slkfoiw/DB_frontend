@@ -47,6 +47,7 @@
     getRepairTypeStatsByBuilding,
     getRepairTrendStats,
   } from "@/api/repairDataAnalysis";
+import { ElMessage } from "element-plus";
   
   export default {
     name: "RepairDataAnalysis",
@@ -59,7 +60,12 @@
     },
     methods: {
       async fetchRepairData() {
-        const { processedCount, unprocessedCount } = await getRepairStatusStats();
+        const res = await getRepairStatusStats();
+        if (res.code !== 0) {
+          ElMessage.error(res.msg);
+          return;
+        }
+        const { processedCount, unprocessedCount } = res.data;
         this.repairStatusData = [
           { status: "已处理", count: processedCount },
           { status: "未处理", count: unprocessedCount },
