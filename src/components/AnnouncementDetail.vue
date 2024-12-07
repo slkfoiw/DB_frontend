@@ -1,3 +1,4 @@
+<!-- AnnouncementDetail.vue -->
 <template>
     <div>
       <h3>{{ announcement.title }}</h3>
