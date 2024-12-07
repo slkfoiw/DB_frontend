@@ -87,7 +87,10 @@ export const updateAllStudents = (data) => {
 export const deleteStudent = (studentId) => {
     return http({
         url: `/student/delete-student/${studentId}`,
-        method: 'DELETE'
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json'
+        },
     })
     const id = mockStudents.findIndex(s => s.studentId === studentId);
     if (id !== -1) {
@@ -102,7 +105,10 @@ export const deleteStudent = (studentId) => {
 export const getStudentById = (studentId) => {
     return http({
         url: `/student/get-student-by-id/${studentId}`,
-        method: 'GET'
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        },
     })
     return new Promise((resolve, reject) => {
         const student = mockStudents.find(s => s.studentId === String(studentId));
