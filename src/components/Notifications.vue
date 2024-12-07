@@ -36,10 +36,10 @@ export default {
                 // 标记为已读
                 if (notification.status === "未读") {
                     const res = await markAsRead(notification.id);
-                    if (res.success) {
+                    if (res.code === 0) {
                         notification.status = "已读"; // 更新本地状态
                     } else {
-                        this.$message.error("标记失败：" + res.message);
+                        this.$message.error("标记失败：" + res.msg);
                         return;
                     }
                 }

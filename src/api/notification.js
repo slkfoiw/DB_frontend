@@ -1,3 +1,5 @@
+import http from "@/utils/http";
+
 let mockNotifications = [
     { id: 1, sender: "宿管", type: "公告", date: "2024-12-01", status: "未读" },
     { id: 2, sender: "系统管理员", type: "报修", date: "2024-12-01", status: "未读" },
@@ -5,21 +7,21 @@ let mockNotifications = [
 ];
 
 export const getNotifications = () => {
-    // return http({
-    //     url: 'notifications',
-    //     method: 'GET',
-    //     headers: {
-    //         'Content-Type': 'application/json'
-    //     }
-    // });
+    return http({
+        url: '/notification/get',
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    });
     return { data: [...mockNotifications] }; // 模拟数据
 };
 
 export const markAsRead = (id) => {
-    // return http({
-    //     url: `notifications/mark-as-read/${id}`,
-    //     method: 'PUT',
-    // });
+    return http({
+        url: `/notification/mark-as-read/${id}`,
+        method: 'PUT',
+    });
     if (mockNotifications[id]) {
         mockNotifications[id].status = "已读"; // 模拟标记已读
     }

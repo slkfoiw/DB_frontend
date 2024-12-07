@@ -7,6 +7,7 @@ export default createStore({
   mutations: {
     setAuthenticated(state, status) {
       state.isAuthenticated = status;
+      localStorage.setItem('isAuthenticated', status); 
     }
   },
   actions: {

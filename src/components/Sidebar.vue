@@ -37,6 +37,11 @@
         <el-menu-item index="/changeRoomList">调宿记录</el-menu-item>
       </el-sub-menu>
       
+      <el-menu-item index="/notifications">
+      <el-icon><Bell /></el-icon>
+      <span>我的消息</span>
+      </el-menu-item>
+      
       <el-menu-item index="/announcementBoard">
       <el-icon><DataLine /></el-icon>
       <span>公告栏</span>
@@ -71,6 +76,7 @@
 import '@fortawesome/fontawesome-free/css/all.css';
 import { useUserStore } from '@/store/user';
 import { ref, computed } from 'vue';
+import { Bell } from '@element-plus/icons-vue';
 
 export default {
     name: 'Sidebar',
