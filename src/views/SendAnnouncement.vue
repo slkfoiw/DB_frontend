@@ -1,18 +1,18 @@
 <template>
-    <div class="send-notice">
+    <div class="send-announcement">
         <h1>发送公告</h1>
-        <form @submit.prevent="sendNotice">
+        <form @submit.prevent="sendAnnouncement">
             <div class="form-group">
                 <label for="title">标题:</label>
-                <input type="text" v-model="notice.title" id="title" required />
+                <input type="text" v-model="announcement.title" id="title" required />
             </div>
             <div class="form-group">
                 <label for="content">内容:</label>
-                <textarea v-model="notice.content" id="content" required></textarea>
+                <textarea v-model="announcement.content" id="content" required></textarea>
             </div>
             <div class="form-group">
                 <label for="recipient">接收对象:</label>
-                <select v-model="notice.recipient" id="recipient" required>
+                <select v-model="announcement.recipient" id="recipient" required>
                     <option value="全体">全体</option>
                     <option value="所有宿管">所有宿管</option>
                     <option value="所有学生">所有学生</option>
@@ -26,10 +26,10 @@
 
 <script>
 import { ref } from 'vue';
-import { sendNoticeApi } from '@/api/admin';
+import { sendAnnouncementApi } from '@/api/admin';
 export default {
     setup() {
-        const notice = ref({
+        const announcement = ref({
             title: '',
             content: '',
             recipient: '全体',
@@ -38,10 +38,10 @@ export default {
         });
         const message = ref('');
 
-        const sendNotice = () => {
+        const sendAnnouncement = () => {
             // 这里可以调用API将公告发送到数据库
 
-            sendNoticeApi(notice.value).then(response => {
+            sendAnnouncementApi(announcement.value).then(response => {
               message.value = '公告发送成功！';
             }).catch(error => {
               message.value = '发送失败，请重试。';
@@ -52,7 +52,7 @@ export default {
         };
 
         const resetForm = () => {
-            notice.value = {
+            announcement.value = {
                 title: '',
                 content: '',
                 recipient: '全体',
@@ -62,16 +62,16 @@ export default {
         };
 
         return {
-            notice,
+            announcement,
             message,
-            sendNotice,
+            sendAnnouncement,
         };
     },
 };
 </script>
 
 <style scoped>
-.send-notice {
+.send-announcement {
     max-width: 500px; /* 增大最大宽度 */
     margin: 0 auto; /* 水平居中 */
     padding: 20px; /* 添加内边距 */

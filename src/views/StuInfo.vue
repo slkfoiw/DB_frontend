@@ -18,7 +18,7 @@
                 <el-button @click="exportStudents">导出学生信息</el-button>
             </div>
 
-            <!-- 搜索宿管、排序、添加宿管 -->
+            <!-- 搜索学生、排序、添加学生 -->
             <div style="margin: 10px 0">
                 <el-input v-model="searchQuery" clearable placeholder="搜索学生学号、姓名" prefix-icon="Search"
                     style="width: 20%;"></el-input>
@@ -31,7 +31,7 @@
                 </div>
             </div>
 
-            <!-- 表格显示宿管信息 -->
+            <!-- 表格显示学生信息 -->
             <el-table :data="students" style="width: 100%">
                 <el-table-column label="序号" type="index" />
                 <el-table-column prop="studentId" label="学号" sortable />
@@ -58,7 +58,7 @@
             </el-pagination>
 
             <!-- 弹窗（添加/编辑学生） -->
-            <el-dialog v-model="showModal" title="宿管信息" @close="closeModal">
+            <el-dialog v-model="showModal" title="学生信息" @close="closeModal">
                 <div class="modal-content">
                     <h3>{{ isEdit ? '编辑学生' : '添加学生' }}</h3>
                     <el-form :model="form" ref="formRef">
@@ -74,14 +74,16 @@
                         <el-form-item label="宿舍号" prop="roomId">
                             <el-input v-model="form.roomId" placeholder="请输入宿舍号" />
                         </el-form-item>
-                        <el-select v-model="form.majorId" placeholder="请选择专业">
-                            <el-option
-                                v-for="major in majors" 
-                                :key="major.majorId" 
-                                :label="major.major" 
-                                :value="major.majorId" 
-                            />
-                        </el-select>
+                        <el-form-item required>
+                            <el-select v-model="form.majorId" placeholder="请选择专业">
+                                <el-option
+                                    v-for="major in majors" 
+                                    :key="major.majorId" 
+                                    :label="major.major" 
+                                    :value="major.majorId" 
+                                />
+                            </el-select>
+                        </el-form-item>
                         <el-form-item>
                             <el-button type="primary" @click="saveStudent">{{ isEdit ? '保存' : '添加' }}</el-button>
                             <el-button type="default" @click="closeModal">取消</el-button>

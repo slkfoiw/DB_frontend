@@ -1,5 +1,5 @@
 <template>
-  <div class="notice-list-container">
+  <div class="announcement-list-container">
     <el-breadcrumb separator-icon="ArrowRight">
       <el-breadcrumb-item :to="{ path: '/home' }">首页</el-breadcrumb-item>
       <el-breadcrumb-item>信息管理</el-breadcrumb-item>
@@ -9,7 +9,7 @@
     <el-card>
       <!-- 搜索框 -->
       <div style="margin: 10px 0">
-        <el-input v-model="searchQuery" clearable placeholder="搜索发布人或公告内容" prefix-icon="Search" style="width: 20%" />
+        <el-input v-model="searchQuery" clearable placeholder="搜索发布人或公告主题或公告内容" prefix-icon="Search" style="width: 20%" />
         <el-button icon="Search" style="margin-left: 5px" type="primary" @click="load"></el-button>
         <div style="float: right">
           <el-tooltip content="添加公告" placement="top">
@@ -19,17 +19,23 @@
       </div>
 
       <!-- 表格显示公告信息 -->
-      <el-table :data="paginatedNotices" style="width: 100%">
+      <el-table :data="announcements" style="width: 100%">
         <el-table-column label="序号" type="index" />
-        <el-table-column prop="releaseTime" label="发布时间" sortable />
+        <el-table-column prop="date" label="发布时间" sortable />
         <el-table-column prop="title" label="主题" />
-        <el-table-column prop="publisher" label="发布人" />
-        <el-table-column prop="recipient" label="通知对象" />
+        <el-table-column prop="senderUsername" label="发布人" />
+        <el-table-column prop="notifyObject" label="通知对象">
+          <template v-slot="scope">
+            <span>
+              {{ scope.row.notifyObject === 0 ? '全体' : `${scope.row.notifyObject}公寓` }}
+            </span>
+          </template>
+        </el-table-column>
         <el-table-column label="操作">
           <template v-slot="scope">
             <el-button icon="more-filled" type="default" @click="openDetail(scope.row)"></el-button>
             <el-button icon="Edit" @click="openModal(scope.row)"></el-button>
-            <el-popconfirm title="确认删除？" @confirm="handleDelete(scope.row.Id)">
+            <el-popconfirm title="确认删除？" @confirm="handleDelete(scope.row.id)">
               <template #reference>
                 <el-button icon="Delete" type="danger"></el-button>
               </template>
@@ -52,8 +58,15 @@
             <el-form-item label="主题" prop="title" required>
               <el-input v-model="form.title" placeholder="请输入公告主题"></el-input>
             </el-form-item>
-            <el-form-item label="通知对象" prop="recipient" required>
-              <el-input v-model="form.recipient" placeholder="请输入通知对象"></el-input>
+            <el-form-item required>
+              <el-select v-model="form.notifyObject" placeholder="请选择通知对象" :disabled="isEdit">
+                  <el-option
+                      v-for="notifyObjectOption in notifyObjectOptions" 
+                      :key="notifyObjectOption.dormId" 
+                      :label="notifyObjectOption.dormId === 0 ? '全体' : `${notifyObjectOption.dormId}公寓`"
+                      :value="notifyObjectOption.dormId" 
+                  />
+              </el-select>
             </el-form-item>
             <el-form-item label="内容" prop="content" required>
               <el-input v-model="form.content" type="textarea" placeholder="请输入公告内容"></el-input>
@@ -80,13 +93,13 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue';
-import { addNotice, getNotices, updateNotice, deleteNotice } from '@/api/admin'; // 替换为实际 API
-import { getUserInfo } from '@/api/user';
+import { ref, onMounted } from 'vue';
+import { addAnnouncement, getAnnouncements, updateAnnouncement, deleteAnnouncement } from '@/api/admin'; // 替换为实际 API
+import { getDormBuilds } from '@/api/dormitoryInfo';
+import { ElMessage } from 'element-plus';
 
-const notices = ref([]);
-const filteredNotices = ref([]);
-const form = ref({ id: null, publisher: '', recipient: '', title: '', content: '', date: '' });
+const announcements = ref([]);
+const form = ref({ id: null, senderUsername: '', notifyObject: '', title: '', content: '', date: '' });
 const isEdit = ref(false);
 const showModal = ref(false);
 const detail = ref('');
@@ -95,34 +108,25 @@ const searchQuery = ref('');
 const totalitems = ref(0);
 const currentPage = ref(1);
 const pageSize = ref(10);
-const paginatedNotices = ref([]);
-
-// 假设获取当前登录用户的名字的函数
-const getCurrentUserName = async () => {
-  const userInfo = await getUserInfo();
-  const name = userInfo.data.name;
-  return name; // 这里应该替换为实际获取用户名的逻辑
-};
-
-// 获取公告列表
-const fetchNotices = async () => {
-  const response = await getNotices();
-  notices.value = response.data; // 假设 API 返回的数据
-  load();
-};
+const notifyObjectOptions = ref([]);
 
 
-const load = () => {
-  filteredNotices.value = notices.value.filter(notice => {
-    return (
-      notice.publisher.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-      notice.content.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-      notice.title.toLowerCase().includes(searchQuery.value.toLowerCase())
-    );
-  }); 
-  totalitems.value = filteredNotices.value.length;
-  const start = (currentPage.value - 1) * pageSize.value;
-  paginatedNotices.value = filteredNotices.value.slice(start, start + pageSize.value);
+const load = async () => {
+  const response = await getAnnouncements({pageNum: currentPage.value, pageSize: pageSize.value, search: searchQuery.value});
+  if (response.code !== 0) {
+    ElMessage.error(response.msg);
+    return;
+  }
+  console.log(response.data);
+  announcements.value = response.data.records;
+  totalitems.value = response.data.total;
+  const res = await getDormBuilds({pageNum: 1, pageSize: 10000});
+  if (res.code !== 0) {
+    ElMessage.error('获取公寓信息失败: ' + res.msg);
+    return;
+  }
+  notifyObjectOptions.value = res.data.records;
+  notifyObjectOptions.value = [{ dormId: 0 }, ...notifyObjectOptions.value];
 };
 
 // 翻页功能
@@ -136,13 +140,12 @@ const handleSizeChange = (newPageSize) => {
   load();
 }
 
-const openModal = (notice = null) => {
-  if (notice) {
-    form.value = { ...notice }; // 复制公告信息
+const openModal = (announcement = null) => {
+  if (announcement) {
+    form.value = { ...announcement }; // 复制公告信息
     isEdit.value = true;
   } else {
     resetForm();
-    form.value.publisher = getCurrentUserName(); // 添加时设置发布人为当前登录用户
     isEdit.value = false;
   }
   showModal.value = true;
@@ -162,25 +165,31 @@ const closeDetail = () => {
 };
 
 const handleChange = async () => {
-  if (isEdit.value) {
-    await updateNotice(form.value);
-  } else {
-    await addNotice(form.value);
+  const res = isEdit.value ? await updateAnnouncement(form.value) : await addAnnouncement(form.value);
+  if (res.code !== 0) {
+    ElMessage.error(res.msg);
+    return;
   }
-  await fetchNotices(); // 刷新公告列表
+  ElMessage.success(res.msg);
+  await load(); // 刷新公告列表
   closeModal();
 };
 
 const handleDelete = async (id) => {
-  await deleteNotice(id);
-  await fetchNotices();
+  const res = await deleteAnnouncement(id);
+  if (res.code !== 0) {
+    ElMessage.error(res.msg);
+    return;
+  }
+  ElMessage.success(res.msg);
+  await load();
 };
 
 const resetForm = () => {
-  form.value = { id: null, publisher: '', title: '', content: '', releasTime: '' };
+  form.value = { id: null, senderUsername: '', title: '', content: '', releasTime: '' };
 };
 
-onMounted(fetchNotices); // 获取公告列表
+onMounted(load); // 获取公告列表
 </script>
 
 <style scoped>

@@ -20,28 +20,31 @@
             </div>
 
             <!-- 表格显示报修信息 -->
-            <el-table :data="paginatedRepairs" style="width: 100%">
+            <el-table :data="repairs" style="width: 100%">
                 <el-table-column label="序号" type="index" />
-                <el-table-column prop="date" label="报修时间" sortable />
-                <el-table-column prop="type" label="报修类型" />
-                <el-table-column prop="dormitoryNumber" label="公寓号" />
-                <el-table-column prop="roomNumber" label="宿舍号" />
+                <el-table-column prop="createDate" label="报修时间" sortable />
+                <el-table-column prop="finishDate" label="完成时间" sortable />
+                <el-table-column prop="title" label="报修类型" />
+                <el-table-column prop="dormId" label="公寓号" />
+                <el-table-column prop="roomId" label="宿舍号" />
+                <el-table-column prop="applicantId" label="申请人" sortable />
                 <el-table-column :filter-method="filterTag" :filters="[
-                    { text: '已完成', value: '已完成' },
-                    { text: '未完成', value: '未完成' },
+                    { text: '已完成', value: 0 },
+                    { text: '未完成', value: 1 },
                 ]" filter-placement="bottom-end" label="报修状态" prop="status" sortable>
                     <template #default="scope">
-                        <el-tag :type="scope.row.status === '已完成' ? 'success' : 'info'" disable-transitions>{{
-                            scope.row.status }}
+                        <el-tag :type="scope.row.status === 0 ? 'success' : 'info'" disable-transitions>
+                            {{ scope.row.status === 0 ? '已完成' : '未完成' }}
                         </el-tag>
                     </template>
                 </el-table-column>
                 <el-table-column label="操作">
                     <template #default="scope">
-                        <el-button icon="Edit" type="primary" @click="openModal(scope.row)">编辑</el-button>
+                        <el-button icon="more-filled" type="default" @click="openDetail(scope.row)"></el-button>
+                        <el-button icon="Edit" type="primary" @click="openModal(scope.row)"></el-button>
                         <el-popconfirm title="确认删除？" @confirm="handleDelete(scope.row.id)">
                             <template #reference>
-                                <el-button icon="Delete" type="danger">删除</el-button>
+                                <el-button icon="Delete" type="danger"></el-button>
                             </template>
                         </el-popconfirm>
                     </template>
@@ -59,24 +62,30 @@
                 <div class="modal-content">
                     <h3>{{ isEdit ? '编辑报修' : '添加报修' }}</h3>
                     <el-form :model="form" ref="formRef">
-                        <el-form-item label="报修时间" prop="date" style="margin-top: 27px">
-                            <el-date-picker v-model="form.date" :disabled="isEdit" clearable
+                        <el-form-item label="报修时间" prop="createDate" style="margin-top: 27px">
+                            <el-date-picker v-model="form.createDate" :disabled="isEdit" clearable
                                 placeholder="选择时间" style="width: 48%" type="datetime"
                                 value-format="YYYY-MM-DD HH:mm:ss"></el-date-picker>
                         </el-form-item>
-                        <el-form-item label="报修类型" prop="type" required>
-                            <el-input v-model="form.type" placeholder="请输入报修类型"></el-input>
+                        <el-form-item label="报修类型" prop="title" required>
+                            <el-input v-model="form.title" placeholder="请输入报修类型"></el-input>
                         </el-form-item>
-                        <el-form-item label="公寓号" prop="dormitoryNumber" required>
-                            <el-input v-model="form.dormitoryNumber" placeholder="请输入公寓号"></el-input>
+                        <el-form-item label="公寓号" prop="dormId" required>
+                            <el-input v-model="form.dormId" :disabled="isEdit" placeholder="请输入公寓号"></el-input>
                         </el-form-item>
-                        <el-form-item label="宿舍号" prop="roomNumber" required>
-                            <el-input v-model="form.roomNumber" placeholder="请输入公寓号"></el-input>
+                        <el-form-item label="宿舍号" prop="roomId" required>
+                            <el-input v-model="form.roomId" :disabled="isEdit" placeholder="请输入房间号"></el-input>
+                        </el-form-item>
+                        <el-form-item label="申请人学号" prop="applicantId" required>
+                            <el-input v-model="form.roomId" :disabled="isEdit" placeholder="请输入申请人学号"></el-input>
+                        </el-form-item>
+                        <el-form-item label="内容" prop="content" required>
+                            <el-input v-model="form.content" type="textarea" placeholder="请输入具体内容"></el-input>
                         </el-form-item>
                         <el-form-item label="报修状态" prop="status" required>
                             <el-radio-group v-model="form.status">
-                                <el-radio label="已完成">已完成</el-radio>
-                                <el-radio label="未完成">未完成</el-radio>
+                                <el-radio :label="0">已完成</el-radio>
+                                <el-radio :label="1">未完成</el-radio>
                             </el-radio-group>
                         </el-form-item>
                         <el-form-item>
@@ -86,55 +95,59 @@
                     </el-form>
                 </div>
             </el-dialog>
+
+            <!--    报修详情-->
+            <el-dialog v-model="showDetail" title="详情">
+                <div v-html="detail.content"></div>
+                <template #footer>
+                <span class="dialog-footer">
+                    <el-button type="primary" @click="closeDetail">确 定</el-button>
+                </span>
+                </template>
+            </el-dialog>
         </el-card>
     </div>
 </template>
 
 <script setup>
 import { ref, computed, onMounted } from 'vue';
-import { getRepairs, updateRepair, addRepair, deleteRepair } from '@/api/admin'; // 替换为实际 API
-
+import { getRepairs, updateRepair, addRepair, deleteRepair } from '@/api/admin';
+import { ElMessage } from 'element-plus';
 
 const repairs = ref([]);
-const filteredRepairs = ref([]);
 const searchQuery = ref('');
 const currentPage = ref(1);
 const pageSize = ref(10);
-const paginatedRepairs = ref([]);
 const totalitems = ref(0);
 const showModal = ref(false);
-const form = ref({ id: null, date: '', type: '', dormitoryNumber: '', roomNumber: '', status: '' });
+const detail = ref('');
+const showDetail = ref(false);
+const form = ref({ id: null, createDate: '', finishDate: null, title: '', content: '', applicantId: '',  dormId: '', roomId: '', status: '' });
 const isEdit = ref(false);
-
-// 获取报修列表
-const fetchRepairs = async () => {
-    const response = await getRepairs();
-    repairs.value = response.data; // 假设 API 返回的数据
-    load();
-};
 
 const filterTag = (value, row) => {
     return row.status === value;
 };
 
-const load = () => {
-    filteredRepairs.value = repairs.value.filter(
-    repair => {
-        return repair.type.toLowerCase().includes(searchQuery.value.toLowerCase());
-    });
-    totalitems.value = filteredRepairs.value.length;
-    const start = (currentPage.value - 1) * pageSize.value;
-    paginatedRepairs.value = filteredRepairs.value.slice(start, start + pageSize.value);
+const load = async () => {
+    const response = await getRepairs({pageNum: currentPage.value, pageSize: pageSize.value, search: searchQuery.value});
+    if (response.code !== 0) {
+        ElMessage.error(response.msg);
+        return;
+    }
+    console.log('load: ', response.data.records);
+    repairs.value = response.data.records;
+    totalitems.value = response.data.total;
 }
 
-const handleCurrentChange = (pageNum) => {
+const handleCurrentChange = async (pageNum) => {
     currentPage.value = pageNum;
-    load();
+    await load();
 }
 
-const handleSizeChange = (newPageSize) => {
+const handleSizeChange = async (newPageSize) => {
     pageSize.value = newPageSize;
-    load();
+    await load();
 }
 
 const openModal = (repair = null) => {
@@ -149,21 +162,31 @@ const openModal = (repair = null) => {
 };
 
 const resetForm = () => {
-    form.value = { id: null, date: '', type: '', dormitoryNumber: '', roomNumber: '', status: '' };
+    form.value = { id: null, createDate: '', finishDate: null, title: '', dormId: '', roomId: '', status: '' };
 };
 
 const closeModal = () => {
     showModal.value = false;
 };
 
+
+const openDetail = (row) => {
+  detail.value = row;
+  showDetail.value = true;
+};
+
+const closeDetail = () => {
+  showDetail.value = false;
+};
+
 const handleChange = async () => {
     const res = isEdit.value ? await updateRepair(form.value) : await addRepair(form.value);
-    if (res.success) {
-        ElMessage.success(res.message);
-    } else {
-        ElMessage.error(res.message);
+    if (res.code !== 0) {
+        ElMessage.error(res.msg);
+        return;
     }
-    fetchRepairs();
+    ElMessage.success(res.msg);
+    await load();
     closeModal();
 };
 
@@ -174,10 +197,10 @@ const handleDelete = async (id) => {
     } else {
         ElMessage.error(res.message);
     }
-    fetchRepairs();
+    await load();
 }
 
-onMounted(fetchRepairs); // 获取报修列表
+onMounted(load); // 获取报修列表
 
 </script>
 

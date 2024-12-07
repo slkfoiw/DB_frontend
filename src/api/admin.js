@@ -7,7 +7,7 @@ const mockAdmins = [
     { adminId: 'admin04', adminName: '赵六', role: '学校管理员' },
 ];
 
-const mockNotices = [
+const mockAnnouncements = [
     { id: 1, releaseTime: new Date().toLocaleString(), title: '第一条公告', publisher: '张三', content: '这是第一条公告', recipient: '全体' },
     { id: 2, releaseTime: new Date(Date.now() - 86400000).toLocaleString(), title: '第二条公告', publisher: '李四', content: '这是第二条公告', recipient: '所有宿管' },
     { id: 3, releaseTime: new Date(Date.now() - 172800000).toLocaleString(), title: '第二条公告', publisher: '王五', content: '这是第三条公告', recipient: '所有学生' },
@@ -98,48 +98,53 @@ export const deleteAdmin = (adminId) => {
     };
 };
 
-export const getNotices = () => {
-    // return http({
-    //     url: 'admin/get-notices',
-    //     method: 'GET',
-    //     headers: {
-    //         'Content-Type': 'application/json'
-    //     }
-    // })
+export const getAnnouncements = ({pageNum, pageSize, search}) => {
+    return http({
+        url: '/announcement/get-announcements',
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        params: {
+            pageNum,
+            pageSize,
+            search
+        }
+    })
     return {
-        data: [...mockNotices]
+        data: [...mockAnnouncements]
     };
 };
 
-export const addNotice = (notice) => {
-    // return http({
-    //     url: 'admin/add-notice',
-    //     method: 'POST',
-    //     headers: {
-    //         'Content-Type': 'application/json'
-    //     },
-    //     data: notice
-    // })
-    const newId = mockNotices.length ? Math.max(mockNotices.map(n => n.id)) + 1 : 1;
-    mockNotices.push({ ...notice.value, id: newId, date: new Date() });
+export const addAnnouncement = (announcement) => {
+    return http({
+        url: '/announcement/add-announcement',
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        data: announcement
+    })
+    const newId = mockAnnouncements.length ? Math.max(mockAnnouncements.map(n => n.id)) + 1 : 1;
+    mockAnnouncements.push({ ...announcement.value, id: newId, date: new Date() });
     return { 
         success: true,
         message: '添加成功'
     };
 };
 
-export const updateNotice = (notice) => {
-    // return http({
-    //     url: `admin/update-notice/${notice.id}`,
-    //     method: 'PUT',
-    //     headers: {
-    //         'Content-Type': 'application/json'
-    //     },
-    //     data: notice
-    // })
-    const id = mockNotices.findIndex(n => n.id === notice.id);
+export const updateAnnouncement = (announcement) => {
+    return http({
+        url: `/announcement/update-announcement/${announcement.id}`,
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        data: announcement
+    })
+    const id = mockAnnouncements.findIndex(n => n.id === announcement.id);
     if (id !== -1) {
-        mockNotices[id] = notice; // 模拟更新
+        mockAnnouncements[id] = announcement; // 模拟更新
     }
     return { 
         success: true,
@@ -147,14 +152,14 @@ export const updateNotice = (notice) => {
     };
 };
 
-export const deleteNotice = (noticeId) => {
-    // return http({
-    //     url: `admin/delete-notice/${noticeId}`,
-    //     method: 'DELETE'
-    // })
-    const id = mockNotices.findIndex(n => n.id === noticeId);
+export const deleteAnnouncement = (announcementId) => {
+    return http({
+        url: `/announcement/delete-announcement/${announcementId}`,
+        method: 'DELETE'
+    })
+    const id = mockAnnouncements.findIndex(n => n.id === announcementId);
     if (id !== -1) {
-        mockNotices.splice(id, 1); // 模拟删除
+        mockAnnouncements.splice(id, 1); // 模拟删除
     }
     return { 
         success: true,
@@ -209,28 +214,33 @@ export const deleteChangeRoom = (changeRoomId) => {
     };
 }
 
-export const getRepairs = () => {
-    // return http({
-    //     url: 'admin/get-repairs',
-    //     method: 'GET',
-    //     headers: {
-    //         'Content-Type': 'application/json'
-    //     }
-    // })
+export const getRepairs = ({pageNum, pageSize, search}) => {
+    return http({
+        url: '/repair/get-repairs',
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        params: {
+            pageNum,
+            pageSize,
+            search
+        }
+    })
     return {
         data: [...mockRepairs]
     };
 };
 
 export const addRepair = async (repair) => {
-    // return http({
-    //     url: 'admin/add-repair',
-    //     method: 'POST',
-    //     headers: {
-    //         'Content-Type': 'application/json'
-    //     },
-    //     data: repair
-    // })
+    return http({
+        url: '/repair/add-repair',
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        data: repair
+    })
     const newId = mockRepairs.length ? Math.max(mockRepairs.map(r => r.id)) + 1 : 1;
     mockRepairs.push({ ...repair, id: newId, date: new Date().toLocaleString() }); 
     return { 
@@ -240,13 +250,14 @@ export const addRepair = async (repair) => {
 }
 
 export const updateRepair = async (repair) => {
-    // return http({
-    //     url: 'admin/update-repair-status',
-    //     method: 'PUT',
-    //     headers: {
-    //         'Content-Type': 'application/json'
-    //     }
-    // })
+    return http({
+        url: '/repair/update-repair',
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        data: repair
+    })
     const id = mockRepairs.findIndex(r => r.id === repair.id);
     if (id !== -1) {
         mockRepairs[id] = repair; // 更新报修状态
@@ -258,10 +269,10 @@ export const updateRepair = async (repair) => {
 };
 
 export const deleteRepair = async (repairId) => {
-    // return http({
-    //     url: `admin/delete-repair/${repairId}`,
-    //     method: 'DELETE'
-    // })
+    return http({
+        url: `/repair/delete-repair/${repairId}`,
+        method: 'DELETE'
+    })
     const id = mockRepairs.findIndex(r => r.id === repairId);
     if (id !== -1) {
         mockRepairs.splice(id, 1); // 模拟删除
@@ -272,21 +283,21 @@ export const deleteRepair = async (repairId) => {
     };
 };
 
-export const sendNoticeApi = async (notice) => {
+export const sendAnnouncementApi = async (announcement) => {
     // return http({
-    //     url: 'admin/send-notice',
+    //     url: 'admin/send-announcement',
     //     method: 'POST',
     //     headers: {
     //         'Content-Type': 'application/json'
     //     },
-    //     data: notice
+    //     data: announcement
     // })
     
     // 模拟发送公告
-    const newId = mockNotices.length ? Math.max(mockNotices.map(n => n.id)) + 1 : 1;
+    const newId = mockAnnouncements.length ? Math.max(mockAnnouncements.map(n => n.id)) + 1 : 1;
     // 将公告的发布时间设置为当前时间
-    const newNotice = { ...notice, id: newId, date: new Date() }; 
-    mockNotices.push(newNotice);
+    const newAnnouncement = { ...announcement, id: newId, date: new Date() }; 
+    mockAnnouncements.push(newAnnouncement);
     return { 
         success: true,
         message: '发送成功'

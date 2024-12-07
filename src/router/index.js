@@ -6,7 +6,7 @@ import Login from '@/views/Login.vue';
 import store from '@/store';
 import Admin from '@/views/Admin.vue';
 import User from '@/views/User.vue';
-import SendNotice from '@/views/SendNotice.vue';
+import SendAnnouncement from '@/views/SendAnnouncement.vue';
 // STUDENT
 import ApplyChangeRoom from '@/views/STUDENT/ApplyChangeRoom.vue';
 import ApplyRepairInfo from '@/views/STUDENT/ApplyRepairInfo.vue';
@@ -45,9 +45,9 @@ const routes = [
     component: () => import('@/views/RoomInfo.vue')
   },
   {
-    path: '/noticeList',
-    name: 'NoticeList',
-    component: () => import('@/views/NoticeList.vue')
+    path: '/announcementList',
+    name: 'AnnouncementList',
+    component: () => import('@/views/AnnouncementList.vue')
   },
   {
     path: '/repairList',
@@ -60,9 +60,9 @@ const routes = [
     component: () => import('@/views/ChangeRoomList.vue')
   },
   {
-    path: '/sendnotice',
-    name: 'SendNotice',
-    component: SendNotice
+    path: '/sendAnnouncement',
+    name: 'SendAnnouncement',
+    component: SendAnnouncement
   },
   {
     path: '/register',

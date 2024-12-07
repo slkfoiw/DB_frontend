@@ -32,7 +32,7 @@
           <el-icon><message/></el-icon>
           <span>信息管理</span>
         </template>
-        <el-menu-item index="/noticeList">公告列表</el-menu-item>
+        <el-menu-item index="/announcementList">公告列表</el-menu-item>
         <el-menu-item index="/repairList">报修记录</el-menu-item>
         <el-menu-item index="/changeRoomList">调宿记录</el-menu-item>
       </el-sub-menu>
