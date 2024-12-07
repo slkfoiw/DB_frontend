@@ -185,8 +185,16 @@ const load = async () => {
     pageNum: currentPage.value,
     pageSize: pageSize.value,
     search: search.value,
+    studentId: userId.value,
   };
   const res = await getRepairRecords(params);
+  if (res.code !== 0) {
+    ElMessage({
+      message: res.msg,
+      type: 'error',
+    });
+    return;
+  }
   tableData.value = res.data.records;
   total.value = res.data.total;
   loading.value = false;
@@ -218,8 +226,6 @@ const add = () => {
     form.repairer = name.value;
     form.dormId = room.dormId;
     form.roomId = room.roomId;
-    console.log(name.value);
-    console.log(form);
   });
 };
 
@@ -228,7 +234,7 @@ const save = async () => {
   formRef.value.validate(async (valid) => {
     if (valid) {
       const res = await addRepair(form);
-      if (res.code === '0') {
+      if (res.code === 0) {
         ElMessage({
           message: '新增成功',
           type: 'success',
