@@ -97,13 +97,13 @@ const currentPage = ref(1);
 const pageSize = ref(10);
 
 const load = async () => {
-    try {
-        const response = await getDormManagers({pageNum: currentPage.value, pageSize: pageSize.value, search: searchQuery.value});
-        dormManagers.value = response.data.records;
-        totalitems.value = response.data.total;
-    } catch (error) {
-        ElMessage.error('获取宿管信息失败: ' + error.message);
+    const response = await getDormManagers({pageNum: currentPage.value, pageSize: pageSize.value, search: searchQuery.value});
+    if (response.code !== 0) {
+        ElMessage.error(response.msg);
+        return;
     }
+    dormManagers.value = response.data.records;
+    totalitems.value = response.data.total;
 };
 
 const handleCurrentChange = async (pageNum) => {
