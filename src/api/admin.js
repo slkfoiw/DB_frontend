@@ -167,28 +167,33 @@ export const deleteAnnouncement = (announcementId) => {
     };
 };
 
-export const getChangeRoom = () => {
-    // return http({
-    //     url: 'admin/get-change-room',
-    //     method: 'GET',
-    //     headers: {
-    //         'Content-Type': 'application/json'
-    //     }
-    // })
+export const getChangeRoom = ({pageNum, pageSize, search}) => {
+    return http({
+        url: '/adjustRoom/get-change-room',
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        params: {
+            pageNum,
+            pageSize,
+            search
+        }
+    })
     return {
         data: [...mockChangeRoom]
     };
 };
 
 export const updateChangeRoom = (changeRoom) => {
-    // return http({
-    //     url: `admin/update-change-room/${changeRoom.id}`,
-    //     method: 'PUT',
-    //     headers: {
-    //         'Content-Type': 'application/json'
-    //     },
-    //     data: changeRoom
-    // })
+    return http({
+        url: '/adjustRoom/update-change-room',
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        data: changeRoom
+    })
     const id = mockChangeRoom.findIndex(c => c.id === changeRoom.id);
     if (id !== -1) {
         mockChangeRoom[id] = changeRoom; // 模拟更新
@@ -200,10 +205,10 @@ export const updateChangeRoom = (changeRoom) => {
 };
 
 export const deleteChangeRoom = (changeRoomId) => {
-    // return http({
-    //     url: `admin/delete-change-room/${changeRoomId}`,
-    //     method: 'DELETE'
-    // })
+    return http({
+        url: `admin/delete-change-room/${changeRoomId}`,
+        method: 'DELETE'
+    })
     const id = mockChangeRoom.findIndex(c => c.id === changeRoomId);
     if (id !== -1) {
         mockChangeRoom.splice(id, 1); // 模拟删除

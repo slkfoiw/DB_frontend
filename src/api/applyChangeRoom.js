@@ -3,13 +3,13 @@ import { info } from 'sass';
 
 // 检查房间状态
 export const checkRoomState = (dormId, roomId) => {
-    // return http({
-    //     url: `/room/checkRoomState/${dormId}/${roomId}`,
-    //     method: 'GET',
-    //     headers: {
-    //         'Content-Type': 'application/json'
-    //     }
-    // });
+    return http({
+        url: `/room/checkRoomState/${dormId}/${roomId}`,
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    });
     return {
         code: "0",
         msg: 'success',
@@ -18,28 +18,13 @@ export const checkRoomState = (dormId, roomId) => {
 
 // 检查房间是否存在
 export const checkRoomExist = (dormId, roomId) => {
-    // return http({
-    //     url: `/room/checkRoomExist/${dormId}/${roomId}`,
-    //     method: 'GET',
-    //     headers: {
-    //         'Content-Type': 'application/json'
-    //     }
-    // });
-    return {
-        code: "0",
-        msg: 'success',
-    }
-};
-
-// 检查床位状态
-export const checkBedState = (dormId, roomId, bedId) => {
-    // return http({
-    //     url: `/room/checkBedState/${dormId}/${roomId}/${bedId}`,
-    //     method: 'GET',
-    //     headers: {
-    //         'Content-Type': 'application/json'
-    //     }
-    // });
+    return http({
+        url: `/room/checkRoomExist/${dormId}/${roomId}`,
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    });
     return {
         code: "0",
         msg: 'success',
@@ -48,18 +33,18 @@ export const checkBedState = (dormId, roomId, bedId) => {
 
 // 获取调整房间数据
 export const fetchAdjustRoomData = (params) => {
-    // return http({
-    //     url: '/adjustRoom/find',
-    //     method: 'GET',
-    //     headers: {
-    //         'Content-Type': 'application/json'
-    //     },
-    //     params: {
-    //         pageNum: params.pageNum,
-    //         pageSize: params.pageSize,
-    //         search: params.search
-    //        }
-    // });
+    return http({
+        url: `/adjustRoom/find/${params.studentId}`,
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        params: {
+            pageNum: params.pageNum,
+            pageSize: params.pageSize,
+            search: params.search
+           }
+    });
     // params 包括：pageNum, pageSize, search
     return {
             data:{
@@ -75,15 +60,15 @@ export const fetchAdjustRoomData = (params) => {
 };
 
 // 更新调整房间信息
-export const updateAdjustRoom = (orderState, data) => {
-    // return http({
-    //     url: `/adjustRoom/update/${orderState}`,
-    //     method: 'PUT',
-    //     headers: {
-    //         'Content-Type': 'application/json'
-    //     },
-    //     data: data
-    // });
+export const updateAdjustRoom = (data) => {
+    return http({
+        url: `/adjustRoom/update/${data.studentId}`,
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        data: data
+    });
     return {
         code: "0",
         msg: 'success'
@@ -92,14 +77,14 @@ export const updateAdjustRoom = (orderState, data) => {
 
 // 添加调整房间信息
 export const addAdjustRoom = (data) => {
-    // return http({
-    //     url: '/adjustRoom/add',
-    //     method: 'POST',
-    //     headers: {
-    //         'Content-Type': 'application/json'
-    //     },
-    //     data: data
-    // });
+    return http({
+        url: `/adjustRoom/add/${data.studentId}`,
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        data: data
+    });
     return {
         code: "0",
         msg: 'success'

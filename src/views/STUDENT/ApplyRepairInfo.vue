@@ -29,7 +29,7 @@
           <el-table-column
               :filter-method="filterTag"
               :filters="[
-              { text: '完成', value: '完成' },
+              { text: '已完成', value: '已完成' },
               { text: '未完成', value: '未完成' },
             ]"
               filter-placement="bottom-end"
@@ -38,7 +38,7 @@
               sortable
           >
             <template #default="scope">
-              <el-tag :type="scope.row.status === '完成' ? 'success' : 'info'" disable-transitions
+              <el-tag :type="scope.row.status === '已完成' ? 'success' : 'info'" disable-transitions
               >{{ scope.row.status }}
               </el-tag>
             </template>

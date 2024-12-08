@@ -40,13 +40,17 @@
                 </el-table-column>
                 <el-table-column label="操作">
                     <template #default="scope">
+                        <!-- 详情按钮始终显示 -->
                         <el-button icon="more-filled" type="default" @click="openDetail(scope.row)"></el-button>
-                        <el-button icon="Edit" type="primary" @click="openModal(scope.row)"></el-button>
-                        <el-popconfirm title="确认删除？" @confirm="handleDelete(scope.row.id)">
-                            <template #reference>
-                                <el-button icon="Delete" type="danger"></el-button>
-                            </template>
-                        </el-popconfirm>
+                        <!-- 编辑和删除按钮仅在状态为未完成时显示 -->
+                        <template v-if="scope.row.status === 1">
+                            <el-button icon="Edit" type="primary" @click="openModal(scope.row)"></el-button>
+                            <el-popconfirm title="确认删除？" @confirm="handleDelete(scope.row.id)">
+                                <template #reference>
+                                    <el-button icon="Delete" type="danger"></el-button>
+                                </template>
+                            </el-popconfirm>
+                        </template>
                     </template>
                 </el-table-column>
             </el-table>
@@ -63,9 +67,8 @@
                     <h3>{{ isEdit ? '编辑报修' : '添加报修' }}</h3>
                     <el-form :model="form" ref="formRef">
                         <el-form-item label="报修时间" prop="createDate" style="margin-top: 27px">
-                            <el-date-picker v-model="form.createDate" :disabled="isEdit" clearable
-                                placeholder="选择时间" style="width: 48%" type="datetime"
-                                value-format="YYYY-MM-DD HH:mm:ss"></el-date-picker>
+                            <el-date-picker v-model="form.createDate" :disabled="isEdit" clearable placeholder="选择时间"
+                                style="width: 48%" type="datetime" value-format="YYYY-MM-DD HH:mm:ss"></el-date-picker>
                         </el-form-item>
                         <el-form-item label="报修类型" prop="title" required>
                             <el-input v-model="form.title" placeholder="请输入报修类型"></el-input>
@@ -100,9 +103,9 @@
             <el-dialog v-model="showDetail" title="详情">
                 <div v-html="detail.content"></div>
                 <template #footer>
-                <span class="dialog-footer">
-                    <el-button type="primary" @click="closeDetail">确 定</el-button>
-                </span>
+                    <span class="dialog-footer">
+                        <el-button type="primary" @click="closeDetail">确 定</el-button>
+                    </span>
                 </template>
             </el-dialog>
         </el-card>
