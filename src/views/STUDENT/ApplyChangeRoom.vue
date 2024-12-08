@@ -112,7 +112,7 @@
                 placeholder="选择时间"
                 style="width: 50%"
                 type="datetime"
-                value-format="yyyy-MM-dd HH:mm:ss"
+                value-format="YYYY-MM-DD HH:mm:ss"
               />
             </el-form-item>
           </el-form>

@@ -11,7 +11,7 @@
           <div style="margin: 10px 0">
             <!--    搜索区-->
             <div style="margin: 10px 0">
-              <el-input v-model="search" clearable placeholder="请输入学号" prefix-icon="Search" style="width: 20%"/>
+              <el-input v-model="searchQuery" clearable placeholder="请输入学号" prefix-icon="Search" style="width: 20%"/>
               <el-button icon="Search" style="margin-left: 5px" type="primary" @click="load"></el-button>
             </div>
           </div>
@@ -78,7 +78,7 @@
           <div>
             <!--      弹窗-->
             <el-dialog v-model="dialogVisible" title="操作" width="30%" @close="cancel">
-              <el-form ref="formRef" :model="form" :rules="rules" label-width="120px">
+              <el-form ref="formRef" :model="form" label-width="120px">
                 <el-form-item label="学号" prop="studentId">
                   <el-input v-model="form.studentId" disabled style="width: 80%"></el-input>
                 </el-form-item>
@@ -113,7 +113,7 @@
                 </el-form-item>
                 <el-form-item label="申请状态" prop="status">
                   <el-radio v-model="form.status" label="通过">通过</el-radio>
-                  <el-radio v-if="this.form.status!=='通过'" v-model="form.status" label="驳回">驳回</el-radio>
+                  <el-radio v-model="form.status" label="驳回">驳回</el-radio>
                 </el-form-item>
                 <el-form-item label="处理时间" prop="finishDate" style="margin-top: 27px">
                   <el-date-picker
@@ -221,6 +221,10 @@ const form = ref({
     finishDate: '',
 });
 
+const filterTag = (value, row) => {
+    return row.status === value;
+};
+
 // 方法：获取换宿数据
 const load = async () => {
     try {
@@ -230,7 +234,7 @@ const load = async () => {
           return;
         }
         console.log(response.data);
-        tableData.value = response.data;
+        tableData.value = response.data.records;
         total.value = response.data.total;
     } catch (error) {
         console.error('Error fetching data:', error);
