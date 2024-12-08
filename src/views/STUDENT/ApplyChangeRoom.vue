@@ -101,9 +101,9 @@
             <el-form-item label="目标宿舍号" prop="toRoomId">
               <el-input v-model.number="form.toRoomId" style="width: 80%" />
             </el-form-item>
-            <el-form-item label="目标床位号" prop="toBedId">
+            <!-- <el-form-item label="目标床位号" prop="toBedId">
               <el-input v-model.number="form.toBedId" style="width: 80%" />
-            </el-form-item>
+            </el-form-item> -->
             <el-form-item label="申请时间" prop="createDate" style="margin-top: 27px">
               <el-date-picker
                 v-model="form.createDate"
@@ -169,7 +169,7 @@
 
 import { ref, reactive, onMounted, nextTick } from 'vue';
 import { ElMessage } from 'element-plus';
-import { checkRoomState, checkRoomExist, checkBedState, fetchAdjustRoomData, updateAdjustRoom, addAdjustRoom } from '@/api/applyChangeRoom'; // 导入API
+import { checkRoomState, checkRoomExist, fetchAdjustRoomData, updateAdjustRoom, addAdjustRoom } from '@/api/applyChangeRoom'; // 导入API
 import { getRoomBedUserId } from '@/api/myRoomInfo';
 import { useUserStore } from '@/store/user';
 
@@ -186,23 +186,9 @@ const pageSize = ref(10);
 const total = ref(0);
 const tableData = ref([]);
 const dormRoomId = ref(0);
-const orderState = ref(false);
 const judgeOption = ref(false);
 const formRef = ref(null);
-const form = reactive({
-      id:'',
-      studentId: '',
-      name: '',
-      curDormId: '',
-      curRoomId: '',
-      curBedId: '',
-      toDormId: '',
-      toRoomId: '',
-      toBedId: '',
-      createDate: '',
-      status: '',
-      finishDate: ''
-    });
+const form = reactive({});
 
 const roomForm = reactive({
   dormId:'',
@@ -235,21 +221,6 @@ const checkRoomStateHandler = async (rule, value, callback) => {
   }
 };
 
-// 检查床位状态
-const checkBedStateHandler = async (rule, value, callback) => {
-  try {
-    const res = await checkBedState(form.toDormId, dormRoomId.value, value);
-    if (res.code === 0) {
-      console.log(res);
-      callback();
-    } else {
-      callback(new Error(res.msg));
-    }
-  } catch (error) {
-    callback(new Error("请求失败"));
-  }
-};
-
 const rules = reactive({
   studentId: [
     { required: true, message: "请输入学号", trigger: "blur" },
@@ -268,19 +239,25 @@ const rules = reactive({
   toRoomId: [
     { validator: checkRoomStateHandler, trigger: "blur" },
   ],
-  toBedId: [
-    { validator: checkBedStateHandler, trigger: "blur" },
-  ],
 });
 
 // 加载数据
 const load = async () => {
   try {
-    const res = await fetchAdjustRoomData({
-      pageNum: currentPage.value,
-      pageSize: pageSize.value,
-      search: search.value,
-    });
+    const params = {
+    pageNum: currentPage.value,
+    pageSize: pageSize.value,
+    search: search.value,
+    studentId: user.userId,
+  };
+    const res = await fetchAdjustRoomData(params);
+    if (res.code !== 0) {
+      ElMessage({
+        message: res.msg,
+        type: "error",
+      });
+      return;
+    }
     tableData.value = res.data.records;
     total.value = res.data.total;
     loading.value = false;
@@ -297,12 +274,13 @@ const add = () => {
     const user = useUserStore().userInfo;
     form.studentId = user.userId;
     form.name = user.name;
-    
+
     const res = await getRoomBedUserId(form.studentId);
     if (res.code === 0) {
       form.curDormId = res.data.dormId;
       form.curRoomId = res.data.roomId;
       roomForm.value = res.data;
+      console.log('roomForm: ', roomForm.value);
       form.curBedId = calBedNum(form.studentId, roomForm.value);
     } else {
       ElMessage({
@@ -321,10 +299,12 @@ const save = () => {
       try {
         if (!judgeOption.value) {
           judgeOrderState(form.status);
-          const res = await updateAdjustRoom(orderState.value, form);
+          const res = await updateAdjustRoom(form);
           handleResponse(res, "修改成功");
         } else {
+          console.log(form);
           const res = await addAdjustRoom(form);
+          console.log(res);
           handleResponse(res, "添加成功");
         }
       } catch (error) {
@@ -341,12 +321,6 @@ const calBedNum = (studentId, data) => {
   if (data.secondBed != null && data.secondBed === studentId) return 2;
   if (data.thirdBed != null && data.thirdBed === studentId) return 3;
   if (data.fourthBed != null && data.fourthBed === studentId) return 4;
-};
-
-// 判断订单状态
-const judgeOrderState = (status) => {
-  if (status === '通过') orderState.value = true;
-  else orderState.value = false;
 };
 
 // 处理响应
