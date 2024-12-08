@@ -117,6 +117,13 @@ const routes = [
       name: 'AnnouncementBoard',
       component: AnnouncementBoard,
       meta: { requiresAuth: true },
+    },
+
+    {
+      path: '/accessLogList',
+      name: 'AccessLogList',
+      component: () => import('@/views/AccessLogList.vue'),
+      meta: { requiresAuth: true },
     }
 ];
 

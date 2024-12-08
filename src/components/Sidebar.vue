@@ -68,6 +68,11 @@
           <span>个人信息</span>
         </template>
       </el-menu-item>
+
+      <el-menu-item v-if="identityLevel === 0" index="/accessLogList">
+        <el-icon><document/></el-icon>
+        <span>访问日志</span>
+      </el-menu-item>
     </el-menu>
   </div>
 </template>
@@ -76,7 +81,7 @@
 import '@fortawesome/fontawesome-free/css/all.css';
 import { useUserStore } from '@/store/user';
 import { ref, computed } from 'vue';
-import { Bell } from '@element-plus/icons-vue';
+import { Bell, Document } from '@element-plus/icons-vue';
 
 export default {
     name: 'Sidebar',
