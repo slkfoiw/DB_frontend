@@ -44,7 +44,6 @@ import {useRouter} from 'vue-router';
 import {User, Message, Lock} from '@element-plus/icons-vue';
 import 'particles.js';
 import { ElMessage } from 'element-plus';
-import { useStore } from 'vuex';
 
 export default {
   name: 'Login',
@@ -62,7 +61,6 @@ export default {
     const isRegistering = ref(false);
 
     const userStore = useUserStore();
-    const store = useStore();
 
     const changeLogoToClosedEyes = () => {
       logo.value = logoClosedEyes;
@@ -92,9 +90,6 @@ export default {
           });
           return;
         }
-        
-        // 把isAuthenticated置为true
-        store.dispatch('login');
 
         // 解析token获取用户角色
         const user = response.name;

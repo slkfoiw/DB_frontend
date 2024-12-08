@@ -135,7 +135,6 @@ export default {
           password: password.value,
           email: email.value
         });
-        console.log(res);
         if (res.code === 0) {
           ElMessage({
             message: res.msg,

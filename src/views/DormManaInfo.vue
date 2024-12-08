@@ -155,7 +155,6 @@ const saveDormMana = async () => {
         }
     }
     const res = isEdit.value ? await updateDormManager({oldManagerId:oldManagerId.value, manager:form.value}) : await addDormManager(form.value);
-    console.log('res:', res);
     if (res.code !== 0) {
         ElMessage.error(res.msg);
         return;

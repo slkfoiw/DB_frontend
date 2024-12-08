@@ -24,10 +24,34 @@ http.interceptors.request.use(config => {
 
 // axios响应式拦截器
 http.interceptors.response.use(
-    res => res.data,
+    async res => {
+        const userStore = useUserStore();
+        console.log('res:', res)
+        if (typeof res.data.code === 'undefined') {
+            if (res.data.status === 0) {
+                return res.data;
+            }
+            if (res.data.status === 401) {
+                ElMessage({
+                    type: 'error',
+                    message: res.data.data,
+                    duration: 3000
+                });
+                userStore.refreshLocal();
+                await router.replace('/login');
+                return;
+            } else {
+                ElMessage({
+                    type: 'error',
+                    message: res.data.data || '未知错误'
+                });
+                return Promise.reject(res.data);
+            }
+        }
+        return res.data;
+    },
     async e => {
         const userStore = useUserStore();
-
         console.log('e:', e)
         if (e.response) {
             // 处理401错误

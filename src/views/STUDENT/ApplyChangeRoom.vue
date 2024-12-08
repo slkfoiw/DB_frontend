@@ -240,7 +240,6 @@ const checkBedStateHandler = async (rule, value, callback) => {
   try {
     const res = await checkBedState(form.toDormId, dormRoomId.value, value);
     if (res.code === 0) {
-      console.log(res);
       callback();
     } else {
       callback(new Error(res.msg));
