@@ -16,7 +16,6 @@ import { useRouter } from 'vue-router'; // 添加这一行
 import { ref } from 'vue';
 import { useUserStore } from '@/store/user';
 import { ElMessage } from 'element-plus';
-import { useStore } from 'vuex';
 
 export default {
     props: {
@@ -28,7 +27,6 @@ export default {
     setup(props, { emit }) {
     const showModal = ref(false);
     const userStore = useUserStore();
-    const store = useStore();
     const router = useRouter(); // 添加这一行
 
     const confirm = async () => {
@@ -43,9 +41,6 @@ export default {
         }
         emit('confirmed');
 
-        // 把isAuthenticated置为false
-        store.dispatch('logout');
-
         ElMessage(
             {
                 message: '已' + props.exeName,
@@ -56,7 +51,7 @@ export default {
 
         showModal.value = false;
 
-        router.push('/home'); // 添加这一行
+        router.push('/login'); // 添加这一行
     };
 
     return {

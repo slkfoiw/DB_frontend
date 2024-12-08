@@ -221,6 +221,20 @@ const checkRoomStateHandler = async (rule, value, callback) => {
   }
 };
 
+// 检查床位状态
+const checkBedStateHandler = async (rule, value, callback) => {
+  try {
+    const res = await checkBedState(form.toDormId, dormRoomId.value, value);
+    if (res.code === 0) {
+      callback();
+    } else {
+      callback(new Error(res.msg));
+    }
+  } catch (error) {
+    callback(new Error("请求失败"));
+  }
+};
+
 const rules = reactive({
   studentId: [
     { required: true, message: "请输入学号", trigger: "blur" },
