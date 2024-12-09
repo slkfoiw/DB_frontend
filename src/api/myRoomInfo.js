@@ -22,3 +22,14 @@ export const getRoomBedUserId = (studentId) => {
       }
   });
 };
+
+// 获取指定公寓指定宿舍空床位编号
+export const getEmptyBedId = ({dormId, roomId}) => {
+  return http({
+      url: `/room/getEmptyBedId/${dormId}/${roomId}`,
+      method: 'GET',
+      headers: {
+          'Content-Type': 'application/json'
+      }
+  });
+};

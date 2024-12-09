@@ -183,6 +183,7 @@ const closeDetail = () => {
 };
 
 const handleChange = async () => {
+    console.log('handleChange: ', form.value);
     const res = isEdit.value ? await updateRepair(form.value) : await addRepair(form.value);
     console.log('handleChange: ', res);
     if (res.code !== 0) {
