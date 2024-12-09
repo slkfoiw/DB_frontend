@@ -3,7 +3,7 @@
     <div class="login-decorator" :class="{ 'slide-up': isLogin }">
       <div class="login-main">
         <div class="logo">
-          <img :src="logo" alt="Logo">
+          <img src="@/assets/logo.png" alt="Logo" width="130" height="100" >
         </div>
         <div class="header">{{ siteHeader }}</div>
         <form @submit.prevent="register">
@@ -60,10 +60,10 @@ export default {
     const password = ref('');
     const confirmPassword = ref('');
     const email = ref('');
-    const logoOpenEyes = 'https://buaaxiaolanshu.oss-cn-beijing.aliyuncs.com/static/logo-bg-no.svg';
-    const logoClosedEyes = 'https://buaaxiaolanshu.oss-cn-beijing.aliyuncs.com/static/logo-close-eyes.jpg';
+    const logoOpenEyes = '@/assets/logo.png';
+    const logoClosedEyes = '@/assets/logo.png';
     const logo = ref(logoOpenEyes);
-    const siteHeader = 'BUAA宿舍管理系统注册界面';
+    const siteHeader = '航小家注册界面';
     const isLogin = ref(false);
 
     const changeLogoToClosedEyes = () => {
@@ -195,7 +195,6 @@ export default {
 <style scoped>
 .bg {
   /* background: #f0f2f5; */
-  background-image: url('https://buaaxiaolanshu.oss-cn-beijing.aliyuncs.com/static/bg-login.svg');
   min-height: 100%;
   background-repeat: no-repeat;
   background-position: 50%;
@@ -229,15 +228,17 @@ export default {
 
 .login-main {
   padding-bottom: 50px;
-  max-width: 350px;
+  max-width: 550px;
+  min-width: 300px;
   margin-left: auto;
   margin-right: auto;
 }
 
 .logo img {
-  width: 30%;
+  width: 50%;
   margin-left: auto;
   margin-right: auto;
+  margin-bottom: 20px;
   display: block;
 }
 

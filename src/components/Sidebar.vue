@@ -3,7 +3,7 @@
     <el-menu :default-active="this.$route.path" router
       unique-opened class="sidebar">
       <!-- logo -->
-      <img alt="logo" class="logo" src="@/assets/logo.png" width="80" height="80" />
+      <img alt="logo" class="logo" src="@/assets/logo.png" width="100" height="80" />
       
       <!-- 侧边菜单列表 -->
       <el-menu-item index="/home">

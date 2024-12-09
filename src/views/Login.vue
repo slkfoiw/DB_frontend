@@ -3,7 +3,7 @@
     <div class="login-decorator" :class="{ 'slide-down': isRegistering }">
       <div class="login-main">
         <div class="logo">
-          <img alt="logo" class="logo" src="@/assets/logo.png" width="100" height="100" />
+          <img alt="logo" class="logo" src="@/assets/logo.png" width="130" height="100" />
         </div>
         <div class="header">{{ siteHeader }}</div>
         <form @submit.prevent="login">
@@ -44,7 +44,7 @@ export default {
     const logoOpenEyes = '@/assets/logo.png';
     const logoClosedEyes = '@/assets/logo.png';
     const logo = ref(logoOpenEyes);
-    const siteHeader = 'BUAA宿舍管理系统登陆界面';
+    const siteHeader = '航小家登陆界面';
     const next = ref('');
     const isRedirecting = ref(false);
     const isRegistering = ref(false);
@@ -182,15 +182,17 @@ export default {
 
 .login-main {
   padding-bottom: 50px;
-  max-width: 350px;
+  max-width: 550px;
+  min-width: 300px;
   margin-left: auto;
   margin-right: auto;
 }
 
 .logo img {
-  width: 30%;
+  width: 50%;
   margin-left: auto;
   margin-right: auto;
+  margin-bottom: 20px;
   display: block;
 }
 
