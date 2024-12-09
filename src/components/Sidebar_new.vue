@@ -1,10 +1,11 @@
 <template>
     <div>
-        <sidebar-menu :menu="menu" :collapsed="isCollapsed" width="200px" theme="white-theme" />
+        <sidebar-menu :menu="menu" :collapsed="true" width="200px" theme="white-theme" />
     </div>
 </template>
 
 <script>
+import '@fortawesome/fontawesome-free/css/all.css';
 import { SidebarMenu } from 'vue-sidebar-menu';
 import 'vue-sidebar-menu/dist/vue-sidebar-menu.css';
 import { useUserStore } from '@/store/user';
