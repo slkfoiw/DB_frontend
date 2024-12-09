@@ -206,8 +206,11 @@ export const updateChangeRoom = (changeRoom) => {
 
 export const deleteChangeRoom = (changeRoomId) => {
     return http({
-        url: `admin/delete-change-room/${changeRoomId}`,
-        method: 'DELETE'
+        url: `/adjustRoom/delete-change-room/${changeRoomId}`,
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json'
+        },
     })
     const id = mockChangeRoom.findIndex(c => c.id === changeRoomId);
     if (id !== -1) {

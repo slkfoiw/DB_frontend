@@ -77,8 +77,8 @@
           </div>
           <div>
             <!--      弹窗-->
-            <el-dialog v-model="dialogVisible" title="操作" width="30%" @close="cancel">
-              <el-form ref="formRef" :model="form" label-width="120px">
+            <el-dialog v-model="dialogVisible" title="操作" width="30%" @open="fetchEmptyBeds" @close="cancel">
+              <el-form ref="formRef" :model="form" :rules="rules" label-width="120px">
                 <el-form-item label="学号" prop="studentId">
                   <el-input v-model="form.studentId" disabled style="width: 80%"></el-input>
                 </el-form-item>
@@ -97,8 +97,11 @@
                 <el-form-item label="目标房间号" prop="toRoomId">
                   <el-input v-model="form.toRoomId" style="width: 80%"></el-input>
                 </el-form-item>
-                <el-form-item label="目标床位号" prop="toBedId">
-                  <el-input v-model="form.toBedId" style="width: 80%"></el-input>
+<!-- 动态下拉框 -->
+                <el-form-item label="目标床位号：" prop="toBedId" required>
+                <el-select v-model="form.toBedId" placeholder="请选择目标床位号" style="width: 100%;">
+                <el-option v-for="bed in emptyBeds" :key="bed" :label="'床位 ' + bed" :value="bed"></el-option>
+                </el-select>
                 </el-form-item>
                 <el-form-item label="申请时间" prop="createDate" style="margin-top: 27px">
                   <el-date-picker
@@ -111,11 +114,13 @@
                       value-format="YYYY-MM-DD HH:mm:ss"
                   ></el-date-picker>
                 </el-form-item>
-                <el-form-item label="申请状态" prop="status">
-                  <el-radio v-model="form.status" label="通过">通过</el-radio>
-                  <el-radio v-model="form.status" label="驳回">驳回</el-radio>
+                <el-form-item label="申请状态" prop="status" required>
+                  <el-radio-group v-model="form.status">
+                    <el-radio :label="0">通过</el-radio>
+                    <el-radio :label="1">驳回</el-radio>
+                  </el-radio-group>
                 </el-form-item>
-                <el-form-item label="处理时间" prop="finishDate" style="margin-top: 27px">
+                <el-form-item label="处理时间" prop="finishDate" style="margin-top: 27px" required>
                   <el-date-picker
                       v-model="form.finishDate"
                       clearable
@@ -198,6 +203,7 @@
 import { ref, onMounted } from 'vue';
 import { getChangeRoom, updateChangeRoom, deleteChangeRoom } from '@/api/admin';
 import { ElMessage } from 'element-plus';
+import { getEmptyBedId } from '@/api/myRoomInfo';
 
 const tableData = ref([]);
 const dialogVisible = ref(false);
@@ -220,6 +226,25 @@ const form = ref({
     createDate: '',
     finishDate: '',
 });
+
+const emptyBeds = ref([]); // 存储空床位列表
+
+// 获取空床位数据
+const fetchEmptyBeds = async () => {
+    try {
+        console.log('Fetching empty beds:', form.value.toDormId, form.value.toRoomId);
+        const response = await getEmptyBedId({ dormId: form.value.toDormId, roomId: form.value.toRoomId });
+        if (response.code !== 0) {
+            ElMessage.error(response.msg);
+            return;
+        }
+        console.log('Empty beds:', response.data);
+        emptyBeds.value = response.data; // 更新空床位数据
+    } catch (error) {
+        console.error('Error fetching empty beds:', error);
+        ElMessage.error('获取空床位失败！');
+    }
+};
 
 const filterTag = (value, row) => {
     return row.status === value;
@@ -258,32 +283,31 @@ const cancel = () => {
 // 方法：编辑数据
 const handleEdit = async(changeRoom) => {
     form.value = { ...changeRoom };
+    console.log(form.value);
     dialogVisible.value = true;
-    await load();
   };
 
 // 方法：保存数据
 const save = async () => {
-    try {
-        const res = await updateChangeRoom(form.value);
-        if (!res.success) throw new Error(res.message);
-        ElMessage.success(res.message);
-    } catch (error) {
-        ElMessage.error(error.message);
-    } finally {
-        await load(); // 刷新数据
-        await cancel();
-    }
+  const res = await updateChangeRoom(form.value);
+  if (res.code !== 0) {
+    ElMessage.error(res.msg);
+    return;
+  }
+  ElMessage.success(res.msg);
+  await load(); // 刷新数据
+  cancel();
 };
 
 // 方法：删除数据
 const handleDelete = async (id) => {
     try {
-        const res = await deleteChangeRoom(id);
-        if (!res.success) throw new Error(res.message);
-        ElMessage.success(res.message);
+      console.log('Delete:', id);
+      const res = await deleteChangeRoom(id);
+      if (res.code !== 0) ElMessage.error(res.msg);
+      ElMessage.success(res.msg);
     } catch (error) {
-        ElMessage.error(error.message);
+        ElMessage.error(error.msg);
     }
     await load(); // 刷新数据
 };
