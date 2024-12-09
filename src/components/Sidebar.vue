@@ -3,7 +3,7 @@
     <el-menu :default-active="this.$route.path" router
       unique-opened class="sidebar">
       <!-- logo -->
-      <img alt="logo" class="logo" src="@/assets/emoji.png" width="80" height="80" />
+      <img alt="logo" class="logo" src="@/assets/logo.png" width="80" height="80" />
       
       <!-- 侧边菜单列表 -->
       <el-menu-item index="/home">
@@ -37,12 +37,17 @@
         <el-menu-item index="/changeRoomList">调宿记录</el-menu-item>
       </el-sub-menu>
       
-      <el-menu-item index="/notifications">
+      <el-menu-item v-if="identityLevel === 0" index="/accessLogList">
+        <el-icon><document/></el-icon>
+        <span>访问日志</span>
+      </el-menu-item>
+      
+      <el-menu-item v-if="identityLevel !== 0" index="/notifications">
       <el-icon><Bell /></el-icon>
       <span>我的消息</span>
       </el-menu-item>
       
-      <el-menu-item index="/announcementBoard">
+      <el-menu-item v-if="identityLevel !== 0" index="/announcementBoard">
       <el-icon><DataLine /></el-icon>
       <span>公告栏</span>
       </el-menu-item>
@@ -67,11 +72,6 @@
           <el-icon><setting/></el-icon>
           <span>个人信息</span>
         </template>
-      </el-menu-item>
-
-      <el-menu-item v-if="identityLevel === 0" index="/accessLogList">
-        <el-icon><document/></el-icon>
-        <span>访问日志</span>
       </el-menu-item>
     </el-menu>
   </div>

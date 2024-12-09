@@ -11,9 +11,6 @@
             <el-input v-model="username" name="username" placeholder="用户名" autofocus :prefix-icon="User"></el-input>
           </div>
           <div class="simpleui-input-inline">
-            <el-input v-model="email" name="email" placeholder="邮箱" autofocus :prefix-icon="Message"></el-input>
-          </div>
-          <div class="simpleui-input-inline">
             <el-input type="password" v-model="password" name="password" @focus="changeLogoToClosedEyes"
               @blur="changeLogoToOpenEyes" @keyup.enter="login" placeholder="密码" show-password
               :prefix-icon="Lock"></el-input>
@@ -50,7 +47,6 @@ export default {
   setup() {
     const router = useRouter();
     const username = ref('');
-    const email = ref('');
     const password = ref('');
     const logoOpenEyes = 'https://buaaxiaolanshu.oss-cn-beijing.aliyuncs.com/static/logo-bg-no.svg';
     const logoClosedEyes = 'https://buaaxiaolanshu.oss-cn-beijing.aliyuncs.com/static/logo-close-eyes.jpg';
@@ -71,7 +67,7 @@ export default {
     };
 
     const login = async () => {
-      if (!username.value || !email.value || !password.value) {
+      if (!username.value || !password.value) {
         ElMessage({
           message: '用户名、邮箱、密码均不能为空',
           type: 'error',
@@ -134,7 +130,6 @@ export default {
 
     return {
       username,
-      email,
       password,
       login,
       logo,

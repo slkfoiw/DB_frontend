@@ -9,7 +9,7 @@
             <div>
                 <!-- 导入和导出功能 -->
                 <div>
-                    <el-upload class="upload-demo" drag accept=".xls, .xlsx, .xml" :on-change="handleFileUpload"
+                    <el-upload class="upload-demo" drag accept=".xls, .xlsx" :on-change="handleFileUpload"
                         :auto-upload="false">
                         <i class="el-icon-upload"></i>
                         <div class="el-upload__text">重新导入宿舍信息，将文件拖到此处，或<em>点击上传</em></div>
