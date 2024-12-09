@@ -9,7 +9,7 @@
         <el-card>
             <!-- 导入和导出功能 -->
             <div>
-                <el-upload class="upload-demo" drag accept=".xls, .xlsx, .xml"
+                <el-upload class="upload-demo" drag accept=".xls, .xlsx"
                     :on-change="handleFileUpload"
                     :auto-upload="false">
                     <i class="el-icon-upload"></i>

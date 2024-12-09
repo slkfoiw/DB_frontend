@@ -3,7 +3,7 @@
     <div class="login-decorator" :class="{ 'slide-down': isRegistering }">
       <div class="login-main">
         <div class="logo">
-          <img :src="logo" alt="Logo">
+          <img alt="logo" class="logo" src="@/assets/logo.png" width="130" height="100" />
         </div>
         <div class="header">{{ siteHeader }}</div>
         <form @submit.prevent="login">
@@ -11,11 +11,7 @@
             <el-input v-model="username" name="username" placeholder="用户名" autofocus :prefix-icon="User"></el-input>
           </div>
           <div class="simpleui-input-inline">
-            <el-input v-model="email" name="email" placeholder="邮箱" autofocus :prefix-icon="Message"></el-input>
-          </div>
-          <div class="simpleui-input-inline">
-            <el-input type="password" v-model="password" name="password" @focus="changeLogoToClosedEyes"
-              @blur="changeLogoToOpenEyes" @keyup.enter="login" placeholder="密码" show-password
+            <el-input type="password" v-model="password" name="password" @keyup.enter="login" placeholder="密码" show-password
               :prefix-icon="Lock"></el-input>
           </div>
           <div class="simpleui-input-inline button-container">
@@ -27,12 +23,6 @@
       </div>
     </div>
     <div id="particles-js"></div>
-  </div>
-  <div v-if="isRedirecting" class="loading-overlay">
-    <div class="loading-content">
-      <img :src="logo" class="bird-logo" alt="小鸟">
-      <div class="loading-text">正在跳转...</div>
-    </div>
   </div>
 </template>
 
@@ -50,12 +40,11 @@ export default {
   setup() {
     const router = useRouter();
     const username = ref('');
-    const email = ref('');
     const password = ref('');
-    const logoOpenEyes = 'https://buaaxiaolanshu.oss-cn-beijing.aliyuncs.com/static/logo-bg-no.svg';
-    const logoClosedEyes = 'https://buaaxiaolanshu.oss-cn-beijing.aliyuncs.com/static/logo-close-eyes.jpg';
+    const logoOpenEyes = '@/assets/logo.png';
+    const logoClosedEyes = '@/assets/logo.png';
     const logo = ref(logoOpenEyes);
-    const siteHeader = 'BUAA宿舍管理系统登陆界面';
+    const siteHeader = '航小家登陆界面';
     const next = ref('');
     const isRedirecting = ref(false);
     const isRegistering = ref(false);
@@ -71,9 +60,9 @@ export default {
     };
 
     const login = async () => {
-      if (!username.value || !email.value || !password.value) {
+      if (!username.value || !password.value) {
         ElMessage({
-          message: '用户名、邮箱、密码均不能为空',
+          message: '用户名、密码均不能为空',
           type: 'error',
           duration: 1000,
         });
@@ -84,7 +73,7 @@ export default {
         const response = await userStore.userLogin(username.value, password.value);
         if (!response) {
           ElMessage({
-            message: '登录失败，请检查邮箱和密码',
+            message: '登录失败，请检查用户名和密码',
             type: 'error',
             duration: 1000,
           });
@@ -107,7 +96,7 @@ export default {
 
       } catch (error) {
         ElMessage({
-          message: '登录失败，请检查邮箱和密码是否正确',
+          message: '登录失败，请检查用户名和密码是否正确',
           type: 'error',
           duration: 1000,
         });
@@ -134,7 +123,6 @@ export default {
 
     return {
       username,
-      email,
       password,
       login,
       logo,
@@ -156,7 +144,6 @@ export default {
 
 <style scoped>
 .bg {
-  background-image: url('https://buaaxiaolanshu.oss-cn-beijing.aliyuncs.com/static/bg-login.svg');
   min-height: 100%;
   background-repeat: no-repeat;
   background-position: 50%;
@@ -195,15 +182,17 @@ export default {
 
 .login-main {
   padding-bottom: 50px;
-  max-width: 350px;
+  max-width: 550px;
+  min-width: 300px;
   margin-left: auto;
   margin-right: auto;
 }
 
 .logo img {
-  width: 30%;
+  width: 50%;
   margin-left: auto;
   margin-right: auto;
+  margin-bottom: 20px;
   display: block;
 }
 
@@ -252,10 +241,6 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
-}
-
-.bird-logo {
-  width: 100px;
 }
 
 .loading-text {
