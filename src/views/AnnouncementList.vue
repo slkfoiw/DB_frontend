@@ -9,11 +9,11 @@
     <el-card>
       <!-- 搜索框 -->
       <div style="margin: 10px 0">
-        <el-input v-model="searchQuery" clearable placeholder="搜索发布人或公告主题或公告内容" prefix-icon="Search" style="width: 20%" />
-        <el-button icon="Search" style="margin-left: 5px" type="primary" @click="load"></el-button>
+        <el-input v-model="searchQuery" clearable placeholder="搜索发布人或公告主题或公告内容" prefix-icon="Search" style="width: 30%" />
+        <el-button icon="Search" plain="true" style="margin-left: 5px" type="primary" @click="load"></el-button>
         <div style="float: right">
           <el-tooltip content="添加公告" placement="top">
-            <el-button icon="plus" style="width: 50px" type="primary" @click="openModal()"></el-button>
+            <el-button icon="plus" plain="true" style="width: 50px" type="primary" @click="openModal()"></el-button>
           </el-tooltip>
         </div>
       </div>
@@ -33,11 +33,11 @@
         </el-table-column>
         <el-table-column label="操作">
           <template v-slot="scope">
-            <el-button icon="more-filled" type="default" @click="openDetail(scope.row)"></el-button>
-            <el-button icon="Edit" @click="openModal(scope.row)"></el-button>
+            <el-button icon="more-filled" type="warning" plain="true" @click="openDetail(scope.row)"></el-button>
+            <el-button icon="Edit" type="primary" plain="true" @click="openModal(scope.row)"></el-button>
             <el-popconfirm title="确认删除？" @confirm="handleDelete(scope.row.id)">
               <template #reference>
-                <el-button icon="Delete" type="danger"></el-button>
+                <el-button icon="Delete" type="danger" plain="true"></el-button>
               </template>
             </el-popconfirm>
           </template>
@@ -206,5 +206,5 @@ onMounted(load); // 获取公告列表
 </script>
 
 <style scoped>
-@import '@/assets/css/table.css';
+@import '../assets/css/table.css';
 </style>

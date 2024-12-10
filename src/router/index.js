@@ -15,6 +15,11 @@ import AnnouncementBoard from '@/views/AnnouncementBoard.vue';
 
 const routes = [
   {
+    path: '/user_new',
+    name: 'User_new',
+    component: () => import('@/views/User_new.vue'),
+  },
+  {
     path: '/',
     name: 'Start',
     component: Login
@@ -97,39 +102,39 @@ const routes = [
     props: true
   },
 
-    // STUDENT
-    {
-      path: '/myRoomInfo',
-      name: 'MyRoomInfo',
-      component: MyRoomInfo,
-      meta: { requiresAuth: true },
-    },
-    {
-      path: '/applyChangeRoom',
-      name: 'ApplyChangeRoom',
-      component: ApplyChangeRoom,
-      meta: { requiresAuth: true },
-    },
-    {
-      path: '/applyRepairInfo',
-      name: 'ApplyRepairInfo',
-      component: ApplyRepairInfo,
-      meta: { requiresAuth: true },
-    },
+  // STUDENT
+  {
+    path: '/myRoomInfo',
+    name: 'MyRoomInfo',
+    component: MyRoomInfo,
+    meta: { requiresAuth: true },
+  },
+  {
+    path: '/applyChangeRoom',
+    name: 'ApplyChangeRoom',
+    component: ApplyChangeRoom,
+    meta: { requiresAuth: true },
+  },
+  {
+    path: '/applyRepairInfo',
+    name: 'ApplyRepairInfo',
+    component: ApplyRepairInfo,
+    meta: { requiresAuth: true },
+  },
 
-    {
-      path: '/announcementBoard',
-      name: 'AnnouncementBoard',
-      component: AnnouncementBoard,
-      meta: { requiresAuth: true },
-    },
+  {
+    path: '/announcementBoard',
+    name: 'AnnouncementBoard',
+    component: AnnouncementBoard,
+    meta: { requiresAuth: true },
+  },
 
-    {
-      path: '/accessLogList',
-      name: 'AccessLogList',
-      component: () => import('@/views/AccessLogList.vue'),
-      meta: { requiresAuth: true },
-    }
+  {
+    path: '/accessLogList',
+    name: 'AccessLogList',
+    component: () => import('@/views/AccessLogList.vue'),
+    meta: { requiresAuth: true },
+  }
 ];
 
 const router = createRouter({
@@ -138,7 +143,7 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
-    next();
+  next();
 });
 
 export default router;

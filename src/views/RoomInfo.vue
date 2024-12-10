@@ -21,11 +21,11 @@
                     <!--    搜索区-->
                     <div style="margin: 10px 0">
                         <el-input v-model="search" clearable placeholder="请输入房间号或学生学号" prefix-icon="Search"
-                            style="width: 20%" />
-                        <el-button icon="Search" style="margin-left: 5px" type="primary" @click="load"></el-button>
+                            style="width: 30%" />
+                        <el-button icon="Search" style="margin-left: 5px" type="primary" @click="load" plain="true"></el-button>
                         <div style="float: right">
                             <el-tooltip content="添加房间" placement="top">
-                                <el-button icon="plus" style="width: 50px" type="primary" @click="addRoom"></el-button>
+                                <el-button icon="plus" style="width: 50px" type="primary" @click="addRoom" plain="true"></el-button>
                             </el-tooltip>
                         </div>
                     </div>
@@ -154,10 +154,10 @@
                     <!--      操作栏-->
                     <el-table-column label="操作" width="130px">
                         <template #default="scope">
-                            <el-button icon="Edit" type="primary" @click.stop="editRoom(scope.row)"></el-button>
+                            <el-button icon="Edit" type="primary" plain="true" @click.stop="editRoom(scope.row)"></el-button>
                             <el-popconfirm title="确认删除？" @confirm="handleDelete(scope.row.dormId, scope.row.roomId)">
                                 <template #reference>
-                                    <el-button icon="Delete" type="danger"></el-button>
+                                    <el-button icon="Delete" type="danger" plain="true"></el-button>
                                 </template>
                             </el-popconfirm>
                         </template>
@@ -192,8 +192,8 @@
                                 <el-input v-model="form.peopleNum" style="width: 80%" :disabled=true>0</el-input>
                             </el-form-item>
                             <el-form-item>
-                                <el-button type="primary" @click="saveNewRoom">添加</el-button>
-                                <el-button type="default" @click="cancel">取消</el-button>
+                                <el-button type="primary" plain="true" @click="saveNewRoom">添加</el-button>
+                                <el-button type="default" plain="true" @click="cancel">取消</el-button>
                             </el-form-item>
                         </el-form>
                     </el-dialog>
@@ -221,8 +221,8 @@
                         </el-form>
                         <template #footer>
                             <span class="dialog-footer">
-                                <el-button @click="cancel">取 消</el-button>
-                                <el-button type="primary" @click="saveUpdateRoom">确 定</el-button>
+                                <el-button plain="true" @click="cancel">取 消</el-button>
+                                <el-button type="primary" plain="true" @click="saveUpdateRoom">确 定</el-button>
                             </span>
                         </template>
                     </el-dialog>
@@ -257,8 +257,8 @@
                         </el-form>
                         <template #footer>
                             <span class="dialog-footer">
-                                <el-button @click="cancel">取 消</el-button>
-                                <el-button type="primary" @click="saveStuBed">确 定</el-button>
+                                <el-button plain="true" @click="cancel">取 消</el-button>
+                                <el-button plain="true" type="primary" @click="saveStuBed">确 定</el-button>
                             </span>
                         </template>
                     </el-dialog>

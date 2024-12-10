@@ -1,100 +1,60 @@
 <template>
-  <div style="display: flex; justify-content: space-between">
-    <!-- 左侧 -->
-    <div style="flex: 1; margin-right: 10px;">
-      <div class="controls">
-        <el-switch
-          v-model="showRepairHistory"
-          active-text="显示报修历史"
-          inactive-text="显示漏斗图"
-          style="margin-left: 20px"
-        ></el-switch>
+  <el-card>
+    <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+      <!-- 左侧 -->
+      <div style="flex: 1; margin-right: 10px;">
+        <div class="controls">
+          <!-- Switch 在顶部 -->
+          <div class="switch-container">
+            <el-switch v-model="showRepairHistory" active-text="显示报修历史" inactive-text="显示漏斗图"
+              style="margin-left: 20px"></el-switch>
+          </div>
 
-        <el-select
-          v-if="showRepairHistory"
-          v-model="selectedBuilding"
-          placeholder="选择楼栋"
-          @change="fetchRepairHistory"
-          style="width: 200px; margin-bottom: 20px"
-        >
-          <el-option
-            v-for="building in uniqueBuildings"
-            :key="building.buildingId"
-            :label="`Building ${building.buildingId}`"
-            :value="building.buildingId"
-          ></el-option>
-        </el-select>
+          <!-- Select 和 Button 在底部 -->
+          <div class="action-container">
+            <el-select v-if="showRepairHistory" v-model="selectedBuilding" placeholder="选择楼栋"
+              @change="fetchRepairHistory" style="width: 200px;">
+              <el-option v-for="building in uniqueBuildings" :key="building.buildingId"
+                :label="`Building ${building.buildingId}`" :value="building.buildingId"></el-option>
+            </el-select>
 
-        <!-- 导出按钮 -->
-        <el-button
-          v-if="showRepairHistory"
-          type="primary"
-          size="small"
-          @click="exportTable"
-          style="margin-left: 10px"
-        >
-          导出表格
+            <el-button v-if="showRepairHistory" @click="exportTable" style="margin-left: 5px;">
+              导出表格
+            </el-button>
+          </div>
+        </div>
+
+        <!-- 报修历史表格 -->
+        <div v-if="showRepairHistory" class="repair-history-table">
+          <el-table :data="repairHistory" style="width: 100%; margin-top: 20px;" v-loading="loading" border>
+            <el-table-column prop="roomId" label="房间号"></el-table-column>
+            <el-table-column prop="type" label="报修类型"></el-table-column>
+            <el-table-column prop="count" label="报修次数"></el-table-column>
+          </el-table>
+
+          <el-pagination v-if="totalPages > 1" @current-change="handlePageChange" :current-page="currentPage"
+            :page-size="pageSize" :total="totalItems" layout="prev, pager, next"
+            style="margin-top: 20px; width: 100%;"></el-pagination>
+        </div>
+
+
+        <!-- 漏斗图 -->
+        <div v-else class="funnel-chart" ref="occupancyRateFunnel"></div>
+      </div>
+
+      <!-- 右侧 3D 图表 -->
+      <div style="flex: 1; margin-left: 20px;">
+        <el-button @click="exportChart" style="margin-top: 10px; margin-left: 10px;">
+          导出图表
         </el-button>
+        <div ref="spareBedsChart" style="width: 100%; height: 600px;"></div>
       </div>
-
-      <!-- 报修历史表格 -->
-      <div v-if="showRepairHistory" class="repair-history-table">
-        <el-table
-          :data="repairHistory"
-          border
-          style="width: 60%; margin-top: 20px;"
-          v-loading="loading"
-        >
-          <el-table-column
-            prop="roomId"
-            label="房间号"
-            width="100"
-          ></el-table-column>
-          <el-table-column
-            prop="type"
-            label="报修类型"
-            width="120"
-          ></el-table-column>
-          <el-table-column
-            prop="count"
-            label="报修次数"
-            width="100"
-          ></el-table-column>
-        </el-table>
-
-        <el-pagination
-          v-if="totalPages > 1"
-          @current-change="handlePageChange"
-          :current-page="currentPage"
-          :page-size="pageSize"
-          :total="totalItems"
-          layout="prev, pager, next"
-          style="margin-top: 20px; text-align: center"
-        ></el-pagination>
-      </div>
-
-      <!-- 漏斗图 -->
-      <div v-else class="funnel-chart" ref="occupancyRateFunnel"></div>
     </div>
-
-    <!-- 右侧 3D 图表 -->
-    <div style="flex: 1; margin-left: 20px;">
-      <div ref="spareBedsChart" style="width: 100%; height: 600px"></div>
-
-      <!-- 导出按钮 -->
-      <el-button
-        type="primary"
-        size="small"
-        @click="exportChart"
-        style="margin-top: 10px;"
-      >
-        导出图表
-      </el-button>
-    </div>
-  </div>
+  </el-card>
 </template>
-  
-  <script>
+
+
+<script>
 import * as echarts from "echarts";
 import "echarts-gl"; // 引入 3D 模块
 import {
@@ -319,8 +279,7 @@ export default {
           // 如果存在相同入住率，合并楼层信息
           rateMap.set(
             occupancyRate,
-            `${rateMap.get(occupancyRate)}, Building ${
-              item.buildingId
+            `${rateMap.get(occupancyRate)}, Building ${item.buildingId
             } - Floor ${item.floor}`
           );
         } else {
@@ -401,17 +360,27 @@ export default {
   },
 };
 </script>
-  
+
 <style scoped>
-/* 样式 */
 .controls {
   display: flex;
+  flex-direction: column;
+  /* 主轴改为垂直方向 */
+  gap: 10px;
+  /* 子项之间的间距 */
+}
+
+.action-container {
+  display: flex;
   align-items: center;
-  margin-bottom: 20px;
+  /* 垂直方向居中 */
+  gap: 10px;
+  /* Select 和 Button 间距 */
+  margin-left: 30px;
 }
 
 .repair-history-table {
-  max-width: 600px;
+  margin-left: 5%;
 }
 
 .funnel-chart {
@@ -419,12 +388,6 @@ export default {
 }
 
 button {
-  margin-left: 10px;
-}
-
-/* 设置容器之间的间距 */
-div {
-  padding: 10px;
+  margin-left: 5px;
 }
 </style>
-  

@@ -2,7 +2,6 @@
   <div>
     <el-breadcrumb separator-icon="ArrowRight" style="margin: 16px">
       <el-breadcrumb-item :to="{ path: '/home' }">首页</el-breadcrumb-item>
-      <el-breadcrumb-item>申请管理</el-breadcrumb-item>
       <el-breadcrumb-item>调宿申请</el-breadcrumb-item>
     </el-breadcrumb>
     <el-card style="margin: 15px; min-height: calc(100vh - 111px)">
@@ -11,44 +10,33 @@
         <div style="margin: 10px 0">
           <!-- 搜索区 -->
           <div style="margin: 10px 0">
-            <el-input v-model="search" clearable placeholder="请输入学号" prefix-icon="Search" style="width: 20%" />
-            <el-button icon="Search" style="margin-left: 5px" type="primary" @click="load"></el-button>
-            <div style="float: right">
+            <div style="float: right; margin: 5px;">
               <el-tooltip content="添加" placement="top">
-                <el-button icon="Plus" style="width: 50px" type="primary" @click="add"></el-button>
+                <el-button icon="Plus" style="width: 50px" type="primary" plain="true" @click="add"></el-button>
               </el-tooltip>
             </div>
           </div>
         </div>
         <!-- 表格 -->
-        <el-table v-loading="loading" :data="tableData" border max-height="705" style="width: 100%" :sort-method="sortMethod" @sort-change="handleSortChange">
+        <el-table v-loading="loading" :data="tableData" border max-height="705" style="width: 100%"
+          :sort-method="sortMethod" @sort-change="handleSortChange">
           <el-table-column label="#" type="index" />
           <el-table-column label="学号" prop="studentId" sortable width="100px" />
           <el-table-column label="姓名" prop="name" width="100px" />
           <el-table-column label="当前公寓号" prop="curDormId" sortable />
           <el-table-column label="当前宿舍号" prop="curRoomId" sortable />
           <el-table-column label="当前床位号" prop="curBedId" sortable />
-          <el-table-column label="目标公寓号" prop="toDormId" sortable/>
+          <el-table-column label="目标公寓号" prop="toDormId" sortable />
           <el-table-column label="目标宿舍号" prop="toRoomId" sortable />
           <el-table-column label="目标床位号" prop="toBedId" sortable />
-          <el-table-column
-            :filter-method="filterTag"
-            :filters="[
-              { text: '未处理', value: '未处理' },
-              { text: '通过', value: '通过' },
-              { text: '驳回', value: '驳回' },
-            ]"
-            filter-placement="bottom-end"
-            label="申请状态"
-            prop="status"
-            sortable
-            width="130px"
-          >
+          <el-table-column :filter-method="filterTag" :filters="[
+            { text: '未处理', value: '未处理' },
+            { text: '通过', value: '通过' },
+            { text: '驳回', value: '驳回' },
+          ]" filter-placement="bottom-end" label="申请状态" prop="status" sortable width="130px">
             <template #default="scope">
-              <el-tag
-                :type="scope.row.status === '通过' ? 'success' : (scope.row.status === '驳回' ? 'danger' : 'info')"
-                disable-transitions
-              >
+              <el-tag :type="scope.row.status === '通过' ? 'success' : (scope.row.status === '驳回' ? 'danger' : 'info')"
+                disable-transitions>
                 {{ scope.row.status }}
               </el-tag>
             </template>
@@ -58,22 +46,17 @@
           <!-- 操作栏 -->
           <el-table-column label="操作" width="130px">
             <template #default="scope">
-              <el-button icon="MoreFilled" type="default" @click="showDetail(scope.row)"></el-button>
-              <el-button v-if="scope.row.status === '未处理' && scope.row.studentId === user.userId" icon="Edit" type="primary" @click="handleEdit(scope.row)"></el-button>
+              <el-button icon="MoreFilled" type="warning" plain="true" @click="showDetail(scope.row)"></el-button>
+              <el-button v-if="scope.row.status === '未处理' && scope.row.studentId === user.userId" icon="Edit"
+                type="primary" @click="handleEdit(scope.row)" plain="true"></el-button>
             </template>
           </el-table-column>
         </el-table>
         <!-- 分页 -->
         <div style="margin: 10px 0">
-          <el-pagination
-            v-model:currentPage="currentPage"
-            :page-size="pageSize"
-            :page-sizes="[10, 20]"
-            :total="total"
-            layout="total, sizes, prev, pager, next, jumper"
-            @size-change="handleSizeChange"
-            @current-change="handleCurrentChange"
-          />
+          <el-pagination v-model:currentPage="currentPage" :page-size="pageSize" :page-sizes="[10, 20]" :total="total"
+            layout="total, sizes, prev, pager, next, jumper" @size-change="handleSizeChange"
+            @current-change="handleCurrentChange" />
         </div>
         <!-- 弹窗 -->
         <el-dialog v-model="dialogVisible" title="修改" width="30%" @close="cancel">
@@ -105,21 +88,14 @@
               <el-input v-model.number="form.toBedId" style="width: 80%" />
             </el-form-item> -->
             <el-form-item label="申请时间" prop="createDate" style="margin-top: 27px">
-              <el-date-picker
-                v-model="form.createDate"
-                :disabled="!judgeOption"
-                clearable
-                placeholder="选择时间"
-                style="width: 50%"
-                type="datetime"
-                value-format="YYYY-MM-DD HH:mm:ss"
-              />
+              <el-date-picker v-model="form.createDate" :disabled="!judgeOption" clearable placeholder="选择时间"
+                style="width: 50%" type="datetime" value-format="YYYY-MM-DD HH:mm:ss" />
             </el-form-item>
           </el-form>
           <template #footer>
             <span class="dialog-footer">
-              <el-button @click="cancel">取消</el-button>
-              <el-button type="primary" @click="save">确定</el-button>
+              <el-button @click="cancel" plain="true">取消</el-button>
+              <el-button type="primary" @click="save" plain="true">确定</el-button>
             </span>
           </template>
         </el-dialog>
@@ -191,8 +167,8 @@ const formRef = ref(null);
 const form = reactive({});
 
 const roomForm = reactive({
-  dormId:'',
-	roomId:'',
+  dormId: '',
+  roomId: '',
   firstBed: '',
   secondBed: '',
   thirdBed: '',
@@ -262,13 +238,13 @@ const rules = reactive({
 const load = async () => {
   try {
     const params = {
-    pageNum: currentPage.value,
-    pageSize: pageSize.value,
-    search: search.value,
-    studentId: user.userId,
-    sortField: sortField.value,
-    sortOrder: sortOrder.value,
-  };
+      pageNum: currentPage.value,
+      pageSize: pageSize.value,
+      search: search.value,
+      studentId: user.userId,
+      sortField: sortField.value,
+      sortOrder: sortOrder.value,
+    };
     const res = await fetchAdjustRoomData(params);
     if (res.code !== 0) {
       ElMessage({
@@ -399,22 +375,22 @@ const handleCurrentChange = (pageNum) => {
 
 
 const handleSortChange = (sort) => {
-    sortField.value = sort.prop;
-    sortOrder.value = sort.order === 'ascending' ? 'asc' : 'desc';
-    load();
+  sortField.value = sort.prop;
+  sortOrder.value = sort.order === 'ascending' ? 'asc' : 'desc';
+  load();
 };
 
 const dormBuildings = ref([
-  {id: '1', name: '1-南区学生公寓-男'},
-  {id: '2', name: '2-南区学生公寓-女'},
-  {id: '3', name: '3-南区学生公寓-混合'},
-  {id: '4', name: '4-北区学生公寓-女'},
-  {id: '5', name: '5-北区学生公寓-男'},
-  {id: '6', name: '6-北区学生公寓-混合'},
-  {id: '7', name: '7-大运村学生公寓-女'},
-  {id: '8', name: '8-大运村学生公寓-男'},
-  {id: '9', name: '9-大运村学生公寓-混合'},
-  {id: '10', name: '10-大运村学生公寓-女'},
+  { id: '1', name: '1-南区学生公寓-男' },
+  { id: '2', name: '2-南区学生公寓-女' },
+  { id: '3', name: '3-南区学生公寓-混合' },
+  { id: '4', name: '4-北区学生公寓-女' },
+  { id: '5', name: '5-北区学生公寓-男' },
+  { id: '6', name: '6-北区学生公寓-混合' },
+  { id: '7', name: '7-大运村学生公寓-女' },
+  { id: '8', name: '8-大运村学生公寓-男' },
+  { id: '9', name: '9-大运村学生公寓-混合' },
+  { id: '10', name: '10-大运村学生公寓-女' },
 ]);
 
 onMounted(() => {
@@ -424,3 +400,7 @@ onMounted(() => {
   }, 1000);
 });
 </script>
+
+<style scoped>
+@import '../../assets/css/table.css';
+</style>

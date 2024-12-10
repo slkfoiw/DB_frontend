@@ -12,7 +12,7 @@
             <!--    搜索区-->
             <div style="margin: 10px 0">
               <el-input v-model="searchQuery" clearable placeholder="请输入学号" prefix-icon="Search" style="width: 20%"/>
-              <el-button icon="Search" style="margin-left: 5px" type="primary" @click="load"></el-button>
+              <el-button icon="Search" style="margin-left: 5px" type="primary" plain="true" @click="load"></el-button>
             </div>
           </div>
           <!--    表格-->
@@ -50,13 +50,13 @@
             <!--      操作栏-->
             <el-table-column label="操作" width="190px">
               <template #default="scope">
-                <el-button v-if="scope.row.status==='通过' ||scope.row.status==='驳回'" icon="more-filled" type="default"
+                <el-button v-if="scope.row.status==='通过' ||scope.row.status==='驳回'" icon="more-filled" type="warning" plain="true"
                            @click="showDetail(scope.row)"></el-button>
-                <el-button v-if="scope.row.status!=='通过' " icon="Edit" type="primary"
+                <el-button v-if="scope.row.status!=='通过' " icon="Edit" type="primary" plain="true"
                            @click="handleEdit(scope.row)"></el-button>
                 <el-popconfirm title="确认删除？" @confirm="handleDelete(scope.row.id)">
                   <template #reference>
-                    <el-button icon="Delete" type="danger"></el-button>
+                    <el-button icon="Delete" type="danger" plain="true"></el-button>
                   </template>
                 </el-popconfirm>
               </template>
@@ -358,3 +358,7 @@ const resetForm = () => {
 onMounted(load);
 
 </script>
+
+<style scoped>
+@import '../assets/css/table.css';
+</style>

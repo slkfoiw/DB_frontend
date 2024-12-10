@@ -1,29 +1,32 @@
 <template>
+    <el-breadcrumb separator-icon="ArrowRight" style="margin: 16px">
+        <el-breadcrumb-item>首页</el-breadcrumb-item>
+    </el-breadcrumb>
     <el-card>
         <!-- 头部数据 -->
         <div>
             <el-row :gutter="20" class="topInfo">
                 <el-col :span="6">
                     <el-button @click="selectAnalysis('student')" class="el-colDiv student-btn">
-                        <span class="title">学生统计</span><br />
+                        <span class="title">学生统计 </span><br />
                         <span class="digital">{{ studentNum }}人</span><br />
                     </el-button>
                 </el-col>
                 <el-col :span="6">
                     <el-button @click="selectAnalysis('dormManager')" class="el-colDiv dorm-manager-btn">
-                        <span class="title">宿管统计</span><br />
+                        <span class="title">宿管统计 </span><br />
                         <span class="digital">{{ dormManaNum }}人</span><br />
                     </el-button>
                 </el-col>
                 <el-col :span="6">
                     <el-button @click="selectAnalysis('repair')" class="el-colDiv repair-btn">
-                        <span class="title">报修统计</span><br />
+                        <span class="title">报修统计 </span><br />
                         <span class="digital">{{ repairNum }}条</span><br />
                     </el-button>
                 </el-col>
                 <el-col :span="6">
                     <el-button @click="selectAnalysis('spareRoom')" class="el-colDiv spare-room-btn">
-                        <span class="title">空宿舍统计</span><br />
+                        <span class="title">空宿舍统计 </span><br />
                         <span class="digital">{{ spareRoomNum }}条</span><br />
                     </el-button>
                 </el-col>
@@ -32,11 +35,13 @@
 
         <!-- 下部显示区域 -->
         <div style="display: flex; width: 100%; margin-top: 40px; align-items: center; justify-content: center;">
-            <div :style="{height: analysisHeight, width: '100%', marginBottom: '40px'}"> <!-- 动态高度 -->
-                <span style="font-size: 22px; display: block; margin-bottom: 30px;">
+            <div :style="{ height: analysisHeight, width: '100%', marginBottom: '40px' }"> <!-- 动态高度 -->
+                <span
+                    style="font-size: 22px; display: block; margin-bottom: 10px; margin-left: 5px; font-weight: bold;">
                     {{ title }}
                 </span>
-                <component :is="analysisOption" />
+                <component v-if="analysisOption" :is="analysisOption" />
+                <div v-else style="text-align: center; color: #999;">请选择统计类型</div>
             </div>
         </div>
     </el-card>
@@ -174,19 +179,26 @@ onMounted(async () => {
 
 /* 按钮的渐变色 */
 .student-btn {
-    background-image: linear-gradient(to left, #FF6347, #FF4500);  /* 红色渐变 */
+    background-image: linear-gradient(to left, #FF6347, #FF4500);
+    /* 红色渐变 */
     color: white;
 }
+
 .dorm-manager-btn {
-    background-image: linear-gradient(to left, #4682B4, #5F9EA0);  /* 蓝色渐变 */
+    background-image: linear-gradient(to left, #4682B4, #5F9EA0);
+    /* 蓝色渐变 */
     color: white;
 }
+
 .repair-btn {
-    background-image: linear-gradient(to left, #32CD32, #228B22);  /* 绿色渐变 */
+    background-image: linear-gradient(to left, #32CD32, #228B22);
+    /* 绿色渐变 */
     color: white;
 }
+
 .spare-room-btn {
-    background-image: linear-gradient(to left, #FFD700, #FF8C00);  /* 金色渐变 */
+    background-image: linear-gradient(to left, #FFD700, #FF8C00);
+    /* 金色渐变 */
     color: white;
 }
 
@@ -213,7 +225,9 @@ onMounted(async () => {
 }
 
 .title {
-    font-size: 18px;
+    font-size: 23px;
+    font-weight: bold;
+    font-family: '';
 }
 
 .last-span {

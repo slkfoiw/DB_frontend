@@ -21,12 +21,12 @@
             <!-- 搜索学生、排序、添加学生 -->
             <div style="margin: 10px 0">
                 <el-input v-model="searchQuery" clearable placeholder="搜索学号、姓名、专业、公寓号、房间号" prefix-icon="Search"
-                    style="width: 20%;"></el-input>
-                <el-button icon="Search" style="margin-left: 5px" type="primary" @click="load"></el-button>
+                    style="width: 30%;"></el-input>
+                <el-button icon="Search" style="margin-left: 5px" type="primary" plain="true" @click="load"></el-button>
                 <!-- <el-button icon="refresh-left" style="margin-left: 10px" type="default" @click="reset"></el-button> -->
                 <div style="float: right">
                     <el-tooltip content="添加学生" placement="top">
-                        <el-button icon="plus" style="width: 50px" type="primary" @click="openModal()"></el-button>
+                        <el-button icon="plus" style="width: 50px" type="primary" plain="true" @click="openModal()"></el-button>
                     </el-tooltip>
                 </div>
             </div>
@@ -41,10 +41,10 @@
                 <el-table-column prop="major" label="专业" />
                 <el-table-column label="操作">
                     <template v-slot="scope">
-                        <el-button icon="Edit" @click="openModal(scope.row)">编辑</el-button>
+                        <el-button icon="Edit" type="primary" plain="true" @click="openModal(scope.row)"></el-button>
                         <el-popconfirm title="确认删除？" @confirm="handleDelete(scope.row.studentId)">
                             <template #reference>
-                                <el-button icon="Delete" type="danger">删除</el-button>
+                                <el-button icon="Delete" type="danger" plain="true"></el-button>
                             </template>
                         </el-popconfirm>
                     </template>

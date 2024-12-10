@@ -10,11 +10,9 @@
         <div style="margin: 10px 0">
           <!--    搜索区-->
           <div style="margin: 10px 0">
-            <el-input v-model="search" clearable placeholder="请输入标题" prefix-icon="Search" style="width: 20%"/>
-            <el-button icon="Search" style="margin-left: 5px" type="primary" @click="load"></el-button>
-            <div style="float: right">
+            <div style="float: right; margin: 5px;">
               <el-tooltip content="添加" placement="top">
-                <el-button icon="plus" style="width: 50px" type="primary" @click="add"></el-button>
+                <el-button icon="plus" style="width: 50px" type="primary" plain="true" @click="add"></el-button>
               </el-tooltip>
             </div>
           </div>
@@ -48,7 +46,7 @@
           <!--      详情栏-->
           <el-table-column label="详情" width="74px">
             <template #default="scope">
-              <el-button icon="more-filled" type="default" @click="showDetail(scope.row)"></el-button>
+              <el-button icon="more-filled" type="warning" plain="true" @click="showDetail(scope.row)"></el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -104,8 +102,8 @@
             </el-form>
             <template #footer>
               <span class="dialog-footer">
-                <el-button @click="cancel">取 消</el-button>
-                <el-button type="primary" @click="save">确 定</el-button>
+                <el-button @click="cancel" plain="true">取 消</el-button>
+                <el-button type="primary" @click="save" plain="true">确 定</el-button>
               </span>
             </template>
           </el-dialog>
@@ -116,7 +114,7 @@
             </el-card>
             <template #footer>
               <span class="dialog-footer">
-                <el-button type="primary" @click="closeDetails">确 定</el-button>
+                <el-button type="primary" @click="closeDetails" plain="true">确 定</el-button>
               </span>
             </template>
           </el-dialog>
@@ -291,3 +289,7 @@ onMounted(() => {
 });
 
 </script>
+
+<style scoped>
+@import '../../assets/css/table.css';
+</style>

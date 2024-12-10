@@ -1,16 +1,17 @@
-<!-- User.vue -->
 <template>
   <div class="bg">
+    <!-- 注销和退出按钮 -->
     <div id="logout">
       <ConfirmModal :exeName="'注销账号'"/>
     </div>
     <div id="logout">
       <ConfirmModal :exeName="'退出登录'"/>
     </div>
+    <!-- 用户信息展示 -->
     <div class="userInfo" v-if="userInfo">
       <el-row :gutter="10">
         <el-col :span="12" style="width: 200px;">
-          <img src="@/assets/avatar.png" width="200" height="200"></img>
+          <img src="@/assets/avatar.png" width="200" height="200" alt="用户头像" />
         </el-col>
         <el-col :span="12" style="width: 250px!important;">
           <h2>
@@ -31,29 +32,33 @@
         </el-col>
       </el-row>
     </div>
+
+    <!-- 编辑和修改密码按钮 -->
     <div class="editUserInfo">
-      <button @click="showEditModal = true" class="userBtn">编辑用户信息</button>
+      <el-button @click="showEditModal = true" type="primary" class="userBtn">编辑用户信息</el-button>
       <EditUserInfoModal
-          :userInfo="userInfo"
-          :showModal="showEditModal"
-          @update:showModal="showEditModal = $event"
-          @doUpdate="doUpdate"
+        :userInfo="userInfo"
+        :showModal="showEditModal"
+        @update:showModal="showEditModal = $event"
+        @doUpdate="doUpdate"
       />
-      <button @click="showChangePasswordModal = true" class="userBtn">修改密码</button>
+      <el-button @click="showChangePasswordModal = true" type="warning" class="userBtn">修改密码</el-button>
       <ChangePasswordModal
-          :showModal="showChangePasswordModal"
-          @update:showModal="showChangePasswordModal = $event"
+        :showModal="showChangePasswordModal"
+        @update:showModal="showChangePasswordModal = $event"
       />
     </div>
+
+    <!-- 粒子背景效果 -->
     <div id="particles-js"></div>
   </div>
 </template>
 
 <script setup>
-import {onMounted, ref} from "vue";
+import { onMounted, ref } from "vue";
 import EditUserInfoModal from '@/components/EditUserInfoModal.vue';
 import ChangePasswordModal from '@/components/ChangePasswordModal.vue';
-import {useUserStore} from "@/store/user";
+import { useUserStore } from "@/store/user";
 import 'particles.js';
 
 // 加载用户信息
@@ -61,7 +66,7 @@ const userStore = useUserStore();
 const userInfo = ref(userStore.userInfo);
 
 const getUserName = async () => {
-  document.title = userInfo.value.name + '的主页';
+  document.title = userInfo.value.name + '的航小家';
 };
 
 const showEditModal = ref(false);
@@ -106,8 +111,6 @@ onMounted(() => {
   };
   document.body.appendChild(script);
 });
-
-
 </script>
 
 <style scoped>
@@ -192,7 +195,10 @@ h3 {
   color: blue;
 }
 
+/* 使用Element Plus按钮样式 */
 .userBtn {
   margin: 10px;
+  padding: 10px 20px;
+  font-size: 14px;
 }
 </style>

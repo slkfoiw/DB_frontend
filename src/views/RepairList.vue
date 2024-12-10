@@ -10,11 +10,11 @@
             <!-- 搜索框 -->
             <div style="margin: 10px 0">
                 <el-input v-model="searchQuery" clearable placeholder="请输入报修类型" prefix-icon="Search"
-                    style="width: 20%" />
-                <el-button icon="Search" style="margin-left: 5px" type="primary" @click="load"></el-button>
+                    style="width: 30%" />
+                <el-button icon="Search" plain="true" style="margin-left: 5px" type="primary" @click="load"></el-button>
                 <div style="float: right">
                     <el-tooltip content="添加报修记录" placement="top">
-                        <el-button icon="plus" style="width: 50px" type="primary" @click="openModal()"></el-button>
+                        <el-button icon="plus" plain="true" style="width: 50px" type="primary" @click="openModal()"></el-button>
                     </el-tooltip>
                 </div>
             </div>
@@ -40,17 +40,21 @@
                 </el-table-column>
                 <el-table-column label="操作">
                     <template #default="scope">
-                        <!-- 详情按钮始终显示 -->
-                        <el-button icon="more-filled" type="default" @click="openDetail(scope.row)"></el-button>
-                        <!-- 编辑和删除按钮仅在状态为未完成时显示 -->
-                        <template v-if="scope.row.status === 1">
-                            <el-button icon="Edit" type="primary" @click="openModal(scope.row)"></el-button>
-                            <el-popconfirm title="确认删除？" @confirm="handleDelete(scope.row.id)">
-                                <template #reference>
-                                    <el-button icon="Delete" type="danger"></el-button>
-                                </template>
-                            </el-popconfirm>
-                        </template>
+                        <div>
+                            <!-- 第一行：详情按钮 -->
+                            <div>
+                                <el-button icon="more-filled" type="warning" plain="true" @click="openDetail(scope.row)"></el-button>
+                            </div>
+                            <!-- 第二行：编辑和删除按钮 -->
+                            <div v-if="scope.row.status === 1" style="margin-top: 8px;">
+                                <el-button icon="Edit" type="primary" plain="true" @click="openModal(scope.row)"></el-button>
+                                <el-popconfirm title="确认删除？" @confirm="handleDelete(scope.row.id)">
+                                    <template #reference>
+                                        <el-button icon="Delete" type="danger" plain="true"></el-button>
+                                    </template>
+                                </el-popconfirm>
+                            </div>
+                        </div>
                     </template>
                 </el-table-column>
             </el-table>
@@ -224,5 +228,5 @@ onMounted(load); // 获取报修列表
 </script>
 
 <style scoped>
-@import '@/assets/css/table.css';
+@import '../assets/css/table.css';
 </style>

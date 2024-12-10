@@ -18,6 +18,8 @@ import { faUtensils } from '@fortawesome/free-solid-svg-icons';
 // 侧边栏美化
 import VueSidebarMenu from 'vue-sidebar-menu'
 import 'vue-sidebar-menu/dist/vue-sidebar-menu.css'
+// 表格美化
+import './assets/css/table.css';
 
 const app = createApp(App)
 

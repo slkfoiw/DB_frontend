@@ -64,7 +64,11 @@ export default {
                 icon: 'fa-solid fa-city',
                 hidden: this.identityLevel === 2,
                 child: [
-                    { href: '/dormitoryInfo', title: '公寓信息' },
+                    { 
+                        href: '/dormitoryInfo', 
+                        title: '公寓信息' ,
+                        hidden: this.identityLevel !== 0
+                    },
                     { href: '/roomInfo', title: '房间信息' }
                 ]
             },

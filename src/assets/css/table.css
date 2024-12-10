@@ -1,3 +1,44 @@
+/* 修改表格行的背景色 */
+.el-table tr {
+    background-color: #f9f9f9;
+}
+
+
+/* 表格标题行（Header Row）的样式 */
+.el-table th {
+    background: #DEE1E7 !important;
+    /* 背景颜色 */
+    font-weight: 550 !important;
+    /* 字体粗细 */
+    color: #3c3c3c !important;
+    /* 字体颜色 */
+    line-height: 60px !important;
+    /* 垂直居中 */
+    border-bottom: 2px solid #ddd; /* 加入细边框，增强层次感 */
+}
+
+
+/* 修改表格行 hover 样式 */
+.el-table tr:hover {
+    background-color: #f4f7fa;
+    /* 清爽的浅蓝色，突出行 */
+    cursor: pointer;
+    /* 鼠标悬停时变为指针 */
+    transition: background-color 0.2s ease;
+    /* 增加平滑过渡效果 */
+}
+
+/* 修改表格奇数行和偶数行样式 */
+.el-table tr:nth-child(odd) {
+    background-color: #ffffff;
+    /* 奇数行背景为白色 */
+}
+
+.el-table tr:nth-child(even) {
+    background-color: #f9fbfd;
+    /* 偶数行为淡淡的浅灰蓝色 */
+}
+
 .el-breadcrumb {
     margin: 16px;
 }
@@ -5,4 +46,9 @@
 .el-card {
     margin: 15px;
     min-height: calc(100vh - 111px);
+}
+
+/* 表格单元格的样式 */
+.el-table td {
+    border: none !important; /* 去掉表格单元格的边框 */
 }
