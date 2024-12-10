@@ -15,7 +15,7 @@ import * as ElIcons from '@element-plus/icons-vue';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { faUtensils } from '@fortawesome/free-solid-svg-icons';
-// ²à±ßÀ¸ÃÀ»¯
+// ä¾§è¾¹æ ç¾åŒ–
 import VueSidebarMenu from 'vue-sidebar-menu'
 import 'vue-sidebar-menu/dist/vue-sidebar-menu.css'
 

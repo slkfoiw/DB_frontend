@@ -15,6 +15,11 @@ import AnnouncementBoard from '@/views/AnnouncementBoard.vue';
 
 const routes = [
   {
+    path: '/',
+    name: 'Start',
+    component: Login
+  },
+  {
     path: '/home',
     name: 'ORIGIN',
     meta: { requiresAuth: true },
