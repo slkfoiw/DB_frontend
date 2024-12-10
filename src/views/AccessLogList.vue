@@ -8,7 +8,7 @@
             </el-input>
         </div>
 
-        <el-table :data="logs" border style="width: 100%">
+        <el-table :data="logs" border style="width: 100%" max-height="600">
             <el-table-column prop="id" label="ID" width="50" />
             <el-table-column prop="username" label="用户名" />
             <el-table-column prop="userIp" label="用户IP" />

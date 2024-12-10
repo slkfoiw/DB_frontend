@@ -110,6 +110,13 @@ export default {
                 icon: 'fa-solid fa-wrench',
                 hidden: this.identityLevel !== 2
             },
+            // 访问日志
+            {
+                href: '/accessLogList',
+                title: '访问日志',
+                icon: 'fa-solid fa-history',
+                hidden: this.identityLevel !== 0
+            },
             // 个人信息
             {
                 href: `/user/${this.userId}`,

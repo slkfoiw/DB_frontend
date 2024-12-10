@@ -19,7 +19,8 @@ npm install xlsx
 npm install echarts vue-echarts
 npm install file-saver
 npm install echarts-gl --save
-
+npm install vue-sidebar-menu
+   
 ```
 不全，可以根据控制台运行的报错提示安装相应的库
 
