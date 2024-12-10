@@ -79,6 +79,7 @@ export const useUserStore = defineStore('user', () => {
 
         // 清理本地存储和 cookie
         localStorage.removeItem('token');
+        localStorage.removeItem('userInfo');
         Cookies.remove('myRefreshToken');
     }
 
