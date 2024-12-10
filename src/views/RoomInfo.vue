@@ -192,8 +192,8 @@
                                 <el-input v-model="form.peopleNum" style="width: 80%" :disabled=true>0</el-input>
                             </el-form-item>
                             <el-form-item>
-                                <el-button type="primary" plain="true" @click="saveNewRoom">添加</el-button>
-                                <el-button type="default" plain="true" @click="cancel">取消</el-button>
+                                <el-button type="primary"  @click="saveNewRoom">添加</el-button>
+                                <el-button type="default"  @click="cancel">取消</el-button>
                             </el-form-item>
                         </el-form>
                     </el-dialog>
@@ -221,8 +221,8 @@
                         </el-form>
                         <template #footer>
                             <span class="dialog-footer">
-                                <el-button plain="true" @click="cancel">取 消</el-button>
-                                <el-button type="primary" plain="true" @click="saveUpdateRoom">确 定</el-button>
+                                <el-button @click="cancel">取 消</el-button>
+                                <el-button type="primary" @click="saveUpdateRoom">确 定</el-button>
                             </span>
                         </template>
                     </el-dialog>
@@ -257,8 +257,8 @@
                         </el-form>
                         <template #footer>
                             <span class="dialog-footer">
-                                <el-button plain="true" @click="cancel">取 消</el-button>
-                                <el-button plain="true" type="primary" @click="saveStuBed">确 定</el-button>
+                                <el-button @click="cancel">取 消</el-button>
+                                <el-button type="primary" @click="saveStuBed">确 定</el-button>
                             </span>
                         </template>
                     </el-dialog>

@@ -1,76 +1,76 @@
 <template>
     <div class="dorm-mana-list">
         <el-breadcrumb separator-icon="ArrowRight">
-            <el-breadcrumb-item :to="{ path: '/home' }">Ê×Ò³</el-breadcrumb-item>
-            <el-breadcrumb-item>ÓÃ»§¹ÜÀí</el-breadcrumb-item>
-            <el-breadcrumb-item>ËŞ¹ÜĞÅÏ¢</el-breadcrumb-item>
+            <el-breadcrumb-item :to="{ path: '/home' }">é¦–é¡µ</el-breadcrumb-item>
+            <el-breadcrumb-item>ç”¨æˆ·ç®¡ç†</el-breadcrumb-item>
+            <el-breadcrumb-item>å®¿ç®¡ä¿¡æ¯</el-breadcrumb-item>
         </el-breadcrumb>
 
         <el-card>
-            <!-- µ¼ÈëºÍµ¼³ö¹¦ÄÜ -->
+            <!-- å¯¼å…¥å’Œå¯¼å‡ºåŠŸèƒ½ -->
             <div>
                 <el-upload class="upload-demo" drag accept=".xls, .xlsx"
                     :on-change="handleFileUpload"
                     :auto-upload="false">
                     <i class="el-icon-upload"></i>
-                    <div class="el-upload__text">ÖØĞÂµ¼ÈëËŞ¹ÜĞÅÏ¢£¬½«ÎÄ¼şÍÏµ½´Ë´¦£¬»ò<em>µã»÷ÉÏ´«</em></div>
+                    <div class="el-upload__text">é‡æ–°å¯¼å…¥å®¿ç®¡ä¿¡æ¯ï¼Œå°†æ–‡ä»¶æ‹–åˆ°æ­¤å¤„ï¼Œæˆ–<em>ç‚¹å‡»ä¸Šä¼ </em></div>
                 </el-upload>
-                <el-button @click="exportDormManagers">µ¼³öËŞ¹ÜĞÅÏ¢</el-button>
+                <el-button @click="exportDormManagers">å¯¼å‡ºå®¿ç®¡ä¿¡æ¯</el-button>
             </div>
 
-            <!-- ËÑË÷ËŞ¹Ü¡¢Ìí¼ÓËŞ¹Ü -->
+            <!-- æœç´¢å®¿ç®¡ã€æ·»åŠ å®¿ç®¡ -->
             <div style="margin: 10px 0">
-                <el-input v-model="searchQuery" clearable placeholder="ÇëÊäÈëËŞ¹Ü¹¤ºÅ»òĞÕÃû" prefix-icon="Search"
+                <el-input v-model="searchQuery" clearable placeholder="è¯·è¾“å…¥å®¿ç®¡å·¥å·æˆ–å§“å" prefix-icon="Search"
                     style="width: 30%" />
                 <el-button icon="Search" style="margin-left: 5px" type="primary" plain="true" @click="load"></el-button>
                 <div style="float: right">
-                    <el-tooltip content="Ìí¼ÓËŞ¹Ü" placement="top">
+                    <el-tooltip content="æ·»åŠ å®¿ç®¡" placement="top">
                         <el-button icon="plus" style="width: 50px" type="primary" plain="true" @click="openModal()"></el-button>
                     </el-tooltip>
                 </div>
             </div>
 
-            <!-- ±í¸ñÏÔÊ¾ËŞ¹ÜĞÅÏ¢ -->
+            <!-- è¡¨æ ¼æ˜¾ç¤ºå®¿ç®¡ä¿¡æ¯ -->
             <el-table :data="dormManagers" style="width: 100%" :sort-method="sortMethod" @sort-change="handleSortChange">
-                <el-table-column label="ĞòºÅ" type="index" />
-                <el-table-column prop="managerId" label="ËŞ¹ÜID" sortable />
-                <el-table-column prop="name" label="ĞÕÃû" sortable />
-                <el-table-column prop="dormId" label="¹«Ô¢ºÅ" sortable />
-                <el-table-column label="²Ù×÷">
+                <el-table-column label="åºå·" type="index" />
+                <el-table-column prop="managerId" label="å®¿ç®¡ID" sortable />
+                <el-table-column prop="name" label="å§“å" sortable />
+                <el-table-column prop="dormId" label="å…¬å¯“å·" sortable />
+                <el-table-column label="æ“ä½œ">
                     <template v-slot="scope">
-                        <el-button icon="Edit" plain="true" @click="openModal(scope.row)">±à¼­</el-button>
-                        <el-popconfirm title="È·ÈÏÉ¾³ı£¿" @confirm="handleDelete(scope.row.managerId)">
+                        <el-button icon="Edit" type="primary" plain="true" @click="openModal(scope.row)"></el-button>
+                        <el-popconfirm title="ç¡®è®¤åˆ é™¤ï¼Ÿ" @confirm="handleDelete(scope.row.managerId)">
                             <template #reference>
-                                <el-button icon="Delete" type="danger" plain="true" >É¾³ı</el-button>
+                                <el-button icon="Delete" type="danger" plain="true" ></el-button>
                             </template>
                         </el-popconfirm>
                     </template>
                 </el-table-column>
             </el-table>
 
-            <!-- ·­Ò³¿Ø¼ş -->
+            <!-- ç¿»é¡µæ§ä»¶ -->
             <el-pagination @current-change="handleCurrentChange" @size-change="handleSizeChange"
                 :current-page="currentPage" :page-size="pageSize" :page-sizes="[10, 20]" :total="totalitems"
                 layout="total, sizes, prev, pager, next, jumper" :disabled="totalitems === 0">
             </el-pagination>
 
-            <!-- µ¯´°£¨Ìí¼Ó/±à¼­ËŞ¹Ü£© -->
-            <el-dialog v-model="showModal" title="ËŞ¹ÜĞÅÏ¢" @close="closeModal">
+            <!-- å¼¹çª—ï¼ˆæ·»åŠ /ç¼–è¾‘å®¿ç®¡ï¼‰ -->
+            <el-dialog v-model="showModal" title="å®¿ç®¡ä¿¡æ¯" @close="closeModal">
                 <div class="modal-content">
-                    <h3>{{ isEdit ? '±à¼­ËŞ¹Ü' : 'Ìí¼ÓËŞ¹Ü' }}</h3>
+                    <h3>{{ isEdit ? 'ç¼–è¾‘å®¿ç®¡' : 'æ·»åŠ å®¿ç®¡' }}</h3>
                     <el-form :model="form" ref="formRef">
-                        <el-form-item label="ËŞ¹ÜID" prop="managerId" required>
-                            <el-input v-model="form.managerId" placeholder="ÇëÊäÈëËŞ¹ÜID"></el-input>
+                        <el-form-item label="å®¿ç®¡ID" prop="managerId" required>
+                            <el-input v-model="form.managerId" placeholder="è¯·è¾“å…¥å®¿ç®¡ID"></el-input>
                         </el-form-item>
-                        <el-form-item label="ËŞ¹ÜĞÕÃû" prop="name" required>
-                            <el-input v-model="form.name" placeholder="ÇëÊäÈëËŞ¹ÜĞÕÃû"></el-input>
+                        <el-form-item label="å®¿ç®¡å§“å" prop="name" required>
+                            <el-input v-model="form.name" placeholder="è¯·è¾“å…¥å®¿ç®¡å§“å"></el-input>
                         </el-form-item>
-                        <el-form-item label="¹«Ô¢ºÅ" prop="dormId" required>
-                            <el-input v-model="form.dormId" placeholder="ÇëÊäÈë¹«Ô¢ºÅ"></el-input>
+                        <el-form-item label="å…¬å¯“å·" prop="dormId" required>
+                            <el-input v-model="form.dormId" placeholder="è¯·è¾“å…¥å…¬å¯“å·"></el-input>
                         </el-form-item>
                         <el-form-item>
-                            <el-button type="primary" @click="saveDormMana">{{ isEdit ? '¸üĞÂ' : 'Ìí¼Ó' }}</el-button>
-                            <el-button type="default" @click="closeModal">È¡Ïû</el-button>
+                            <el-button type="primary" @click="saveDormMana">{{ isEdit ? 'æ›´æ–°' : 'æ·»åŠ ' }}</el-button>
+                            <el-button type="default" @click="closeModal">å–æ¶ˆ</el-button>
                         </el-form-item>
                     </el-form>
                 </div>
@@ -152,12 +152,12 @@ const saveDormMana = async () => {
     const { managerId, name, dormId } = form.value;
     
     // if (!/^\d{8}$/.test(managerId)) {
-    //     ElMessage.error('ËŞ¹ÜID±ØĞëÊÇ8Î»Êı×Ö£¡');
+    //     ElMessage.error('å®¿ç®¡IDå¿…é¡»æ˜¯8ä½æ•°å­—ï¼');
     //     return;
     // }
     
     if (!name || !dormId) {
-        ElMessage.error('ÇëÌîĞ´ÍêÕûĞÅÏ¢£¡');
+        ElMessage.error('è¯·å¡«å†™å®Œæ•´ä¿¡æ¯ï¼');
         return;
     }
     
@@ -208,7 +208,7 @@ const handleFileUpload = async (file) => {
         };
         reader.readAsArrayBuffer(file.raw);
     } else {
-        ElMessage.error('ÎÄ¼şÉÏ´«Ê§°Ü');
+        ElMessage.error('æ–‡ä»¶ä¸Šä¼ å¤±è´¥');
     }
 };
 
@@ -227,7 +227,7 @@ const parseXML = async (data) => {
     parseString(data, async (err, result) => {
         if (err) {
             console.log('err:', err);
-            ElMessage.error('XML½âÎöÊ§°Ü!');
+            ElMessage.error('XMLè§£æå¤±è´¥!');
             return;
         }
         const res = await updateAllDormManagers(result);
@@ -247,10 +247,10 @@ const exportDormManagers = async () => {
         search: searchQuery.value,
         sortField: sortField.value,
         sortOrder: sortOrder.value
-    }); // »ñÈ¡ËùÓĞĞÅÏ¢
-    const ws = XLSX.utils.json_to_sheet(res.data.records); // ½«ĞÅÏ¢×ªÎª¹¤×÷±í
-    XLSX.utils.book_append_sheet(wb, ws, 'ËŞ¹ÜĞÅÏ¢');
-    XLSX.writeFile(wb, 'ËŞ¹ÜĞÅÏ¢.xlsx');
+    }); // è·å–æ‰€æœ‰ä¿¡æ¯
+    const ws = XLSX.utils.json_to_sheet(res.data.records); // å°†ä¿¡æ¯è½¬ä¸ºå·¥ä½œè¡¨
+    XLSX.utils.book_append_sheet(wb, ws, 'å®¿ç®¡ä¿¡æ¯');
+    XLSX.writeFile(wb, 'å®¿ç®¡ä¿¡æ¯.xlsx');
 };
 
 onMounted(load)

@@ -1,6 +1,6 @@
 <template>
     <div>
-        <sidebar-menu :menu="menu" :collapsed="true" width="200px" theme="white-theme" />
+        <sidebar-menu :menu="menu" :collapsed="false" width="200px" theme="white-theme" />
     </div>
 </template>
 
