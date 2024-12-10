@@ -1,13 +1,25 @@
 <script setup>
+import { useRoute } from 'vue-router'; // 获取当前路由信息
 import Sidebar_new from './components/Sidebar_new.vue';
+
+const route = useRoute(); // 当前路由
+const noSidebarRoutes = ['/login', '/register',  '/']; // 不需要 Sidebar 的路由
 </script>
 
 <template>
-  <div class="container">
-    <Sidebar_new />
-    <main>
+  <div>
+    <!-- 如果当前路由不在 noSidebarRoutes 中，显示 Sidebar 和主布局 -->
+    <div v-if="!noSidebarRoutes.includes(route.path)" class="container">
+      <Sidebar_new />
+      <main>
+        <router-view />
+      </main>
+    </div>
+
+    <!-- 否则，直接显示路由内容（如登录注册页面） -->
+    <div v-else>
       <router-view />
-    </main>
+    </div>
   </div>
 </template>
 
