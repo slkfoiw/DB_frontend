@@ -1,10 +1,10 @@
 <script setup>
-import Sidebar from '@/components/Sidebar.vue'
+import Sidebar_new from './components/Sidebar_new.vue';
 </script>
 
 <template>
   <div class="container">
-    <Sidebar />
+    <Sidebar_new />
     <main>
       <router-view />
     </main>
@@ -19,7 +19,7 @@ import Sidebar from '@/components/Sidebar.vue'
 
 main {
   flex-grow: 1;
-  margin-left: 200px;
+  margin-left: 65px;
   background-color: #f1f1f1;
   flex-direction: column;
   justify-content: center; /* 垂直居中对齐 */

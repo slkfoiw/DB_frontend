@@ -15,6 +15,9 @@ import * as ElIcons from '@element-plus/icons-vue';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { faUtensils } from '@fortawesome/free-solid-svg-icons';
+// ≤‡±ﬂ¿∏√¿ªØ
+import VueSidebarMenu from 'vue-sidebar-menu'
+import 'vue-sidebar-menu/dist/vue-sidebar-menu.css'
 
 const app = createApp(App)
 
@@ -31,4 +34,5 @@ const pinia = createPinia()
 pinia.use(piniaPersist)
 
 app.use(pinia)
+app.use(VueSidebarMenu)
 app.mount('#app')
