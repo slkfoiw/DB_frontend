@@ -31,7 +31,7 @@
                     </div>
                 </div>
                 <!--    表格-->
-                <el-table :data="dormRooms" style="width: 100%">
+                <el-table :data="dormRooms" style="width: 100%" :sort-method="sortMethod" @sort-change="handleSortChange">
                     <el-table-column label="#" type="index" />
                     <!-- 床位展开-->
                     <el-table-column label="展开" type="expand">
@@ -319,6 +319,8 @@ const stuInfoDialog = ref(false);
 const stuForm = ref({ studentId: '', username: '', name: '', major: '', gender: '', introduction: '', email: '' });
 const bedNum = ref(0);
 const editRoomDialog = ref(false);
+const sortField = ref('');
+const sortOrder = ref('');
 
 const resetForm = () => {
     form.value = { roomId: '', dormId: '', floor: '', capacity: '', peopleNum: '', firstBed: '', secondBed: '', thirdBed: '', fourthBed: '' };
@@ -373,7 +375,13 @@ const saveUpdateRoom = async () => {
 }
 
 const load = async () => {
-    const response = await getDormRooms({ pageNum: currentPage.value, pageSize: pageSize.value, search: search.value });
+    const response = await getDormRooms({ 
+        pageNum: currentPage.value, 
+        pageSize: pageSize.value, 
+        search: search.value,
+        sortField: sortField.value,
+        sortOrder: sortOrder.value,
+    });
     if (response.code !== 0) {
         ElMessage.error('获取宿舍信息失败: ' + response.msg);
         return;
@@ -390,6 +398,12 @@ const handleCurrentChange = async (pageNum) => {
 const handleSizeChange = async (newPageSize) => {
     pageSize.value = newPageSize;
     await load();
+};
+
+const handleSortChange = (sort) => {
+    sortField.value = sort.prop;
+    sortOrder.value = sort.order === 'ascending' ? 'asc' : 'desc';
+    load();
 };
 
 const filterTag = (value, row) => {
@@ -526,10 +540,16 @@ const parseXML = async (data) => {
     });
 };
 
-const exportDormRooms = () => {
+const exportDormRooms = async () => {
     const wb = XLSX.utils.book_new();
-    console.log('dormRooms:', dormRooms.value);
-    const ws = XLSX.utils.json_to_sheet(dormRooms.value);
+    const res = await getDormRooms({
+        pageNum: 1, 
+        pageSize: 1000000, 
+        search: search.value,
+        sortField: sortField.value,
+        sortOrder: sortOrder.value
+    });
+    const ws = XLSX.utils.json_to_sheet(res.data.records);
     XLSX.utils.book_append_sheet(wb, ws, '宿舍信息');
     XLSX.writeFile(wb, '宿舍信息.xlsx');
 };

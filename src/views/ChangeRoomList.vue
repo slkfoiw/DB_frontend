@@ -16,7 +16,7 @@
             </div>
           </div>
           <!--    表格-->
-          <el-table :data="tableData" border max-height="705" style="width: 100%">
+          <el-table :data="tableData" border max-height="705" style="width: 100%" :sort-method="sortMethod" @sort-change="handleSortChange">
             <el-table-column label="#" type="index"/>
             <el-table-column label="学号" prop="studentId" sortable width="100px"/>
             <el-table-column label="当前公寓号" prop="curDormId" sortable/>
@@ -212,6 +212,8 @@ const searchQuery = ref('');
 const currentPage = ref(1);
 const pageSize = ref(10);
 const total = ref(0);
+const sortField = ref('');
+const sortOrder = ref('');
 
 const form = ref({
     id: '',
@@ -253,7 +255,13 @@ const filterTag = (value, row) => {
 // 方法：获取换宿数据
 const load = async () => {
     try {
-        const response = await getChangeRoom({pageNum: currentPage.value, pageSize: pageSize.value, search: searchQuery.value});
+        const response = await getChangeRoom({
+          pageNum: currentPage.value, 
+          pageSize: pageSize.value, 
+          search: searchQuery.value,
+          sortField: sortField.value,
+          sortOrder: sortOrder.value,
+        });
         if (response.code !== 0) {
           ElMessage.error(response.msg);
           return;
@@ -321,6 +329,12 @@ const handleCurrentChange = async (pageNum) => {
 const handleSizeChange = async (newPageSize) => {
     pageSize.value = newPageSize;
     await load(); // 更新每页显示数量
+};
+
+const handleSortChange = (sort) => {
+    sortField.value = sort.prop;
+    sortOrder.value = sort.order === 'ascending' ? 'asc' : 'desc';
+    load();
 };
 
 // 方法：重置表单

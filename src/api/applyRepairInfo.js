@@ -12,6 +12,8 @@ export const getRepairRecords = (params) => {
         pageNum: params.pageNum,
         pageSize: params.pageSize,
         search: params.search,
+        sortField: params.sortField,
+        sortOrder: params.sortOrder
       }
     });
   };

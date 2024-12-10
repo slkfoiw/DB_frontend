@@ -19,10 +19,10 @@
       </div>
 
       <!-- 表格显示公告信息 -->
-      <el-table :data="announcements" style="width: 100%">
+      <el-table :data="announcements" style="width: 100%" :sort-method="sortMethod" @sort-change="handleSortChange">
         <el-table-column label="序号" type="index" />
         <el-table-column prop="date" label="发布时间" sortable />
-        <el-table-column prop="title" label="主题" />
+        <el-table-column prop="title" label="主题" sortable />
         <el-table-column prop="senderUsername" label="发布人" />
         <el-table-column prop="notifyObject" label="通知对象">
           <template v-slot="scope">
@@ -109,10 +109,17 @@ const totalitems = ref(0);
 const currentPage = ref(1);
 const pageSize = ref(10);
 const notifyObjectOptions = ref([]);
-
+const sortField = ref('');
+const sortOrder = ref('');
 
 const load = async () => {
-  const response = await getAnnouncements({pageNum: currentPage.value, pageSize: pageSize.value, search: searchQuery.value});
+  const response = await getAnnouncements({
+    pageNum: currentPage.value, 
+    pageSize: pageSize.value,
+    search: searchQuery.value,
+    sortField: sortField.value,
+    sortOrder: sortOrder.value
+  });
   if (response.code !== 0) {
     ElMessage.error(response.msg);
     return;
@@ -139,6 +146,12 @@ const handleSizeChange = (newPageSize) => {
   pageSize.value = newPageSize;
   load();
 }
+
+const handleSortChange = (sort) => {
+    sortField.value = sort.prop;
+    sortOrder.value = sort.order === 'ascending' ? 'asc' : 'desc';
+    load();
+};
 
 const openModal = (announcement = null) => {
   if (announcement) {

@@ -20,11 +20,11 @@
           </div>
         </div>
         <!--    表格-->
-        <el-table v-loading="loading" :data="tableData" border max-height="705" style="width: 100%">
+        <el-table v-loading="loading" :data="tableData" border max-height="705" style="width: 100%" :sort-method="sortMethod" @sort-change="handleSortChange">
           <el-table-column label="#" type="index"/>
-          <el-table-column :show-overflow-tooltip="true" label="标题" prop="title"/>
-          <el-table-column label="公寓号" prop="dormId" sortable width="150px"/>
-          <el-table-column label="宿舍号" prop="roomId" sortable width="150px"/>
+          <el-table-column :show-overflow-tooltip="true" label="标题" prop="title" sortable />
+          <el-table-column label="公寓号" prop="dormId" width="150px"/>
+          <el-table-column label="宿舍号" prop="roomId" width="150px"/>
           <el-table-column label="申请人" prop="repairer" width="150px"/>
           <el-table-column
               :filter-method="filterTag"
@@ -156,6 +156,8 @@ const rules = reactive({
   content: [{ required: true, message: '请输入内容', trigger: 'blur' }],
   createDate: [{ required: true, message: '请选择时间', trigger: 'blur' }],
 });
+const sortField = ref('');
+const sortOrder = ref('');
 
 // 初始化
 const init = () => {
@@ -186,6 +188,8 @@ const load = async () => {
     pageSize: pageSize.value,
     search: search.value,
     studentId: userId.value,
+    sortField: sortField.value,
+    sortOrder: sortOrder.value,
   };
   const res = await getRepairRecords(params);
   if (res.code !== 0) {
@@ -268,6 +272,12 @@ const handleSizeChange = (newSize) => {
 const handleCurrentChange = (newPage) => {
   currentPage.value = newPage;
   load();
+};
+
+const handleSortChange = (sort) => {
+    sortField.value = sort.prop;
+    sortOrder.value = sort.order === 'ascending' ? 'asc' : 'desc';
+    load();
 };
 
 // 初始化加载

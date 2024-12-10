@@ -1,6 +1,6 @@
 import http from "@/utils/http";
 
-export const getDormManagers = ({pageNum, pageSize, search}) => {
+export const getDormManagers = ({pageNum, pageSize, search, sortField, sortOrder}) => {
     return http({
         url: '/manager/get-managers',
         method: 'GET',
@@ -10,7 +10,9 @@ export const getDormManagers = ({pageNum, pageSize, search}) => {
         params: {
             pageNum,
             pageSize,
-            search
+            search,
+            sortField,
+            sortOrder
         }
     })
 };

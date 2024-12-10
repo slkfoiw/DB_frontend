@@ -1,5 +1,4 @@
 import http from '@/utils/http';
-import { info } from 'sass';
 
 // 检查房间状态
 export const checkRoomState = (dormId, roomId) => {
@@ -42,7 +41,9 @@ export const fetchAdjustRoomData = (params) => {
         params: {
             pageNum: params.pageNum,
             pageSize: params.pageSize,
-            search: params.search
+            search: params.search,
+            sortField: params.sortField,
+            sortOrder: params.sortOrder
            }
     });
     // params 包括：pageNum, pageSize, search

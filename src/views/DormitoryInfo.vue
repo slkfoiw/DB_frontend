@@ -21,7 +21,7 @@
                     </div>
                 </div>
                 <!--    表格-->
-                <el-table :data="dormBuildings" style="width: 100%">
+                <el-table :data="dormBuildings" style="width: 100%" :sort-method="sortMethod" @sort-change="handleSortChange">
                     <el-table-column label="#" type="index"/>
                     <el-table-column label="楼栋号" prop="dormId" sortable/>
                     <el-table-column label="地址" prop="address"/>
@@ -120,9 +120,17 @@ const resetForm = () => {
                 address: '',
                 gender: '',};
 };
+const sortField = ref('');
+const sortOrder = ref('');
 
 const load = async () => {
-    const response = await getDormBuilds({pageNum: currentPage.value, pageSize: pageSize.value, search: search.value});
+    const response = await getDormBuilds({
+        pageNum: currentPage.value, 
+        pageSize: pageSize.value, 
+        search: search.value,
+        sortField: sortField.value,
+        sortOrder: sortOrder.value
+    });
     if (response.code !== 0) {
         ElMessage.error('获取公寓信息失败: ' + response.msg);
         return;
@@ -174,7 +182,7 @@ const save = async () => {
     cancel();
 };
 
-const filterTag = (value, row) => {
+const filterTag = async(value, row) => {
     return row.gender === value;
 };
 
@@ -196,6 +204,12 @@ const handleCurrentChange = async (pageNum) => {
 const handleSizeChange = async(newPageSize) => {
     pageSize.value = newPageSize;
     await load();
+};
+
+const handleSortChange = (sort) => {
+    sortField.value = sort.prop;
+    sortOrder.value = sort.order === 'ascending' ? 'asc' : 'desc';
+    load();
 };
 
 onMounted(load);

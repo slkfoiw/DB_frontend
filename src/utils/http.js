@@ -12,12 +12,12 @@ const http = axios.create({
 // axios请求拦截器
 http.interceptors.request.use(config => {
     const userStore = useUserStore();
-    console.log('userStore.token:', userStore.token)
     if (userStore.token) {
         if (!config.headers.Authorization) {
             config.headers.Authorization = `Bearer ${userStore.token}`;
         }
     }
+    console.log('config:', config);
     return config
 }, e => Promise.reject(e))
 

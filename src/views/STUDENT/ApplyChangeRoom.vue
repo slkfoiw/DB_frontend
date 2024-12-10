@@ -21,7 +21,7 @@
           </div>
         </div>
         <!-- 表格 -->
-        <el-table v-loading="loading" :data="tableData" border max-height="705" style="width: 100%">
+        <el-table v-loading="loading" :data="tableData" border max-height="705" style="width: 100%" :sort-method="sortMethod" @sort-change="handleSortChange">
           <el-table-column label="#" type="index" />
           <el-table-column label="学号" prop="studentId" sortable width="100px" />
           <el-table-column label="姓名" prop="name" width="100px" />
@@ -199,6 +199,9 @@ const roomForm = reactive({
   fourthBed: ''
 });
 
+const sortField = ref('');
+const sortOrder = ref('');
+
 // 检查房间状态
 const checkRoomStateHandler = async (rule, value, callback) => {
   dormRoomId.value = value;
@@ -263,6 +266,8 @@ const load = async () => {
     pageSize: pageSize.value,
     search: search.value,
     studentId: user.userId,
+    sortField: sortField.value,
+    sortOrder: sortOrder.value,
   };
     const res = await fetchAdjustRoomData(params);
     if (res.code !== 0) {
@@ -390,6 +395,13 @@ const handleSizeChange = (pageSize) => {
 const handleCurrentChange = (pageNum) => {
   currentPage.value = pageNum;
   load();
+};
+
+
+const handleSortChange = (sort) => {
+    sortField.value = sort.prop;
+    sortOrder.value = sort.order === 'ascending' ? 'asc' : 'desc';
+    load();
 };
 
 const dormBuildings = ref([

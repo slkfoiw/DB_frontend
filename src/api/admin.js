@@ -98,7 +98,7 @@ export const deleteAdmin = (adminId) => {
     };
 };
 
-export const getAnnouncements = ({pageNum, pageSize, search}) => {
+export const getAnnouncements = ({pageNum, pageSize, search, sortField, sortOrder}) => {
     return http({
         url: '/announcement/get-announcements',
         method: 'GET',
@@ -108,7 +108,9 @@ export const getAnnouncements = ({pageNum, pageSize, search}) => {
         params: {
             pageNum,
             pageSize,
-            search
+            search,
+            sortField,
+            sortOrder
         }
     })
     return {
@@ -167,7 +169,7 @@ export const deleteAnnouncement = (announcementId) => {
     };
 };
 
-export const getChangeRoom = ({pageNum, pageSize, search}) => {
+export const getChangeRoom = ({pageNum, pageSize, search, sortField, sortOrder}) => {
     return http({
         url: '/adjustRoom/get-change-room',
         method: 'GET',
@@ -177,7 +179,9 @@ export const getChangeRoom = ({pageNum, pageSize, search}) => {
         params: {
             pageNum,
             pageSize,
-            search
+            search,
+            sortField,
+            sortOrder
         }
     })
     return {
@@ -222,7 +226,7 @@ export const deleteChangeRoom = (changeRoomId) => {
     };
 }
 
-export const getRepairs = ({pageNum, pageSize, search}) => {
+export const getRepairs = ({pageNum, pageSize, search, sortField, sortOrder}) => {
     return http({
         url: '/repair/get-repairs',
         method: 'GET',
@@ -232,7 +236,9 @@ export const getRepairs = ({pageNum, pageSize, search}) => {
         params: {
             pageNum,
             pageSize,
-            search
+            search,
+            sortField,
+            sortOrder
         }
     })
     return {

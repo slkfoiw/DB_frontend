@@ -31,7 +31,7 @@
             </div>
 
             <!-- 表格显示宿管信息 -->
-            <el-table :data="dormManagers" style="width: 100%">
+            <el-table :data="dormManagers" style="width: 100%" :sort-method="sortMethod" @sort-change="handleSortChange">
                 <el-table-column label="序号" type="index" />
                 <el-table-column prop="managerId" label="宿管ID" sortable />
                 <el-table-column prop="name" label="姓名" sortable />
@@ -95,9 +95,17 @@ const isEdit = ref(false);
 const showModal = ref(false);
 const currentPage = ref(1);
 const pageSize = ref(10);
+const sortField = ref('');
+const sortOrder = ref('');
 
 const load = async () => {
-    const response = await getDormManagers({pageNum: currentPage.value, pageSize: pageSize.value, search: searchQuery.value});
+    const response = await getDormManagers({
+        pageNum: currentPage.value, 
+        pageSize: pageSize.value, 
+        search: searchQuery.value,
+        sortField: sortField.value,
+        sortOrder: sortOrder.value   
+    });
     if (response.code !== 0) {
         ElMessage.error(response.msg);
         return;
@@ -115,6 +123,12 @@ const handleSizeChange = async (newPageSize) => {
     pageSize.value = newPageSize;
     await load();
 }
+
+const handleSortChange = (sort) => {
+    sortField.value = sort.prop;
+    sortOrder.value = sort.order === 'ascending' ? 'asc' : 'desc';
+    load();
+};
 
 const openModal = (manager = null) => {
     if (manager) {
@@ -225,9 +239,16 @@ const parseXML = async (data) => {
     });
 };
 
-const exportDormManagers = () => {
+const exportDormManagers = async () => {
     const wb = XLSX.utils.book_new();
-    const ws = XLSX.utils.json_to_sheet(dormManagers.value);
+    const res = await getDormManagers({
+        pageNum: 1, 
+        pageSize: 1000000, 
+        search: searchQuery.value,
+        sortField: sortField.value,
+        sortOrder: sortOrder.value
+    }); // 获取所有信息
+    const ws = XLSX.utils.json_to_sheet(res.data.records); // 将信息转为工作表
     XLSX.utils.book_append_sheet(wb, ws, '宿管信息');
     XLSX.writeFile(wb, '宿管信息.xlsx');
 };

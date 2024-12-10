@@ -15,7 +15,7 @@ let mockStudents = [
     { studentId: '22371012', stuName: '周十四', dormitoryNumber: '13', roomNumber: '602', major: '软件开发' },
   ];
 
-export const getStudents = ({pageNum, pageSize, search}) => {
+export const getStudents = ({pageNum, pageSize, search, sortField, sortOrder}) => {
     return http({
         url: '/student/get-students',
         method: 'GET',
@@ -25,7 +25,9 @@ export const getStudents = ({pageNum, pageSize, search}) => {
         params: {
             pageNum,
             pageSize,
-            search
+            search,
+            sortField, 
+            sortOrder
         }
     })
     // return {

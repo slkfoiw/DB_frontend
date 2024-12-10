@@ -20,7 +20,7 @@
 
             <!-- 搜索学生、排序、添加学生 -->
             <div style="margin: 10px 0">
-                <el-input v-model="searchQuery" clearable placeholder="搜索学生学号、姓名" prefix-icon="Search"
+                <el-input v-model="searchQuery" clearable placeholder="搜索学号、姓名、专业、公寓号、房间号" prefix-icon="Search"
                     style="width: 20%;"></el-input>
                 <el-button icon="Search" style="margin-left: 5px" type="primary" @click="load"></el-button>
                 <!-- <el-button icon="refresh-left" style="margin-left: 10px" type="default" @click="reset"></el-button> -->
@@ -32,7 +32,7 @@
             </div>
 
             <!-- 表格显示学生信息 -->
-            <el-table :data="students" style="width: 100%">
+            <el-table :data="students" style="width: 100%" :sort-method="sortMethod" @sort-change="handleSortChange">
                 <el-table-column label="序号" type="index" />
                 <el-table-column prop="studentId" label="学号" sortable />
                 <el-table-column prop="name" label="姓名" sortable />
@@ -118,9 +118,17 @@ const showModal = ref(false);
 const currentPage = ref(1);
 const pageSize = ref(10);
 const majors = ref([]);
+const sortField = ref('');
+const sortOrder = ref('');
 
 const load = async () => {
-    const response = await getStudents({pageNum: currentPage.value, pageSize: pageSize.value, search: searchQuery.value});
+    const response = await getStudents({
+        pageNum: currentPage.value, 
+        pageSize: pageSize.value, 
+        search: searchQuery.value,
+        sortField: sortField.value,
+        sortOrder: sortOrder.value
+    });
     if (response.code !== 0) {
         ElMessage.error(response.msg);
         return;
@@ -147,6 +155,12 @@ const handleSizeChange = async (newPageSize) => {
     pageSize.value = newPageSize;
     await load();
 }
+
+const handleSortChange = (sort) => {
+    sortField.value = sort.prop;
+    sortOrder.value = sort.order === 'ascending' ? 'asc' : 'desc';
+    load();
+};
 
 const openModal = (student = null) => {
     if (student) {
@@ -243,9 +257,16 @@ const parseXML = async (data) => {
     });
 };
 
-const exportStudents = () => {
+const exportStudents = async () => {
     const wb = XLSX.utils.book_new(); // 创建新的工作簿
-    const ws = XLSX.utils.json_to_sheet(students.value); // 将学生信息转为工作表
+    const res = await getStudents({
+        pageNum: 1, 
+        pageSize: 1000000, 
+        search: searchQuery.value,
+        sortField: sortField.value,
+        sortOrder: sortOrder.value
+    });
+    const ws = XLSX.utils.json_to_sheet(res.data.records); // 将信息转为工作表
     XLSX.utils.book_append_sheet(wb, ws, '学生信息'); // 将工作表加入工作簿
     XLSX.writeFile(wb, '学生信息.xlsx'); // 导出为 Excel 文件
 };

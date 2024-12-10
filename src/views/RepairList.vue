@@ -20,7 +20,7 @@
             </div>
 
             <!-- 表格显示报修信息 -->
-            <el-table :data="repairs" style="width: 100%">
+            <el-table :data="repairs" style="width: 100%" :sort-method="sortMethod" @sort-change="handleSortChange">
                 <el-table-column label="序号" type="index" />
                 <el-table-column prop="createDate" label="报修时间" sortable />
                 <el-table-column prop="finishDate" label="完成时间" sortable />
@@ -127,13 +127,21 @@ const detail = ref('');
 const showDetail = ref(false);
 const form = ref({ id: null, createDate: '', finishDate: null, title: '', content: '', applicantId: '',  dormId: '', roomId: '', status: '' });
 const isEdit = ref(false);
+const sortField = ref('');
+const sortOrder = ref('');
 
 const filterTag = (value, row) => {
     return row.status === value;
 };
 
 const load = async () => {
-    const response = await getRepairs({pageNum: currentPage.value, pageSize: pageSize.value, search: searchQuery.value});
+    const response = await getRepairs({
+        pageNum: currentPage.value, 
+        pageSize: pageSize.value, 
+        search: searchQuery.value,
+        sortField: sortField.value,
+        sortOrder: sortOrder.value
+    });
     if (response.code !== 0) {
         ElMessage.error(response.msg);
         return;
@@ -152,6 +160,12 @@ const handleSizeChange = async (newPageSize) => {
     pageSize.value = newPageSize;
     await load();
 }
+
+const handleSortChange = (sort) => {
+    sortField.value = sort.prop;
+    sortOrder.value = sort.order === 'ascending' ? 'asc' : 'desc';
+    load();
+};
 
 const openModal = (repair = null) => {
     if (repair) {

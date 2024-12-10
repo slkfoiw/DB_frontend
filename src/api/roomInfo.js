@@ -17,7 +17,7 @@ let mockRoomInfos = [
     { roomId: '269', dormId: '13', floor: '2', capacity: '4', peopleNum: '4', firstBed: "name48", secondBed: "name49", thirdBed: "name50", fourthBed: "name51" },
 ];
 
-export const getDormRooms = ({pageNum, pageSize, search}) => {
+export const getDormRooms = ({pageNum, pageSize, search, sortField, sortOrder}) => {
     return http({
         url: '/room/get-rooms',
         method: 'GET',
@@ -27,7 +27,9 @@ export const getDormRooms = ({pageNum, pageSize, search}) => {
         params: {
             pageNum,
             pageSize,
-            search
+            search,
+            sortField,
+            sortOrder
         }
     })
 };

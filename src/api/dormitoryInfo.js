@@ -34,7 +34,8 @@ export const rules = {
     ],
 };
 
-export const getDormBuilds = ({pageNum, pageSize, search}) => {
+export const getDormBuilds = ({pageNum, pageSize, search, sortField, sortOrder, gender}) => {
+    console.log(pageNum, pageSize, search, sortField, sortOrder, gender);
     return http({
         url: '/dorm/get-dorms',
         method: 'GET',
@@ -44,7 +45,10 @@ export const getDormBuilds = ({pageNum, pageSize, search}) => {
         params: {
             pageNum,
             pageSize,
-            search  
+            search,
+            sortField,
+            sortOrder,
+            gender  
         }
     })
     return {
