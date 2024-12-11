@@ -26,7 +26,7 @@
 
         <!-- 报修历史表格 -->
         <div v-if="showRepairHistory" class="repair-history-table">
-          <el-table :data="repairHistory" style="width: 100%; margin-top: 20px;" v-loading="loading" border>
+          <el-table :data="pageRepairHistory" style="width: 100%; margin-top: 20px;" v-loading="loading" border>
             <el-table-column prop="roomId" label="房间号"></el-table-column>
             <el-table-column prop="type" label="报修类型"></el-table-column>
             <el-table-column prop="count" label="报修次数"></el-table-column>
@@ -71,6 +71,7 @@ export default {
       selectedBuilding: null,
       buildings: [], // 原始楼栋列表
       repairHistory: [], // 报修历史数据
+      pageRepairHistory: [], // 当前页报修历史数据
       totalItems: 0, // 总条目数
       totalPages: 0, // 总页数
       currentPage: 1, // 当前页
@@ -112,7 +113,8 @@ export default {
 
         this.totalItems = data.length;
         this.totalPages = Math.ceil(data.length / this.pageSize);
-        this.repairHistory = data.slice(0, this.pageSize);
+        this.repairHistory = data;
+        this.pageRepairHistory = this.repairHistory.slice(0, this.pageSize);
       } catch (error) {
         console.error("Error fetching repair history:", error);
       } finally {
@@ -124,7 +126,7 @@ export default {
       this.currentPage = page;
       const start = (page - 1) * this.pageSize;
       const end = page * this.pageSize;
-      this.repairHistory = this.repairHistory.slice(start, end);
+      this.pageRepairHistory = this.repairHistory.slice(start, end);
     },
 
     exportTable() {

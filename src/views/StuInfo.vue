@@ -63,11 +63,11 @@
             <el-dialog v-model="showModal" title="学生信息" @close="closeModal">
                 <div class="modal-content">
                     <h3>{{ isEdit ? '编辑学生' : '添加学生' }}</h3>
-                    <el-form :model="form" ref="formRef">
-                        <el-form-item label="学号" prop="studentId">
-                            <el-input v-model="form.studentId" placeholder="请输入学号" :disabled="isEdit" />
+                    <el-form :model="form" ref="formRef" >
+                        <el-form-item label="学号" prop="studentId" required>
+                            <el-input v-model="form.studentId" placeholder="请输入学号" :disabled="isEdit"/>
                         </el-form-item>
-                        <el-form-item label="姓名" prop="name">
+                        <el-form-item label="姓名" prop="name" required>
                             <el-input v-model="form.name" placeholder="请输入姓名" />
                         </el-form-item>
                         <el-form-item label="公寓号" prop="dormId">
@@ -108,9 +108,9 @@ const searchQuery = ref('');
 const form = ref({
     studentId: '',
     name: '',
-    dormId: '',
-    roomId: '',
-    majorId: '',
+    dormId: null,
+    roomId: null,
+    majorId: null,
     major: ''
 });
 const totalitems = ref(0);
@@ -184,11 +184,14 @@ const closeModal = () => {
 const saveStudent = async () => {
     
     // 验证信息是否为空
-    if (form.value.name === '' || form.value.dormId === '' || form.value.roomId === '' || form.value.major === '') {
-        alert('请填写完整信息！');
+    if (form.value.studentId === '' || form.value.name === '') {
+        ElMessage.error('学号和姓名不能为空');
         return;
     }
-
+    if (form.value.dormId !== null && form.value.roomId === null) { // 填了公寓就必须有房间号
+        ElMessage.error('请输入宿舍号');
+        return;
+    }
     const res = isEdit.value ? await updateStudent({oldStudentId: oldStudentId.value, student: form.value}) : await addStudent(form.value);
     if (res.code !== 0) {
         ElMessage.error(res.msg);

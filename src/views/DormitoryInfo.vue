@@ -28,8 +28,8 @@
                     <el-table-column
                         :filter-method="filterTag"
                         :filters="[
-                        { text: '男', value: '男' },
                         { text: '女', value: '女' },
+                        { text: '男', value: '男' },
                         { text: '混合', value: '混合' }
                     ]"
                         filter-placement="bottom-end"
@@ -182,7 +182,7 @@ const save = async () => {
     cancel();
 };
 
-const filterTag = async(value, row) => {
+const filterTag = (value, row) => {
     return row.gender === value;
 };
 
