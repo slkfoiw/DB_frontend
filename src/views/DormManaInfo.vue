@@ -65,7 +65,7 @@
                         <el-form-item label="宿管姓名" prop="name" required>
                             <el-input v-model="form.name" placeholder="请输入宿管姓名"></el-input>
                         </el-form-item>
-                        <el-form-item label="公寓号" prop="dormId" required>
+                        <el-form-item label="公寓号" prop="dormId">
                             <el-input v-model="form.dormId" placeholder="请输入公寓号"></el-input>
                         </el-form-item>
                         <el-form-item>
@@ -89,7 +89,7 @@ import { parseString } from 'xml2js';
 const dormManagers = ref([]);
 const searchQuery = ref('');
 const totalitems = ref(0);
-const form = ref({ managerId: '', name: '', dormId: '' });
+const form = ref({ managerId: '', name: '', dormId: null });
 const oldManagerId = ref('');
 const isEdit = ref(false);
 const showModal = ref(false);
@@ -156,7 +156,7 @@ const saveDormMana = async () => {
     //     return;
     // }
     
-    if (!name || !dormId) {
+    if (name === '' || managerId == '') {
         ElMessage.error('请填写完整信息！');
         return;
     }

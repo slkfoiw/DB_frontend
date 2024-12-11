@@ -12,7 +12,7 @@
                 <el-input v-model="searchQuery" clearable placeholder="请输入报修类型" prefix-icon="Search"
                     style="width: 30%" />
                 <el-button icon="Search" plain="true" style="margin-left: 5px" type="primary" @click="load"></el-button>
-                <div style="float: right">
+                <div style="float: right" v-if="identityLevel === 0">
                     <el-tooltip content="添加报修记录" placement="top">
                         <el-button icon="plus" plain="true" style="width: 50px" type="primary" @click="openModal()"></el-button>
                     </el-tooltip>
@@ -120,7 +120,10 @@
 import { ref, computed, onMounted } from 'vue';
 import { getRepairs, updateRepair, addRepair, deleteRepair } from '@/api/admin';
 import { ElMessage } from 'element-plus';
+import { useUserStore } from '@/store/user';
 
+const userStore = useUserStore();
+const identityLevel = computed(() => userStore.userInfo.identityLevel);
 const repairs = ref([]);
 const searchQuery = ref('');
 const currentPage = ref(1);
