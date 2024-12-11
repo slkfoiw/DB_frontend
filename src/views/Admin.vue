@@ -2,7 +2,7 @@
     <el-breadcrumb separator-icon="ArrowRight" style="margin: 16px">
         <el-breadcrumb-item>首页</el-breadcrumb-item>
     </el-breadcrumb>
-    <el-card>
+    <el-card style="height: 1230px;">
         <!-- 头部数据 -->
         <div>
             <el-row :gutter="20" class="topInfo">

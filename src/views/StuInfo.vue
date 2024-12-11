@@ -52,10 +52,12 @@
             </el-table>
 
             <!-- 翻页控件 -->
+            <div style="margin: 10px 0">
             <el-pagination @current-change="handleCurrentChange" @size-change="handleSizeChange"
                 :current-page="currentPage" :page-size="pageSize" :page-sizes="[10, 20]" :total="totalitems"
                 layout="total, sizes, prev, pager, next, jumper" :disabled="totalitems === 0">
             </el-pagination>
+            </div>
 
             <!-- 弹窗（添加/编辑学生） -->
             <el-dialog v-model="showModal" title="学生信息" @close="closeModal">
