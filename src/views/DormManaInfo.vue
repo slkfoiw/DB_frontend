@@ -254,6 +254,7 @@ const exportDormManagers = async () => {
 };
 
 onMounted(load)
+
 </script>
 
 <style scoped>
