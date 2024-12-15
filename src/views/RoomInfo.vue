@@ -34,7 +34,7 @@
                 <el-table :data="dormRooms" style="width: 100%" :sort-method="sortMethod" @sort-change="handleSortChange">
                     <el-table-column label="#" type="index" />
                     <!-- 床位展开-->
-                    <el-table-column label="展开" type="expand">
+                    <el-table-column v-if="userStore.userInfo.identityLevel !== 2" label="展开" type="expand">
                         <template #default="props">
                             <el-form inline label-position="left">
                                 <el-form-item label="一号床位" class="item">
@@ -302,6 +302,7 @@ import { ElMessage } from "element-plus";
 import * as XLSX from 'xlsx';
 import { parseString } from 'xml2js';
 import { MoreFilled, Edit } from '@element-plus/icons-vue';
+import { useUserStore } from '@/store/user';
 
 const dormRooms = ref([]);
 const search = ref('');
@@ -321,6 +322,7 @@ const bedNum = ref(0);
 const editRoomDialog = ref(false);
 const sortField = ref('');
 const sortOrder = ref('');
+const userStore = useUserStore();
 
 const resetForm = () => {
     form.value = { roomId: '', dormId: '', floor: '', capacity: '', peopleNum: '', firstBed: '', secondBed: '', thirdBed: '', fourthBed: '' };
@@ -375,6 +377,7 @@ const saveUpdateRoom = async () => {
 }
 
 const load = async () => {
+    console.log('identityLevel:', userStore.userInfo.identityLevel);
     const response = await getDormRooms({ 
         pageNum: currentPage.value, 
         pageSize: pageSize.value, 
