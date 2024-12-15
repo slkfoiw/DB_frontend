@@ -77,9 +77,7 @@
               <el-input v-model="form.curBedId" disabled style="width: 80%" />
             </el-form-item>
             <el-form-item label="目标公寓号" prop="toDormId">
-              <el-select v-model="form.toDormId" placeholder="选择公寓号" style="width: 80%">
-                <el-option v-for="build in dormBuildings" :key="build.id" :label="build.name" :value="build.id" />
-              </el-select>
+              <el-input v-model="form.toDormId" disabled style="width: 80%" />
             </el-form-item>
             <el-form-item label="目标宿舍号" prop="toRoomId">
               <el-input v-model.number="form.toRoomId" style="width: 80%" />
@@ -273,6 +271,7 @@ const add = () => {
     const res = await getRoomBedUserId(form.studentId);
     if (res.code === 0) {
       form.curDormId = res.data.dormId;
+      form.toDormId = res.data.dormId;
       form.curRoomId = res.data.roomId;
       roomForm.value = res.data;
       console.log('roomForm: ', roomForm.value);
