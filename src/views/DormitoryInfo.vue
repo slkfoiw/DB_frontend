@@ -11,7 +11,7 @@
                 <div style="margin: 10px 0">
                 <!--    搜索区-->
                     <div style="margin: 10px 0">
-                        <el-input v-model="search" clearable placeholder="请输入楼栋号/地址/备注" prefix-icon="Search" style="width: 30%"/>
+                        <el-input v-model="search" clearable placeholder="请输入楼栋号/地址" prefix-icon="Search" style="width: 30%"/>
                         <el-button icon="Search" style="margin-left: 5px" type="primary" plain="true"@click="load"></el-button>
                         <div style="float: right">
                             <el-tooltip content="添加" placement="top">
@@ -104,7 +104,7 @@ const search = ref('');
 const totalitems = ref(0);
 const form = ref({dormId: '',
                 address: '',
-                gender: '',});
+                gender: null,});
 const dialogVisible = ref(false);
 const isEdit = ref(false);
 const currentPage = ref(1);
