@@ -8,7 +8,7 @@
         <el-card style="margin: 15px; min-height: calc(100vh - 111px)">
             <div>
                 <!-- 导入和导出功能 -->
-                <div>
+                <div v-if="userStore.userInfo.identityLevel !== 2">
                     <el-upload class="upload-demo" drag accept=".xls, .xlsx" :on-change="handleFileUpload"
                         :auto-upload="false">
                         <i class="el-icon-upload"></i>
@@ -20,10 +20,10 @@
                 <div style="margin: 10px 0">
                     <!--    搜索区-->
                     <div style="margin: 10px 0">
-                        <el-input v-model="search" clearable placeholder="请输入房间号或学生学号" prefix-icon="Search"
+                        <el-input v-model="search" clearable placeholder="请输入房间号或公寓号或楼层号" prefix-icon="Search"
                             style="width: 30%" />
                         <el-button icon="Search" style="margin-left: 5px" type="primary" @click="load" plain="true"></el-button>
-                        <div style="float: right">
+                        <div style="float: right" v-if="userStore.userInfo.identityLevel !== 2">
                             <el-tooltip content="添加房间" placement="top">
                                 <el-button icon="plus" style="width: 50px" type="primary" @click="addRoom" plain="true"></el-button>
                             </el-tooltip>
@@ -152,7 +152,7 @@
                         { text: 4, value: 4 },
                     ]" filter-placement="bottom-end" label="已住人数" prop="peopleNum" sortable />
                     <!--      操作栏-->
-                    <el-table-column label="操作" width="130px">
+                    <el-table-column v-if="userStore.userInfo.identityLevel !== 2" label="操作" width="130px">
                         <template #default="scope">
                             <el-button icon="Edit" type="primary" plain="true" @click.stop="editRoom(scope.row)"></el-button>
                             <el-popconfirm title="确认删除？" @confirm="handleDelete(scope.row.dormId, scope.row.roomId)">
