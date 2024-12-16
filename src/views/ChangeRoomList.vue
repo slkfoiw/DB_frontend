@@ -99,9 +99,9 @@
                 </el-form-item>
 <!-- 动态下拉框 -->
                 <el-form-item label="目标床位号：" prop="toBedId" required>
-                <el-select v-model="form.toBedId" placeholder="请选择目标床位号" style="width: 100%;">
-                <el-option v-for="bed in emptyBeds" :key="bed" :label="'床位 ' + bed" :value="bed"></el-option>
-                </el-select>
+                  <el-select v-model="form.toBedId" placeholder="请选择目标床位号" style="width: 100%;">
+                    <el-option v-for="bed in emptyBeds" :key="bed" :label="'床位 ' + bed" :value="bed" required></el-option>
+                  </el-select>
                 </el-form-item>
                 <el-form-item label="申请时间" prop="createDate" style="margin-top: 27px">
                   <el-date-picker
@@ -128,6 +128,7 @@
                       style="width: 50%"
                       type="datetime"
                       value-format="YYYY-MM-DD HH:mm:ss"
+                      required
                   ></el-date-picker>
                 </el-form-item>
               </el-form>
@@ -216,17 +217,17 @@ const sortField = ref('');
 const sortOrder = ref('');
 
 const form = ref({
-    id: '',
-    studentId: '',
-    curDormId: '',
-    curRoomId: '',
-    curBedId: '',
-    toDormId: '',
-    toRoomId: '',
-    toBedId: '',
-    status: '',
-    createDate: '',
-    finishDate: '',
+    id: null,
+    studentId: null,
+    curDormId: null,
+    curRoomId: null,
+    curBedId: null,
+    toDormId: null,
+    toRoomId: null,
+    toBedId: null,
+    status: null,
+    createDate: null,
+    finishDate: null,
 });
 
 const emptyBeds = ref([]); // 存储空床位列表
@@ -291,12 +292,29 @@ const cancel = () => {
 // 方法：编辑数据
 const handleEdit = async(changeRoom) => {
     form.value = { ...changeRoom };
-    console.log(form.value);
+    if (form.value.status === '未处理') {
+      form.value.status = null;
+    }
+    form.value.toBedId = null;
+    console.log('handleEdit:', form.value);
     dialogVisible.value = true;
   };
 
 // 方法：保存数据
 const save = async () => {
+  console.log('save form:', form.value);
+  if (!form.value.toBedId) {
+    ElMessage.error('请选择目标床位号！');
+    return;
+  }
+  if (form.value.status === null) {
+    ElMessage.error('请选择申请状态！');
+    return;
+  }
+  if (!form.value.finishDate) {
+    ElMessage.error('请选择处理时间！');
+    return;
+  }
   const res = await updateChangeRoom(form.value);
   if (res.code !== 0) {
     ElMessage.error(res.msg);
